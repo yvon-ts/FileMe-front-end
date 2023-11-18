@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FileME</title>
+<style>
+  .flex{
+    display: flex;
+  }
+  .flex-col{
+    display: flex;
+    flex-direction: column;
+  }
+  .just-btwn{
+    justify-content: space-between;
+  }
+  .just-around{
+    justify-content: space-around;
+  }
+  .just-center{
+    justify-content: center;
+  }
+  .align-items-center{
+    align-items: center;
+  }
+  #container{
+    height: 100vh;
+  }
+  aside{
+    width: 20%;
+  }
+  main{
+    width: 78%;
+  }
+  header{
+    height: 10%;
+  }
+  section{
+    height: 88%;
+  }
+  .mb-2{
+    margin-bottom: 2%;
+  }
+  .folder{
+    /* width: 18%; */
+    border: 1px solid #000;
+    background-color: #f1f1f1;
+  }
+  .file{
+    /* width: 18%; */
+    border: 1px solid #000;
+    background-color: #f1f1f1;
+  }
+  #add{
+    background-color: #f3f3f3; /* Folder background */
+    text-align: center;
+    width: 60%;
+  }
+  #folder, #file {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px; /* Adjust the gap as needed */
+    padding: 16px; /* Adjust the padding as needed */
+  }
+  .folder, .file {
+    border: 1px solid #ccc; /* For visualizing the folders */
+    padding: 8px; /* Adjust the padding as needed */
+    text-align: center; /* Centering the text */
+    background-color: #f3f3f3; /* Folder background */
+  }
+  nav ul li{
+    padding: 16px; /* Adjust the padding as needed */
+  }
+</style>
+<!-- <script src="./js/global.js"></script> -->
+<script src="https://kit.fontawesome.com/25fdabb88c.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div id="container" class="flex just-btwn">
+    <aside class="flex-col align-items-center" style="border: 1px solid #000">
+        <h1>FILEME<span style="color: #000;"><i class="fa-solid fa-folder"></i></span></h1>
+        <div id="add" style="border: 1px solid #000">新增</div>
+        <nav>
+            <ul class="flex-col">
+                <li class="active">我的雲端硬碟</li>
+                <li>垃圾桶</li>
+                <li>儲存空間</li>
+            </ul>
+        </nav>
+    </aside>
+    <main>
+        <header class="flex just-btwn mb-2" style="border: 1px solid #000">
+            <h2>在雲端硬碟中搜尋</h2>
+            <!-- Search input would go here -->
+            <div id="user" style="border: 1px solid #000">會員頭貼</div>
+        </header>
+        <section id="content" style="border: 1px solid #000">
+            <h3>我的雲端硬碟 > 麵包屑</h3>
+            <div id="folder">
+                <!-- Folder entries would be listed here -->
+                <div class="folder"><span style="color: #000;"><i class="fa-solid fa-folder"></i></span>資料夾1</div>
+                <div class="folder">資料夾2</div>
+                <div class="folder">資料夾3</div>
+                <div class="folder">資料夾4</div>
+            </div>
+            <div id="file">
+                <!-- File entries would be listed here -->
+                <div class="file">檔案1</div>
+                <div class="file">檔案2</div>
+
+            </div>
+        </section>
+        <!-- 右側保留欄位 -->
+        <!-- <section id="details" style="border: 1px solid #000">
+        </section> -->
+    </main>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+<script>
+    
+  $('#user').click(() => console.log('hi'));
+</script>
+
+</body>
+</html>
