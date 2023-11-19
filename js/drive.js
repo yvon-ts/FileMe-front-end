@@ -5,7 +5,7 @@ function fetchMyDrive(){
             'token': localStorage.getItem('token')}
     }).then(response => {
         renderDriveData(response.data.data);
-    }).catch(error => console.log(error))
+    }).catch(error => globalExceptionHandler(error))
 }
 
 function fetchTrash(){
@@ -17,7 +17,17 @@ function fetchTrash(){
         renderDriveData(response.data.data);
     }).catch(error => globalExceptionHandler(error))
 }
-
+function fetchDrive(folderId){
+    const api_drive = API_DRIVE_PREFIX + folderId;
+    console.log(api_drive);
+    axios.get(api_drive, {
+        headers: {
+            'Content-Type': 'application/json',
+            'token': localStorage.getItem('token')}
+    }).then(response => {
+        renderDriveData(response.data.data);
+    }).catch(error => globalExceptionHandler(error))
+}
 function clearDriveData(){
     $('#folder').html('');
     $('#file').html('');
@@ -27,6 +37,7 @@ function renderDriveData(rawData){
     clearDriveData();
     renderFolders(rawData);
     renderFiles(rawData);
+    $('.folder').dblclick((e) => fetchDrive(e.target.id));
 }
 
 function renderFolders(rawData){

@@ -78,6 +78,9 @@
     width: 100%;
     height: 100%;
   }
+  .my-drive:hover{
+    background-color: #ccc;
+  }
 </style>
 <!-- <script src="./js/global.js"></script> -->
 <script src="https://kit.fontawesome.com/25fdabb88c.js" crossorigin="anonymous"></script>
@@ -90,8 +93,8 @@
         <div id="add" style="border: 1px solid #000">新增</div>
         <nav>
             <ul class="flex-col">
-                <li class="active"><button id="my-drive">我的雲端硬碟</button></li>
-                <li><button id="my-trash">垃圾桶</button></li>
+                <li class="active my-drive">我的雲端硬碟</li>
+                <li id="my-trash">垃圾桶</li>
                 <li>儲存空間</li>
             </ul>
         </nav>
@@ -105,7 +108,9 @@
             </div>
         </header>
         <section id="content" style="border: 1px solid #000">
-            <h3>我的雲端硬碟 > 麵包屑</h3>
+            <nav>
+              <ul><li class="active my-drive">我的雲端硬碟</li></ul>
+            </nav>
             <div id="folder">
                 <!-- Folder entries would be listed here -->
                 <!-- <div class="folder"><span style="color: #000;"><i class="fa-solid fa-folder"></i></span>資料夾1</div> -->
@@ -128,8 +133,8 @@
 <script src="./js/drive.js"></script>
 <script>
   $(document).ready(fetchMyDrive());
-  $('#add').click(() => fetchMyDrive());
-  $('#my-drive').click(() => fetchMyDrive());
+  // $('#add').click(() => fetchMyDrive());
+  $('.my-drive').click(() => fetchMyDrive());
   $('#my-trash').click(() => fetchTrash());
 </script>
 
