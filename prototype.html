@@ -69,6 +69,9 @@
     text-align: center; /* Centering the text */
     background-color: #f3f3f3; /* Folder background */
   }
+  [access="1"]{
+    background-color: #dfedfa;
+  }
   nav ul li{
     border: 1px solid #ccc;
     padding: 16px; /* Adjust the padding as needed */
@@ -78,11 +81,14 @@
     width: 100%;
     height: 100%;
   }
-  .my-drive:hover{
+  #side-bar li:not(.active):hover{
     background-color: #ccc;
   }
+  .hidden{
+    display: none;
+  }
 </style>
-<!-- <script src="./js/global.js"></script> -->
+<!-- <script src="./js/exceptionHandler.js"></script> -->
 <script src="https://kit.fontawesome.com/25fdabb88c.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -91,10 +97,10 @@
     <aside class="flex-col align-items-center" style="border: 1px solid #000">
         <h1>FILEME<span style="color: #000;"><i class="fa-solid fa-folder"></i></span></h1>
         <div id="add" style="border: 1px solid #000">新增</div>
-        <nav>
+        <nav id="side-bar">
             <ul class="flex-col">
-                <li class="active my-drive">我的雲端硬碟</li>
-                <li id="my-trash">垃圾桶</li>
+                <li id="my-drive" class="active my-drive bread-toggler">我的雲端硬碟</li>
+                <li id="my-trash" class="bread-toggler">垃圾桶</li>
                 <li>儲存空間</li>
             </ul>
         </nav>
@@ -109,14 +115,19 @@
         </header>
         <section id="content" style="border: 1px solid #000">
             <nav>
-              <ul><li class="active my-drive">我的雲端硬碟</li></ul>
+              <ul id="breadcrumb">
+                <li id="root" class="my-drive">我的雲端硬碟</li>
+                <li class="hidden my-trash">垃圾桶<button>清空</button><button>還原</button></li>
+              </ul>
             </nav>
-            <div id="folder">
-                <!-- Folder entries would be listed here -->
-                <!-- <div class="folder"><span style="color: #000;"><i class="fa-solid fa-folder"></i></span>資料夾1</div> -->
-            </div>
-            <div id="file">
-                <!-- File entries would be listed here -->
+            <div id="drive-data">
+              <div id="folder">
+                  <!-- Folder entries would be listed here -->
+                  <!-- <div class="folder"><span style="color: #000;"><i class="fa-solid fa-folder"></i></span>資料夾1</div> -->
+              </div>
+              <div id="file">
+                  <!-- File entries would be listed here -->
+              </div>
             </div>
         </section>
         <!-- 右側保留欄位 -->
@@ -129,13 +140,17 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="./js/constants.js"></script>
 <script src="./js/global.js"></script>
+<script src="./js/exceptionHandler.js"></script>
 <script src="./js/user.js"></script>
 <script src="./js/drive.js"></script>
 <script>
   $(document).ready(fetchMyDrive());
   // $('#add').click(() => fetchMyDrive());
+  $('#side-bar li').click((e) => toggleSideBar(e));
+  $('.bread-toggler').click((e) => toggleBreadcrumb(e));
   $('.my-drive').click(() => fetchMyDrive());
-  $('#my-trash').click(() => fetchTrash());
+  $('#my-trash').click(() => fetchMyTrash());
+  $('#root').click(() => $('.breadcrumb').remove());
 </script>
 
 </body>

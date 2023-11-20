@@ -1,24 +1,16 @@
-function filterErrorCode(errorCode){
-    return errorCode.toString().charAt(0);
+function login(username, password){
+    axios.post(API_LOGIN,{
+        'username': username,
+        'password': password
+    }).then(response => {
+        localStorage.setItem("userId", response.data.data.userId);
+        localStorage.setItem("token", response.data.data.token);
+        window.location.replace('prototype.html');
+    }).catch(error => console.log(error));
+// }).catch(error => globalExceptionHandler(error));
 }
-function globalExceptionHandler(error){
-    let errorCode = error.response.data.code;
-    switch(filterErrorCode(errorCode)){
-        case '1': {
-            Swal.fire({
-                icon: 'error',
-                text: error.response.data.msg + ' (錯誤代碼: ' + errorCode + ')'
-            });
-            if(errorCode === 11411) logout();
-            break;
-        }
-            
-        default:{
-            Swal.fire({
-                icon: 'error',
-                text: DEFAULT_RESPONSE + ' (錯誤代碼: ' + errorCode + ')'
-            })
-            break;
-        }
-    }
- }
+function logout(){
+    // 要再補打後端api?
+    localStorage.clear();
+    window.location.replace('login.html');
+}
