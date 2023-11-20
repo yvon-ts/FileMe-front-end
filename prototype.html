@@ -69,6 +69,9 @@
     text-align: center; /* Centering the text */
     background-color: #f3f3f3; /* Folder background */
   }
+  .focus{
+    border: 5px solid #9dc8f0;
+  }
   [access="1"]{
     background-color: #dfedfa;
   }
@@ -117,7 +120,7 @@
             <nav>
               <ul id="breadcrumb">
                 <li id="root" class="my-drive">我的雲端硬碟</li>
-                <li class="hidden my-trash">垃圾桶<button>清空</button><button>還原</button></li>
+                <li class="hidden my-trash">垃圾桶<button>清空</button><button id="recover">還原</button></li>
               </ul>
             </nav>
             <div id="drive-data">
@@ -151,6 +154,7 @@
   $('.my-drive').click(() => fetchMyDrive());
   $('#my-trash').click(() => fetchMyTrash());
   $('#root').click(() => $('.breadcrumb').remove());
+  $('#recover').click(() => recover());
 </script>
 
 </body>

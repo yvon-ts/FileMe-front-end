@@ -14,3 +14,15 @@ function logout(){
     localStorage.clear();
     window.location.replace('login.html');
 }
+function swalSuccess(){
+    Swal.fire({
+        icon: 'success',
+        text: '操作成功'
+    })
+}
+function swalEmptyList(){
+    Swal.fire({
+        icon: 'warning',
+        text: '請先選擇檔案或資料夾'
+    })
+}

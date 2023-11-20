@@ -13,6 +13,21 @@ function toggleBreadcrumb(e){
         $('#breadcrumb .my-drive').addClass('hidden');
     }
 }
+function toggleFocus(e){
+    if($(e.target).hasClass('focus')){
+        $(e.target).removeClass('focus');
+    }else{
+        $(e.target).addClass('focus');
+    }
+}
+function collectFocused(){
+    let list = [];
+    $('.focus').each((index, item) => {
+        let dataTypeValue = $(item).hasClass('folder')? 0 : 1;
+        list.push({id: item.id, dataType: dataTypeValue});
+    });
+    return list;
+}
 // ----------------- Fetch data ----------------- //
 function fetchMyDrive(){
     axios.get(API_MY_DRIVE, {
@@ -62,6 +77,8 @@ function renderDriveData(rawData){
     clearDriveData();
     renderFolders(rawData);
     renderFiles(rawData);
+    $('.folder').click((e) => toggleFocus(e));
+    $('.file').click((e) => toggleFocus(e));
     $('.folder').dblclick((e) => {
         fetchDrive(e.target.id);
         addBreadcrumb(e.target);
@@ -84,4 +101,23 @@ function renderFiles(rawData){
         return `<div class="file" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
     });
     files.forEach(file => $('#file').append(file));
+}
+// ----------------- Update ----------------- //
+function recover(){
+    const list = collectFocused();
+    if(list.length === 0) swalEmptyList();
+    else doRecover(list);
+}
+function doRecover(list){
+    const jsonList = JSON.stringify(list);
+    axios.post('http://localhost:8080/drive/recover', jsonList, {
+        headers: {
+            'Content-Type': 'application/json',
+            'token': localStorage.getItem('token')
+        }
+    }).then((response) => {
+        $('.focus').remove();
+        swalSuccess();
+    })
+    .catch((error) => globalExceptionHandler(error));
 }
