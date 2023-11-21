@@ -26,3 +26,9 @@ function swalEmptyList(){
         text: '請先選擇檔案或資料夾'
     })
 }
+function swalTrash(){
+    Swal.fire({
+        icon: 'warning',
+        text: '請先還原檔案或資料夾'
+    })
+}

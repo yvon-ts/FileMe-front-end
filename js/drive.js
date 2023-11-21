@@ -45,7 +45,7 @@ function fetchMyTrash(){
             'Content-Type': 'application/json',
             'token': localStorage.getItem('token')}
     }).then(response => {
-        renderDriveData(response.data.data);
+        renderTrash(response.data.data);
     }).catch(error => globalExceptionHandler(error))
 }
 async function fetchDrive(folderId){
@@ -68,7 +68,7 @@ function clearDriveData(){
 function addBreadcrumb(target){
     $('#breadcrumb li').removeClass('active');
     $('#breadcrumb').append(`<li id="${target.id}" class="active breadcrumb">${target.innerHTML}</li>`);
-    $('.breadcrumb').click((e) => {
+    $('.breadcrumb').click(e => {
         fetchDrive(e.target.id);
         $(e.target).nextAll().remove();});
 }
@@ -77,12 +77,21 @@ function renderDriveData(rawData){
     clearDriveData();
     renderFolders(rawData);
     renderFiles(rawData);
-    $('.folder').click((e) => toggleFocus(e));
-    $('.file').click((e) => toggleFocus(e));
-    $('.folder').dblclick((e) => {
+    $('.folder').click(e => toggleFocus(e));
+    $('.file').click(e => toggleFocus(e));
+    $('.folder').dblclick(e => {
         fetchDrive(e.target.id);
         addBreadcrumb(e.target);
     });
+}
+
+function renderTrash(rawData){
+    clearDriveData();
+    renderFolderTrash(rawData);
+    renderFileTrash(rawData);
+    $('.folder').click(e => toggleFocus(e));
+    $('.file').click(e => toggleFocus(e));
+    $('.folder').dblclick(() => swalTrash());
 }
 
 function renderFolders(rawData){
@@ -102,13 +111,30 @@ function renderFiles(rawData){
     });
     files.forEach(file => $('#file').append(file));
 }
+
+function renderFolderTrash(rawData){
+    const folders = rawData
+    .filter(item => item.dataType === 0)
+    .map(item => function(){
+        return `<div class="folder trash" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
+    });
+    folders.forEach(folder => $('#folder').append(folder));
+}
+function renderFileTrash(rawData){
+    const files = rawData
+       .filter(item => item.dataType === 1)
+       .map(item => function(){
+           return `<div class="file trash" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
+       });
+       files.forEach(file => $('#file').append(file));
+   }
 // ----------------- Update ----------------- //
 function recover(){
     const list = collectFocused();
     if(list.length === 0) swalEmptyList();
-    else doRecover(list);
+    else doRecover(list, true);
 }
-function doRecover(list){
+function doRecover(list, removeFocus){
     const jsonList = JSON.stringify(list);
     axios.post('http://localhost:8080/drive/recover', jsonList, {
         headers: {
@@ -116,7 +142,7 @@ function doRecover(list){
             'token': localStorage.getItem('token')
         }
     }).then((response) => {
-        $('.focus').remove();
+        if(removeFocus) $('.focus').remove();
         swalSuccess();
     })
     .catch((error) => globalExceptionHandler(error));
