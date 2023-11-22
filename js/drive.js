@@ -146,7 +146,7 @@ function renderFolderTrash(rawData){
     const folders = rawData
     .filter(item => item.dataType === 0)
     .map(item => function(){
-        return `<div class="folder trash" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
+        return `<div class="folder-trash trash" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
     });
     folders.forEach(folder => $('#folder').append(folder));
 }
@@ -154,7 +154,7 @@ function renderFileTrash(rawData){
     const files = rawData
        .filter(item => item.dataType === 1)
        .map(item => function(){
-           return `<div class="file trash" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
+           return `<div class="file-trash trash" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
        });
        files.forEach(file => $('#file').append(file));
    }
@@ -224,3 +224,22 @@ function doRecover(list, removeFocus){
     })
     .catch((error) => globalExceptionHandler(error));
 }
+// ---- relocate
+function initRelocateMenu(response){
+    $('.folder').clone().appendTo('#sub-folder');
+    renderSuperFolders(response);
+  }
+    function renderSuperFolders(rawData){
+      const folders = rawData
+      // .filter(item => item.dataType === 0)
+      .map(item => function(){
+          return `<li id="${item.id}">${item.dataName}</li>`;
+      });
+      folders.forEach(folder => $('#dialog ul').append(folder));
+    }
+    function renderSubFolders(rawData){
+      const folders = rawData.map(item => function(){
+        return `<div class="sub-folder" id="${item.id}">${item.dataName}</div>`;
+      });
+      folders.forEach(folder => $('#sub-folder').append(folder));
+    }
