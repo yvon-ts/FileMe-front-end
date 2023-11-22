@@ -120,8 +120,16 @@
         <section id="content" style="border: 1px solid #000">
             <nav>
               <ul id="breadcrumb">
-                <li id="root" class="my-drive">我的雲端硬碟</li>
-                <li class="hidden my-trash">垃圾桶<button>清空</button><button id="recover">還原</button></li>
+                <li id="toolbar" class="hidden">
+                  <span>選取</span>
+                  <button id="trash" class="tool-drive">移至垃圾桶</button>
+                  <button class="tool-trash hidden">清空</button>
+                  <button id="recover" class="tool-trash hidden">還原</button>
+                </li>
+                <li id="root">
+                  <span class="my-drive tool-drive">我的雲端硬碟</span>
+                  <span class="hidden my-trash tool-trash">垃圾桶</span>
+                </li>
               </ul>
             </nav>
             <div id="drive-data">
@@ -159,6 +167,7 @@
   $('.my-drive').click(() => fetchMyDrive());
   $('#my-trash').click(() => fetchMyTrash());
   $('#root').click(() => $('.breadcrumb').remove());
+  $('#trash').click(() => trash());
   $('#recover').click(() => recover());
   trashMenu();
 </script>

@@ -5,20 +5,43 @@ function toggleSideBar(e){
 function toggleBreadcrumb(e){
     $('.breadcrumb').remove();
     if(e.target.id === 'my-drive'){
-        $('#breadcrumb .my-drive').removeClass('hidden');
-        $('#breadcrumb .my-trash').addClass('hidden');
+        $('#root').removeClass('hidden');
+        $('.tool-drive').removeClass('hidden');
+        $('#toolbar').addClass('hidden');
+        $('.tool-trash').addClass('hidden');
     }
     if(e.target.id === 'my-trash'){
-        $('#breadcrumb .my-trash').removeClass('hidden');
-        $('#breadcrumb .my-drive').addClass('hidden');
+        $('#root').removeClass('hidden');
+        $('.tool-trash').removeClass('hidden');
+        $('#toolbar').addClass('hidden');
+        $('.tool-drive').addClass('hidden');
     }
 }
 function toggleFocus(e){
     if($(e.target).hasClass('focus')){
         $(e.target).removeClass('focus');
+        monitorToolbar();
     }else{
         $(e.target).addClass('focus');
+        monitorToolbar();
     }
+}
+function monitorToolbar(){
+    const count = countFocus();
+   if(count > 0){
+    $('#root').addClass('hidden');
+    $('.breadcrumb').addClass('hidden');
+    $('#toolbar').removeClass('hidden');
+    $('#toolbar span').text(`已選取 ${count} 個`);
+   }
+   else{
+    $('#toolbar').addClass('hidden');
+    $('#root').removeClass('hidden');
+    $('.breadcrumb').removeClass('hidden');
+   }
+}
+function countFocus(){
+    return $('.focus').length;
 }
 function collectFocused(){
     let list = [];
@@ -63,9 +86,12 @@ async function fetchDrive(folderId){
 function clearDriveData(){
     $('#folder').html('');
     $('#file').html('');
+    $('#toolbar').addClass('hidden');
+    $('#root').removeClass('hidden');
 }
 
 function addBreadcrumb(target){
+    $('#breadcrumb').addClass('flex');
     $('#breadcrumb li').removeClass('active');
     $('#breadcrumb').append(`<li id="${target.id}" class="active breadcrumb">${target.innerHTML}</li>`);
     $('.breadcrumb').click(e => {
@@ -91,7 +117,11 @@ function renderTrash(rawData){
     renderFileTrash(rawData);
     $('.folder').click(e => toggleFocus(e));
     $('.file').click(e => toggleFocus(e));
-    $('.folder').dblclick(() => swalTrash());
+    $('.trash').dblclick((e) => {
+        $('.focus').removeClass('focus');
+        $(e.target).addClass('focus');
+        recover();
+    });
 }
 
 function renderFolders(rawData){
@@ -128,21 +158,68 @@ function renderFileTrash(rawData){
        });
        files.forEach(file => $('#file').append(file));
    }
-// ----------------- Update ----------------- //
-function recover(){
+// ----------------- Update: trash ----------------- //
+function trash(){
     const list = collectFocused();
     if(list.length === 0) swalEmptyList();
-    else doRecover(list, true);
+    else swalTrash(list);
 }
-function doRecover(list, removeFocus){
+function swalTrash(list){
+    Swal.fire({
+        text: '是否要將已選擇的檔案移至垃圾桶？',
+        showCancelButton: true,
+        confirmButtonText: '是',
+        cancelButtonText: '否'
+      }).then((result) => {
+        if (result.isConfirmed) doTrash(list, true);
+      });
+}
+function doTrash(list, removeFocus){
     const jsonList = JSON.stringify(list);
-    axios.post('http://localhost:8080/drive/recover', jsonList, {
+    axios.post(API_TRASH, jsonList, {
         headers: {
             'Content-Type': 'application/json',
             'token': localStorage.getItem('token')
         }
     }).then((response) => {
-        if(removeFocus) $('.focus').remove();
+        if(removeFocus){
+            $('.focus').remove();
+            $('#toolbar').addClass('hidden');
+            $('#root').removeClass('hidden');
+        }
+        swalSuccess();
+    })
+    .catch((error) => globalExceptionHandler(error));
+}
+// ----------------- Update: recover ----------------- //
+function recover(){
+    const list = collectFocused();
+    if(list.length === 0) swalEmptyList();
+    else swalRecover(list, true);
+}
+function swalRecover(list, removeFocus){
+    Swal.fire({
+        text: '是否要還原已選擇的檔案？',
+        showCancelButton: true,
+        confirmButtonText: '是',
+        cancelButtonText: '否'
+      }).then((result) => {
+        if (result.isConfirmed) doRecover(list, removeFocus);
+      });
+}
+function doRecover(list, removeFocus){
+    const jsonList = JSON.stringify(list);
+    axios.post(API_RECOVER, jsonList, {
+        headers: {
+            'Content-Type': 'application/json',
+            'token': localStorage.getItem('token')
+        }
+    }).then((response) => {
+        if(removeFocus){
+            $('.focus').remove();
+            $('#toolbar').addClass('hidden');
+            $('#root').removeClass('hidden');
+        }
         swalSuccess();
     })
     .catch((error) => globalExceptionHandler(error));
