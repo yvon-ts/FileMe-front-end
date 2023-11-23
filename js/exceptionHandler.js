@@ -1,3 +1,14 @@
+axios.interceptors.response.use(
+    response => {
+        // Any status code within the range of 2xx cause this function to trigger
+        // Do something with response data
+        return response;
+    },
+    error => {
+        globalExceptionHandler(error);
+    }
+);
+
 function globalExceptionHandler(error){
     specialExceptionHandler(error);
  }
@@ -17,6 +28,14 @@ function globalExceptionHandler(error){
         case 13010: {
             clearDriveData();
             $('#folder').append('<div><span>請使用「新增」建立資料</span></div>'); // TODO: 不符合垃圾桶中文描述
+            break;
+        }
+        // NO_SUCH_DATA
+        case 13020: {
+            Swal.fire({
+                icon: 'info',
+                text:  '沒有更多資料了 (錯誤代碼: ' + errorCode + ')'
+            });
             break;
         }
         default:{

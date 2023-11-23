@@ -59,7 +59,8 @@ function fetchMyDrive(){
             'token': localStorage.getItem('token')}
     }).then(response => {
         renderDriveData(response.data.data);
-    }).catch(error => globalExceptionHandler(error))
+    })
+    // .catch(error => globalExceptionHandler(error))
 }
 
 function fetchMyTrash(){
@@ -69,7 +70,8 @@ function fetchMyTrash(){
             'token': localStorage.getItem('token')}
     }).then(response => {
         renderTrash(response.data.data);
-    }).catch(error => globalExceptionHandler(error))
+    })
+    // .catch(error => globalExceptionHandler(error))
 }
 async function fetchDrive(folderId){
     const api_drive = API_DRIVE_PREFIX + folderId;
@@ -79,7 +81,8 @@ async function fetchDrive(folderId){
             'token': localStorage.getItem('token')}
     }).then(response => {
         renderDriveData(response.data.data);
-    }).catch(error => globalExceptionHandler(error))
+    })
+    // .catch(error => globalExceptionHandler(error))
 }
 // ----------------- Render data ----------------- //
 
@@ -117,7 +120,7 @@ function renderTrash(rawData){
     renderFileTrash(rawData);
     $('.folder').click(e => toggleFocus(e));
     $('.file').click(e => toggleFocus(e));
-    $('.trash').dblclick((e) => {
+    $('.trash').dblclick(e => {
         $('.focus').removeClass('focus');
         $(e.target).addClass('focus');
         recover();
@@ -189,7 +192,7 @@ function doTrash(list, removeFocus){
         }
         swalSuccess();
     })
-    .catch((error) => globalExceptionHandler(error));
+    // .catch((error) => globalExceptionHandler(error));
 }
 // ----------------- Update: recover ----------------- //
 function recover(){
@@ -222,7 +225,7 @@ function doRecover(list, removeFocus){
         }
         swalSuccess();
     })
-    .catch((error) => globalExceptionHandler(error));
+    // .catch((error) => globalExceptionHandler(error));
 }
 // ----------------- Update: relocate: render menu ----------------- //
 function fetchSuperFolders(folderId){
@@ -250,7 +253,7 @@ function renderSuperFolders(rawData){
         return `<li id="${item.id}" class="super-folder">${item.dataName}</li>`;
     });
     folders.forEach(folder => $('#dialog ul').append(folder));
-    $('.super-folder').click((e) => fetchSubFolders(e.target.id));
+    $('.super-folder').click(e => fetchSubFolders(e.target.id));
 }
 function renderSubFolders(rawData){
     $('#sub-folder').empty();
@@ -258,4 +261,8 @@ function renderSubFolders(rawData){
     return `<div id="${item.id}" class="sub-folder">${item.dataName}</div>`;
     });
     folders.forEach(folder => $('#sub-folder').append(folder));
+    $('.sub-folder').dblclick(e => { // TODO: 要擋住本身不能dblclick
+        fetchSubFolders(e.target.id)
+        fetchSuperFolders(e.target.id) //可評估要用加的還是重load
+    });
 }

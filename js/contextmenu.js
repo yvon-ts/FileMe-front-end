@@ -30,6 +30,8 @@ function folderMenu(){
                 icon: 'fa-exchange-alt',
                 callback: (key, opt) => {
                     const target = opt.$trigger[0];
+                    console.log(target);
+                    console.log($('.context-menu-active').first());
                     //取得current folder id
                     let currentFolderId = $('.breadcrumb').last().attr('id') || 0;
                     // 彈出menu
@@ -38,6 +40,10 @@ function folderMenu(){
                     fetchSuperFolders(currentFolderId);
                     // 右側
                     $('.folder').clone().appendTo('#sub-folder');
+                    $('#sub-folder .folder').dblclick(e => {
+                        fetchSubFolders(e.target.id)
+                        fetchSuperFolders(e.target.id) //可評估要用加的還是重load
+                    });
                     // id和target一樣的要加css
                     // callSuperAPI
                 }},
