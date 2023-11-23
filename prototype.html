@@ -60,13 +60,13 @@
     text-align: center;
     width: 60%;
   }
-  #folder, #file {
+  #folder, #file, #sub-folder {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 16px; /* Adjust the gap as needed */
     padding: 16px; /* Adjust the padding as needed */
   }
-  .folder, .file, .folder-trash, .file-trash {
+  .folder, .file, .folder-trash, .file-trash, .sub-folder {
     border: 1px solid #ccc; /* For visualizing the folders */
     padding: 8px; /* Adjust the padding as needed */
     text-align: center; /* Centering the text */
@@ -113,7 +113,7 @@
     </aside>
     <main>
         <header class="flex just-btwn mb-2" style="border: 1px solid #000">
-            <h2>在雲端硬碟中搜尋</h2><button id="test">test</button>
+            <h2>在雲端硬碟中搜尋</h2>
             <!-- Search input would go here -->
             <div id="user" style="border: 1px solid #000">
             <a href="login.html" style="border: 1px solid #000"><span>會員頭貼</span></a> <!-- TODO: delete -->
@@ -175,14 +175,13 @@
   folderMenu();
   fileMenu();
   trashMenu();
-  $('#test').click(() => console.log($('#breadcrumb li').last().attr('id')));
 </script>
-<script>
+<!-- <script>
   $( function() {
     $( "#dialog" ).dialog({
       resizable: false,
       height: "auto",
-      width: 400,
+      width: 900,
       modal: true,
       buttons: {
         "Delete all items": function() {
@@ -193,7 +192,7 @@
         }
       }
     });
-    $('#tt').click(() => {
+    $('#root-super').click(() => {
                     console.log('hi');
                     let id = '1726514820467744769';
                     axios.get(API_SUPER_FOLDER,{
@@ -205,18 +204,18 @@
                     }).then(response => renderSuperFolders(response.data.data));
                 });
   } );
-  </script>
-<div id="dialog" class="flex just-btwn">
+  </script> -->
+<div id="dialog" class="flex just-btwn hidden">
         <aside>
             <nav>
                 <ul class="flex-col">
-                    <li id="tt">根目錄</li>
+                    <li id="root-super">根目錄</li>
                 </ul>
             </nav>
         </aside>
         <main>
-            <section id="sub-folder" class="flex">
-            </section>
+            <div id="sub-folder" class="flex">
+            </div>
         </main>
     </div>
 </body>

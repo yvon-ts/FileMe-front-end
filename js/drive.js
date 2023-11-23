@@ -224,22 +224,38 @@ function doRecover(list, removeFocus){
     })
     .catch((error) => globalExceptionHandler(error));
 }
-// ---- relocate
-function initRelocateMenu(response){
-    $('.folder').clone().appendTo('#sub-folder');
-    renderSuperFolders(response);
-  }
-    function renderSuperFolders(rawData){
-      const folders = rawData
-      // .filter(item => item.dataType === 0)
-      .map(item => function(){
-          return `<li id="${item.id}">${item.dataName}</li>`;
-      });
-      folders.forEach(folder => $('#dialog ul').append(folder));
-    }
-    function renderSubFolders(rawData){
-      const folders = rawData.map(item => function(){
-        return `<div class="sub-folder" id="${item.id}">${item.dataName}</div>`;
-      });
-      folders.forEach(folder => $('#sub-folder').append(folder));
-    }
+// ----------------- Update: relocate: render menu ----------------- //
+function fetchSuperFolders(folderId){
+    axios.get(API_SUPER_FOLDER,{
+        params: {
+            folderId: folderId},
+        headers: {
+            'token': localStorage.getItem('token')
+        }
+    }).then(response => renderSuperFolders(response.data.data));
+}
+function fetchSubFolders(folderId){
+    axios.get(API_SUB_FOLDER,{
+        params: {
+            folderId: folderId},
+        headers: {
+            'token': localStorage.getItem('token')
+        }
+    }).then(response => renderSubFolders(response.data.data));
+}
+function renderSuperFolders(rawData){
+    $('.super-folder').remove();
+    const folders = rawData
+    .map(item => function(){
+        return `<li id="${item.id}" class="super-folder">${item.dataName}</li>`;
+    });
+    folders.forEach(folder => $('#dialog ul').append(folder));
+    $('.super-folder').click((e) => fetchSubFolders(e.target.id));
+}
+function renderSubFolders(rawData){
+    $('#sub-folder').empty();
+    const folders = rawData.map(item => function(){
+    return `<div id="${item.id}" class="sub-folder">${item.dataName}</div>`;
+    });
+    folders.forEach(folder => $('#sub-folder').append(folder));
+}

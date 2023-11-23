@@ -1,3 +1,25 @@
+function dialogRelocate() {
+    $('#dialog').removeClass('hidden');
+    $( "#dialog" ).dialog({
+      resizable: false,
+      height: "auto",
+      width: 900,
+      modal: true,
+      close: () => {
+        $('#sub-folder').empty();
+        $('.super-folder').remove();
+        $('#dialog').addClass('hidden');
+      },
+      buttons: {
+        "Delete all items": function() {
+          $( this ).dialog( "close" );
+        },
+        Cancel: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+}
 function folderMenu(){
     $.contextMenu({
         selector: '.folder',
@@ -8,19 +30,14 @@ function folderMenu(){
                 icon: 'fa-exchange-alt',
                 callback: (key, opt) => {
                     const target = opt.$trigger[0];
+                    //取得current folder id
+                    let currentFolderId = $('.breadcrumb').last().attr('id') || 0;
                     // 彈出menu
-                $('#test').click(() => {
-                    console.log('hi');
-                    let id = '1726514820467744769';
-                    axios.get(API_SUPER_FOLDER,{
-                        params: {
-                            folderId: id},
-                        headers: {
-                            'token': localStorage.getItem('token')
-                        }
-                    }).then(response => renderSuperFolders(response.data.data));
-                });
-                    $('.folder').clone().appendTo('#sub-folder'); // append對象要改
+                    dialogRelocate();
+                    let id = opt.$trigger[0].id; // 不能點選的id(本人)
+                    fetchSuperFolders(currentFolderId);
+                    // 右側
+                    $('.folder').clone().appendTo('#sub-folder');
                     // id和target一樣的要加css
                     // callSuperAPI
                 }},
