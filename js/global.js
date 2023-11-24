@@ -32,3 +32,28 @@ function swalTrash(){
         text: '請先還原檔案或資料夾'
     })
 }
+
+let relocateOrigin = [];
+
+function renderDialogRelocate() {
+    $('#dialog').removeClass('hidden');
+    $( "#dialog" ).dialog({
+      resizable: false,
+      height: "auto",
+      width: 900,
+      modal: true,
+      close: () => {
+        $('#sub-folder').empty();
+        $('.super-folder').remove();
+        $('#dialog').addClass('hidden');
+      },
+      buttons: {
+        "移動至選定資料夾": function() {
+          relocate();
+        },
+        Cancel: function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+}

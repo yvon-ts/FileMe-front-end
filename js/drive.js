@@ -248,8 +248,7 @@ function fetchSubFolders(folderId){
 }
 function renderSuperFolders(rawData){
     $('.super-folder').remove();
-    const folders = rawData
-    .map(item => function(){
+    const folders = rawData.map(item => function(){
         return `<li id="${item.id}" class="super-folder">${item.dataName}</li>`;
     });
     folders.forEach(folder => $('#dialog ul').append(folder));
@@ -257,12 +256,46 @@ function renderSuperFolders(rawData){
 }
 function renderSubFolders(rawData){
     $('#sub-folder').empty();
-    const folders = rawData.map(item => function(){
-    return `<div id="${item.id}" class="sub-folder">${item.dataName}</div>`;
+    const folders = rawData.map(item => {
+        let className = includesLargeNumber(relocateOrigin, item.id) ? 'folder origin' : 'folder';
+    return `<div id="${item.id}" class="${className}">${item.dataName}</div>`;
     });
     folders.forEach(folder => $('#sub-folder').append(folder));
-    $('.sub-folder').dblclick(e => { // TODO: 要擋住本身不能dblclick
+    addListenerRelocate('origin');
+}
+function relocate(){
+    const list = collectFocused();
+    relocateOrigin.push(list
+        .filter(item => item.dataType === 0)
+        .map(item => item.id.toString())
+    );
+    if(list.length === 0){
+        swalEmptyList(); // 這邊要改collectSelected
+    } else {
+        initDialogRelocate();
+        addListenerRelocate('focus');
+    }
+}
+function initDialogRelocate(){
+    //取得current folder id
+    const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+    // 彈出menu
+    renderDialogRelocate();
+    fetchSuperFolders(currentFolderId);
+    // 右側
+    $('.folder').clone().appendTo('#sub-folder');
+}
+function addListenerRelocate(excludedClass){
+    const className = '.' + excludedClass; 
+    $('#sub-folder .folder').not(className).dblclick(e => {
         fetchSubFolders(e.target.id)
         fetchSuperFolders(e.target.id) //可評估要用加的還是重load
     });
+    $('#sub-folder .folder').not(className).click(e => {
+        $('.sub-folder').removeClass('selected');
+        $(e.target).addClass('selected');
+    });
+}
+function includesLargeNumber(array, number){
+    return array.some(element => element.toString() === number.toString())
 }

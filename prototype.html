@@ -125,6 +125,7 @@
                 <li id="toolbar" class="hidden">
                   <span>選取</span>
                   <button id="trash" class="tool-drive">移至垃圾桶</button>
+                  <button id="relocate" class="tool-drive">移動</button>
                   <button class="tool-trash hidden">清空</button>
                   <button id="recover" class="tool-trash hidden">還原</button>
                 </li>
@@ -172,6 +173,7 @@
   $('#root').click(() => $('.breadcrumb').remove());
   $('#trash').click(() => trash());
   $('#recover').click(() => recover());
+  $('#relocate').click(() => relocate());
   folderMenu();
   fileMenu();
   trashMenu();

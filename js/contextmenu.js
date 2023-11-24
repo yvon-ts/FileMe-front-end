@@ -1,25 +1,3 @@
-function dialogRelocate() {
-    $('#dialog').removeClass('hidden');
-    $( "#dialog" ).dialog({
-      resizable: false,
-      height: "auto",
-      width: 900,
-      modal: true,
-      close: () => {
-        $('#sub-folder').empty();
-        $('.super-folder').remove();
-        $('#dialog').addClass('hidden');
-      },
-      buttons: {
-        "Delete all items": function() {
-          $( this ).dialog( "close" );
-        },
-        Cancel: function() {
-          $( this ).dialog( "close" );
-        }
-      }
-    });
-}
 function folderMenu(){
     $.contextMenu({
         selector: '.folder',
@@ -30,22 +8,9 @@ function folderMenu(){
                 icon: 'fa-exchange-alt',
                 callback: (key, opt) => {
                     const target = opt.$trigger[0];
-                    console.log(target);
-                    console.log($('.context-menu-active').first());
-                    //取得current folder id
-                    let currentFolderId = $('.breadcrumb').last().attr('id') || 0;
-                    // 彈出menu
-                    dialogRelocate();
-                    let id = opt.$trigger[0].id; // 不能點選的id(本人)
-                    fetchSuperFolders(currentFolderId);
-                    // 右側
-                    $('.folder').clone().appendTo('#sub-folder');
-                    $('#sub-folder .folder').dblclick(e => {
-                        fetchSubFolders(e.target.id)
-                        fetchSuperFolders(e.target.id) //可評估要用加的還是重load
-                    });
-                    // id和target一樣的要加css
-                    // callSuperAPI
+                    relocateOriginId = opt.$trigger[0].id; // 不能點選的id(本人)
+                    initDialogRelocate();
+                    addListenerRelocate('context-menu-active');
                 }},
             'trash': {
                 name: '移至垃圾桶',
