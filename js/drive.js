@@ -164,7 +164,7 @@ function renderFileTrash(rawData){
 // ----------------- Update: trash ----------------- //
 function trash(){
     const list = collectFocused();
-    if(list.length === 0) swalEmptyList();
+    if(list.length === 0) swalWarning(SWAL_NULL_DEST);
     else swalTrash(list);
 }
 function swalTrash(list){
@@ -197,7 +197,7 @@ function doTrash(list, removeFocus){
 // ----------------- Update: recover ----------------- //
 function recover(){
     const list = collectFocused();
-    if(list.length === 0) swalEmptyList();
+    if(list.length === 0) swalWarning(SWAL_NULL_DEST);
     else swalRecover(list, true);
 }
 function swalRecover(list, removeFocus){
@@ -238,7 +238,8 @@ function fetchSuperFolders(folderId){
     }).then(response => renderSuperFolders(response.data.data));
 }
 function fetchSubFolders(folderId){
-    axios.get(API_SUB_FOLDER,{
+    relocateDestId = folderId;
+    return axios.get(API_SUB_FOLDER,{
         params: {
             folderId: folderId},
         headers: {
@@ -257,20 +258,39 @@ function renderSuperFolders(rawData){
 function renderSubFolders(rawData){
     $('#sub-folder').empty();
     const folders = rawData.map(item => {
-        let className = includesLargeNumber(relocateOrigin, item.id) ? 'folder origin' : 'folder';
+        let className = includesLargeNumber(relocateTargetFolders, item.id) ? 'folder origin' : 'folder';
     return `<div id="${item.id}" class="${className}">${item.dataName}</div>`;
     });
     folders.forEach(folder => $('#sub-folder').append(folder));
     addListenerRelocate('origin');
 }
-function relocate(){
-    const list = collectFocused();
-    relocateOrigin.push(list
+function relocate(removeFocus){
+    axios.post(API_RELOCATE, {
+        id: relocateDestId,
+        list: relocateTarget
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+            'token': localStorage.getItem('token')
+        }
+    }).then((response) => {
+        if(removeFocus){
+            $('.focus').remove();
+            $('#toolbar').addClass('hidden');
+            $('#root').removeClass('hidden');
+        }
+        swalSuccess();
+        clearRelocateParams();
+    })
+}
+function batchRelocate(){
+    relocateTarget = collectFocused();
+    relocateTargetFolders.push(relocateTarget
         .filter(item => item.dataType === 0)
         .map(item => item.id.toString())
     );
-    if(list.length === 0){
-        swalEmptyList(); // 這邊要改collectSelected
+    if(relocateTarget.length === 0){
+        swalFrontEndError();
     } else {
         initDialogRelocate();
         addListenerRelocate('focus');
@@ -278,10 +298,12 @@ function relocate(){
 }
 function initDialogRelocate(){
     //取得current folder id
-    const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+    relocateOrigin = $('.breadcrumb').last().attr('id') || 0;
     // 彈出menu
     renderDialogRelocate();
-    fetchSuperFolders(currentFolderId);
+    fetchSuperFolders(relocateOrigin);
+    // init root //用頁面來控制 不要用點的
+    $('#root-super').click(() => fetchSubFolders(ROOT_FOLDER_ID));
     // 右側
     $('.folder').clone().appendTo('#sub-folder');
 }
@@ -289,7 +311,12 @@ function addListenerRelocate(excludedClass){
     const className = '.' + excludedClass; 
     $('#sub-folder .folder').not(className).dblclick(e => {
         fetchSubFolders(e.target.id)
-        fetchSuperFolders(e.target.id) //可評估要用加的還是重load
+        .then(() => fetchSuperFolders(e.target.id))
+        .catch(error => {
+            let errCode = error.response.data.code;
+            console.log((errCode === error.response.data.code));
+        })
+        
     });
     $('#sub-folder .folder').not(className).click(e => {
         $('.sub-folder').removeClass('selected');
@@ -298,4 +325,10 @@ function addListenerRelocate(excludedClass){
 }
 function includesLargeNumber(array, number){
     return array.some(element => element.toString() === number.toString())
+}
+function clearRelocateParams(){
+    relocateTarget.length = 0;
+    relocateTargetFolders.length = 0;
+    relocateOrigin = '';
+    relocateDestId = '';
 }

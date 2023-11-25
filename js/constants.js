@@ -8,6 +8,12 @@ const API_TRASH = API_DOMAIN + '/drive/trash';
 const API_RECOVER = API_DOMAIN + '/drive/recover';
 const API_SUPER_FOLDER = API_DOMAIN + '/drive/folder/super';
 const API_SUB_FOLDER = API_DOMAIN + '/drive/folder/sub';
+const API_RELOCATE = API_DOMAIN + '/drive/relocate';
 // const API_PREVIEW_PREFIX = API_DOMAIN + '/';
 
-const DEFAULT_RESPONSE = '系統錯誤';
+const ROOT_FOLDER_ID = 0;
+
+const SWAL_DEFAULT = '系統錯誤';
+const SWAL_EMPTY_LIST = '請先選擇檔案或資料夾';
+const SWAL_NULL_DEST = '請選擇您要將資料移動到哪一個目錄';
+const SWAL_RELOCATE_FORBIDDEN = '此為原本的目錄，若要移動請改選其他資料夾';

@@ -20,20 +20,28 @@ function swalSuccess(){
         text: '操作成功'
     })
 }
-function swalEmptyList(){
+function swalFrontEndError(){
     Swal.fire({
-        icon: 'warning',
-        text: '請先選擇檔案或資料夾'
+        icon: 'error',
+        text: SWAL_DEFAULT
     })
 }
-function swalTrash(){
+function swalBackEndError(){
     Swal.fire({
-        icon: 'warning',
-        text: '請先還原檔案或資料夾'
+        icon: 'error',
+        text: SWAL_DEFAULT + ' (錯誤代碼: ' + errorCode + ')'
     })
 }
-
-let relocateOrigin = [];
+function swalWarning(wording){
+    Swal.fire({
+        icon: 'warning',
+        text: wording
+    })
+}
+let relocateTarget = [];
+let relocateTargetFolders = [];
+let relocateOrigin = '';
+let relocateDestId = '';
 
 function renderDialogRelocate() {
     $('#dialog').removeClass('hidden');
@@ -49,7 +57,10 @@ function renderDialogRelocate() {
       },
       buttons: {
         "移動至選定資料夾": function() {
-          relocate();
+            if(relocateDestId.length === 0) swalWarning(SWAL_NULL_DEST);
+            if(relocateDestId === relocateOrigin) swalWarning(SWAL_RELOCATE_FORBIDDEN);
+            relocate(true);
+            $(this).dialog('close');
         },
         Cancel: function() {
           $( this ).dialog( "close" );

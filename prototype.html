@@ -66,7 +66,7 @@
     gap: 16px; /* Adjust the gap as needed */
     padding: 16px; /* Adjust the padding as needed */
   }
-  .folder, .file, .folder-trash, .file-trash, .sub-folder {
+  .folder, .file, .folder-trash, .file-trash {
     border: 1px solid #ccc; /* For visualizing the folders */
     padding: 8px; /* Adjust the padding as needed */
     text-align: center; /* Centering the text */
@@ -74,6 +74,18 @@
   }
   .focus{
     border: 5px solid #9dc8f0;
+  }
+  /* .folder:not(.focus):hover,
+  .folder:not(.origin):hover,
+  .file:not(.focus):hover,
+  .file:not(.origin):hover,
+  .folder-trash:hover,
+  .file-trash:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  } */
+  #sub-folder .focus, #sub-folder .origin{
+    color: #ccc;
+    border: none;
   }
   [access="1"]{
     background-color: #dfedfa;
@@ -173,7 +185,7 @@
   $('#root').click(() => $('.breadcrumb').remove());
   $('#trash').click(() => trash());
   $('#recover').click(() => recover());
-  $('#relocate').click(() => relocate());
+  $('#relocate').click(() => batchRelocate());
   folderMenu();
   fileMenu();
   trashMenu();

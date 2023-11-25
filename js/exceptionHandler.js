@@ -22,13 +22,13 @@ function globalExceptionHandler(error){
                 text: error.response.data.msg + ' (錯誤代碼: ' + errorCode + ')',
                 didClose: () => logout()
             });
-            break;
+            throw error;
         }
         // EMPTY_FOLDER
         case 13010: {
             clearDriveData();
             $('#folder').append('<div><span>請使用「新增」建立資料</span></div>'); // TODO: 不符合垃圾桶中文描述
-            break;
+            throw error;
         }
         // NO_SUCH_DATA
         case 13020: {
@@ -36,7 +36,7 @@ function globalExceptionHandler(error){
                 icon: 'info',
                 text:  '沒有更多資料了 (錯誤代碼: ' + errorCode + ')'
             });
-            break;
+            throw error;
         }
         default:{
             generalExceptionHandler(errorCode);
@@ -54,15 +54,12 @@ function globalExceptionHandler(error){
                 icon: 'error',
                 text: error.response.data.msg + ' (錯誤代碼: ' + errorCode + ')'
             });
-            break;
+            throw error;
         }
             
         default:{
-            Swal.fire({
-                icon: 'error',
-                text: DEFAULT_RESPONSE + ' (錯誤代碼: ' + errorCode + ')'
-            })
-            break;
+            swalBackEndError();
+            throw error;
         }
     }
  }

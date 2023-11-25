@@ -8,7 +8,7 @@ function folderMenu(){
                 icon: 'fa-exchange-alt',
                 callback: (key, opt) => {
                     const target = opt.$trigger[0];
-                    relocateOriginId = opt.$trigger[0].id; // 不能點選的id(本人)
+                    relocateTargetId = opt.$trigger[0].id; // 不能點選的id(本人)
                     initDialogRelocate();
                     addListenerRelocate('context-menu-active');
                 }},
