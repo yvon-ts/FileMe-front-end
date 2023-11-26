@@ -61,9 +61,13 @@ function fetchMyDrive(){
             'Content-Type': 'application/json',
             'token': localStorage.getItem('token')}
     }).then(response => {
-        renderDriveData(response.data.data);
+        const result = response.data.data;
+        if(result.length === 0){
+            handleEmptyFolder();
+        }else{
+            renderDriveData(result);
+        }
     })
-    // .catch(error => globalExceptionHandler(error))
 }
 
 function fetchMyTrash(){
@@ -72,9 +76,13 @@ function fetchMyTrash(){
             'Content-Type': 'application/json',
             'token': localStorage.getItem('token')}
     }).then(response => {
-        renderTrash(response.data.data);
+        const result = response.data.data;
+        if(result.length === 0){
+            handleEmptyTrashcan();
+        }else{
+            renderDriveData(result);
+        }
     })
-    // .catch(error => globalExceptionHandler(error))
 }
 async function fetchDrive(folderId){
     const api_drive = API_DRIVE_PREFIX + folderId;
@@ -83,9 +91,13 @@ async function fetchDrive(folderId){
             'Content-Type': 'application/json',
             'token': localStorage.getItem('token')}
     }).then(response => {
-        renderDriveData(response.data.data);
+        const result = response.data.data;
+        if(result.length === 0){
+            handleEmptyFolder();
+        }else{
+            renderDriveData(result);
+        }
     })
-    // .catch(error => globalExceptionHandler(error))
 }
 // ----------------- Render data ----------------- //
 
@@ -274,6 +286,7 @@ function renderSuperFolders(rawData){
     folders.forEach(folder => $('#dialog ul').append(folder));
     $('.super-folder').click(e => fetchSubFolders(e.target.id));
 }
+// here
 function renderSubFolders(rawData){
     $('#sub-folder').empty();
     const folders = rawData.map(item => {
@@ -325,6 +338,11 @@ function initDialogRelocate(){
     // 右側
     $('.folder').clone().appendTo('#sub-folder');
 }
+/**
+ * 禁止移動目標double click
+ * 透過右鍵/移動按鈕/renderSub取得的判斷class不同(context-menu-active/focus/origin)
+ * 故新增此方法
+ */
 function addListenerRelocate(excludedClass){
     const className = '.' + excludedClass; 
     $('#sub-folder .folder').not(className).dblclick(e => {

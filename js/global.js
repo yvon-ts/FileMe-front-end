@@ -56,7 +56,7 @@ function renderDialogRelocate() {
         $('#dialog').addClass('hidden');
       },
       buttons: {
-        "移動到這裡": function() {
+        '移動到這裡': function() {
             if(relocateDestId.length === 0){
                 swalWarning(SWAL_NULL_DEST);
                 return;
@@ -68,8 +68,10 @@ function renderDialogRelocate() {
             relocate(true);
             $(this).dialog('close');
         },
-        Cancel: function() {
-          $( this ).dialog( "close" );
+        '取消': function() {
+            $('.focus').removeClass('focus');
+            monitorToolbar();
+            $( this ).dialog( "close" );
         }
       }
     });

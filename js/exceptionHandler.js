@@ -27,7 +27,7 @@ function globalExceptionHandler(error){
         // EMPTY_FOLDER
         case 13010: {
             clearDriveData();
-            $('#folder').append('<div><span>請使用「新增」建立資料</span></div>'); // TODO: 不符合垃圾桶中文描述
+            $('#folder').append('<div><span>請使用「新增」建立資料</span></div>');
             throw error;
         }
         // NO_SUCH_DATA
@@ -62,4 +62,12 @@ function globalExceptionHandler(error){
             throw error;
         }
     }
+ }
+function handleEmptyFolder(){
+    clearDriveData();
+    $('#folder').append('<div><span>請使用「新增」建立資料</span></div>');
+ }
+ function handleEmptyTrashcan(){
+    clearDriveData();
+    $('#folder').append('<div><span>您的垃圾桶是空的</span></div>');
  }

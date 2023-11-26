@@ -8,7 +8,8 @@ function folderMenu(){
                 icon: 'fa-exchange-alt',
                 callback: (key, opt) => {
                     const target = opt.$trigger[0];
-                    relocateTargetId = opt.$trigger[0].id; // 不能點選的id(本人)
+                    target.classList.add('focus');
+                    relocateTarget = collectFocused();
                     initDialogRelocate();
                     addListenerRelocate('context-menu-active');
                 }},
@@ -38,11 +39,15 @@ function fileMenu(){
             },
             'relocate': {
                 name: '移動',
-                icon: 'fa-exchange-alt'
-                // ,callback: () => {
-
-                // }
-            },
+                icon: 'fa-exchange-alt',
+                callback: (key, opt) => {
+                    const target = opt.$trigger[0];
+                    target.classList.add('focus');
+                    relocateTarget = collectFocused();
+                    initDialogRelocate();
+                    displaySelectedMenu(relocateOrigin);
+                    addListenerRelocate('focus');
+                }},
             'trash': {
                 name: '移至垃圾桶',
                 icon: 'delete',
