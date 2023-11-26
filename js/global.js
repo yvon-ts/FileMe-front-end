@@ -56,9 +56,15 @@ function renderDialogRelocate() {
         $('#dialog').addClass('hidden');
       },
       buttons: {
-        "移動至選定資料夾": function() {
-            if(relocateDestId.length === 0) swalWarning(SWAL_NULL_DEST);
-            if(relocateDestId === relocateOrigin) swalWarning(SWAL_RELOCATE_FORBIDDEN);
+        "移動到這裡": function() {
+            if(relocateDestId.length === 0){
+                swalWarning(SWAL_NULL_DEST);
+                return;
+            }
+            if(relocateDestId === relocateOrigin){
+                swalWarning(SWAL_RELOCATE_FORBIDDEN);
+                return;
+            }
             relocate(true);
             $(this).dialog('close');
         },

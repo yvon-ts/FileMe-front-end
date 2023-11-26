@@ -35,10 +35,13 @@ function monitorToolbar(){
     $('#toolbar span').text(`已選取 ${count} 個`);
    }
    else{
+    resumeHeader();
+   }
+}
+function resumeHeader(){
     $('#toolbar').addClass('hidden');
     $('#root').removeClass('hidden');
     $('.breadcrumb').removeClass('hidden');
-   }
 }
 function countFocus(){
     return $('.focus').length;
@@ -187,8 +190,7 @@ function doTrash(list, removeFocus){
     }).then((response) => {
         if(removeFocus){
             $('.focus').remove();
-            $('#toolbar').addClass('hidden');
-            $('#root').removeClass('hidden');
+            resumeHeader();
         }
         swalSuccess();
     })
@@ -220,8 +222,7 @@ function doRecover(list, removeFocus){
     }).then((response) => {
         if(removeFocus){
             $('.focus').remove();
-            $('#toolbar').addClass('hidden');
-            $('#root').removeClass('hidden');
+            resumeHeader();
         }
         swalSuccess();
     })
@@ -235,7 +236,10 @@ function fetchSuperFolders(folderId){
         headers: {
             'token': localStorage.getItem('token')
         }
-    }).then(response => renderSuperFolders(response.data.data));
+    }).then(response => {
+        renderSuperFolders(response.data.data);
+        displaySelectedMenu(folderId);
+    });
 }
 function fetchSubFolders(folderId){
     relocateDestId = folderId;
@@ -245,7 +249,22 @@ function fetchSubFolders(folderId){
         headers: {
             'token': localStorage.getItem('token')
         }
-    }).then(response => renderSubFolders(response.data.data));
+    }).then(response => {
+        renderSubFolders(response.data.data);
+        displaySelectedMenu(folderId);
+    });
+}
+function displaySelectedMenu(folderId){
+    relocateDestId = folderId;
+    $('.super-folder').removeClass('selected');
+    if(folderId === ROOT_FOLDER_ID) {
+        $('#root-super').addClass('selected');
+    } else {
+        $('#root-super').removeClass('selected');
+        $('.super-folder').each((index, item) => {
+            if(item.id === folderId) $(item).addClass('selected');
+        })
+    }
 }
 function renderSuperFolders(rawData){
     $('.super-folder').remove();
@@ -276,14 +295,13 @@ function relocate(removeFocus){
     }).then((response) => {
         if(removeFocus){
             $('.focus').remove();
-            $('#toolbar').addClass('hidden');
-            $('#root').removeClass('hidden');
+            resumeHeader();
         }
         swalSuccess();
         clearRelocateParams();
     })
 }
-function batchRelocate(){
+function batchRelocateSetting(){
     relocateTarget = collectFocused();
     relocateTargetFolders.push(relocateTarget
         .filter(item => item.dataType === 0)
@@ -301,8 +319,8 @@ function initDialogRelocate(){
     relocateOrigin = $('.breadcrumb').last().attr('id') || 0;
     // 彈出menu
     renderDialogRelocate();
-    fetchSuperFolders(relocateOrigin);
-    // init root //用頁面來控制 不要用點的
+    if(!(relocateOrigin === ROOT_FOLDER_ID)) fetchSuperFolders(relocateOrigin);
+    // 左側
     $('#root-super').click(() => fetchSubFolders(ROOT_FOLDER_ID));
     // 右側
     $('.folder').clone().appendTo('#sub-folder');
@@ -312,15 +330,10 @@ function addListenerRelocate(excludedClass){
     $('#sub-folder .folder').not(className).dblclick(e => {
         fetchSubFolders(e.target.id)
         .then(() => fetchSuperFolders(e.target.id))
-        .catch(error => {
-            let errCode = error.response.data.code;
-            console.log((errCode === error.response.data.code));
-        })
-        
-    });
-    $('#sub-folder .folder').not(className).click(e => {
-        $('.sub-folder').removeClass('selected');
-        $(e.target).addClass('selected');
+        // .catch(error => {
+        //     let errCode = error.response.data.code;
+        //     console.log((errCode === error.response.data.code));
+        // })
     });
 }
 function includesLargeNumber(array, number){

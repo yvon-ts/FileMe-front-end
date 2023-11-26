@@ -72,7 +72,7 @@
     text-align: center; /* Centering the text */
     background-color: #f3f3f3; /* Folder background */
   }
-  .focus{
+  .focus, .selected{
     border: 5px solid #9dc8f0;
   }
   /* .folder:not(.focus):hover,
@@ -185,7 +185,7 @@
   $('#root').click(() => $('.breadcrumb').remove());
   $('#trash').click(() => trash());
   $('#recover').click(() => recover());
-  $('#relocate').click(() => batchRelocate());
+  $('#relocate').click(() => batchRelocateSetting());
   folderMenu();
   fileMenu();
   trashMenu();
