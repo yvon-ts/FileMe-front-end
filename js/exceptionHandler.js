@@ -25,19 +25,19 @@ function globalExceptionHandler(error){
             throw error;
         }
         // EMPTY_FOLDER
-        case 13010: {
-            clearDriveData();
-            $('#folder').append('<div><span>請使用「新增」建立資料</span></div>');
-            throw error;
-        }
+        // case 13010: {
+        //     clearDriveData();
+        //     $('#folder').append('<div><span>請使用「新增」建立資料</span></div>');
+        //     throw error;
+        // }
         // NO_SUCH_DATA
-        case 13020: {
-            Swal.fire({
-                icon: 'info',
-                text:  '沒有更多資料了 (錯誤代碼: ' + errorCode + ')'
-            });
-            throw error;
-        }
+        // case 13020: {
+        //     Swal.fire({
+        //         icon: 'info',
+        //         text:  '沒有更多資料了 (錯誤代碼: ' + errorCode + ')'
+        //     });
+        //     throw error;
+        // }
         default:{
             generalExceptionHandler(errorCode);
         }
