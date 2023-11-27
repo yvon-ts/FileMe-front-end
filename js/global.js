@@ -69,8 +69,7 @@ function renderDialogRelocate() {
             $(this).dialog('close');
         },
         '取消': function() {
-            $('.focus').removeClass('focus');
-            monitorToolbar();
+            clearFocused();
             $( this ).dialog( "close" );
         }
       }

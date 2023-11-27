@@ -54,6 +54,10 @@ function collectFocused(){
     });
     return list;
 }
+function clearFocused(){
+    $('.focus').removeClass('focus');
+    monitorToolbar();
+}
 // ----------------- Fetch data ----------------- //
 function fetchMyDrive(){
     axios.get(API_MY_DRIVE, {
@@ -176,6 +180,38 @@ function renderFileTrash(rawData){
        });
        files.forEach(file => $('#file').append(file));
    }
+// ----------------- Update: rename ----------------- //
+function swalRename(targetId, dataType){
+    Swal.fire({
+        text: '請輸入新的名稱',
+        input: 'text',
+        inputValidator: (value) => {
+            if(!REGEX_DATA_NAME.test(value)) return REGEX_WARN_DATA_NAME;
+        },
+        showCancelButton: true,
+        confirmButtonText: '確認改名',
+        showLoaderOnConfirm: true,
+        preConfirm: newName => {
+            doRename(newName, targetId, dataType)},
+        allowOutsideClick: () => !Swal.isLoading()
+    })
+}
+function doRename(newName, targetId, dataType){
+    axios.post(API_RENAME, {
+        id: targetId,
+        dataName: newName,
+        dataType: dataType
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+            'token': localStorage.getItem('token')
+        }
+    }).then((response) => {
+        const folderId = $('.breadcrumb').last().attr('id') || 0;
+        fetchDrive(folderId);
+        swalSuccess();
+    })
+}
 // ----------------- Update: trash ----------------- //
 function trash(){
     const list = collectFocused();
@@ -189,12 +225,8 @@ function swalTrash(list){
         confirmButtonText: '是',
         cancelButtonText: '否'
       }).then((result) => {
-        if (result.isConfirmed) {
-            doTrash(list);
-        } else {
-            $('.focus').removeClass('focus');
-            monitorToolbar();
-        }
+        if (result.isConfirmed) doTrash(list);
+        else clearFocused();
       });
 }
 function doTrash(list){
@@ -223,12 +255,8 @@ function swalRecover(list){
         confirmButtonText: '是',
         cancelButtonText: '否'
       }).then((result) => {
-        if (result.isConfirmed) {
-            doRecover(list);
-        } else {
-            $('.focus').removeClass('focus');
-            monitorToolbar();
-        }
+        if (result.isConfirmed) doRecover(list);
+        else clearFocused();
       });
 }
 function doRecover(list){

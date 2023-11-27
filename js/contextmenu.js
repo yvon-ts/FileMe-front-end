@@ -2,7 +2,16 @@ function folderMenu(){
     $.contextMenu({
         selector: '.folder',
         items: {
-            'rename': {name: '重新命名', icon: 'fa-edit'},
+            'rename': {
+                name: '重新命名',
+                icon: 'fa-edit',
+                callback: (key, opt) => {
+                    const target = opt.$trigger[0];
+                    const targetId = target.id
+                    const dataType = opt.$trigger[0].classList.contains('folder') ? 0 : 1;
+                    swalRename(targetId, dataType);
+                }
+            },
             'relocate': {
                 name: '移動',
                 icon: 'fa-exchange-alt',
@@ -31,10 +40,13 @@ function fileMenu(){
             'download': {name: '下載', icon: 'fa-save'},
             'rename': {
                 name: '重新命名',
-                icon: 'fa-edit'
-                // ,callback: (key, opt) => {
-                //     $('.folder').clone().appendTo('#file');
-                // }
+                icon: 'fa-edit',
+                callback: (key, opt) => {
+                    const target = opt.$trigger[0];
+                    const targetId = target.id
+                    const dataType = opt.$trigger[0].classList.contains('folder') ? 0 : 1;
+                    swalRename(targetId, dataType);
+                }
             },
             'relocate': {
                 name: '移動',
@@ -60,7 +72,7 @@ function trashMenu(){
     $.contextMenu({
         selector: '.trash',
         items: {
-            'recover': { // TODO: 加一下swal確認是否操作
+            'recover': {
                 name: '還原',
                 icon: 'fa-rotate-left',
                 callback: (key, opt) => {
