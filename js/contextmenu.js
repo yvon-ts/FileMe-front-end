@@ -9,17 +9,16 @@ function folderMenu(){
                 callback: (key, opt) => {
                     const target = opt.$trigger[0];
                     target.classList.add('focus');
-                    relocateTarget = collectFocused();
-                    initDialogRelocate();
-                    addListenerRelocate('context-menu-active');
+                    batchRelocateSetting();
+                    displaySelectedMenu(relocateOrigin);
                 }},
             'trash': {
                 name: '移至垃圾桶',
                 icon: 'delete',
                 callback: (key, opt) => {
-                    let list = [{id: opt.$trigger[0].id, dataType: 0}];
-                    doTrash(list, false);
-                    opt.$trigger[0].remove();
+                    const target = opt.$trigger[0];
+                    target.classList.add('focus');
+                    trash();
                 }}
         }
       })
@@ -43,18 +42,16 @@ function fileMenu(){
                 callback: (key, opt) => {
                     const target = opt.$trigger[0];
                     target.classList.add('focus');
-                    relocateTarget = collectFocused();
-                    initDialogRelocate();
+                    batchRelocateSetting();
                     displaySelectedMenu(relocateOrigin);
-                    addListenerRelocate('focus');
                 }},
             'trash': {
                 name: '移至垃圾桶',
                 icon: 'delete',
                 callback: (key, opt) => {
-                    let list = [{id: opt.$trigger[0].id, dataType: 1}];
-                    doTrash(list, false);
-                    opt.$trigger[0].remove();
+                    const target = opt.$trigger[0];
+                    target.classList.add('focus');
+                    trash();
                 }}
         }
       })
@@ -63,14 +60,13 @@ function trashMenu(){
     $.contextMenu({
         selector: '.trash',
         items: {
-            'recover': {
+            'recover': { // TODO: 加一下swal確認是否操作
                 name: '還原',
                 icon: 'fa-rotate-left',
                 callback: (key, opt) => {
-                    let dataTypeValue = opt.$trigger[0].classList.contains('folder-trash')? 0 : 1;
-                    let list = [{id: opt.$trigger[0].id, dataType: dataTypeValue}];
-                    doRecover(list, false);
-                    opt.$trigger[0].remove();
+                    const target = opt.$trigger[0];
+                    target.classList.add('focus');
+                    recover();
                 }},
             'delete': {name: '立即刪除', icon: 'fa-solid fa-ban', callback: () => {alert('立即刪除')}}
         }

@@ -49,7 +49,7 @@ function countFocus(){
 function collectFocused(){
     let list = [];
     $('.focus').each((index, item) => {
-        let dataTypeValue = $(item).hasClass('folder')? 0 : 1;
+        let dataTypeValue = $(item).hasClass('folder') || $(item).hasClass('folder-trash')? 0 : 1;
         list.push({id: item.id, dataType: dataTypeValue});
     });
     return list;
@@ -80,7 +80,7 @@ function fetchMyTrash(){
         if(result.length === 0){
             handleEmptyTrashcan();
         }else{
-            renderDriveData(result);
+            renderTrash(result);
         }
     })
 }
@@ -189,10 +189,15 @@ function swalTrash(list){
         confirmButtonText: '是',
         cancelButtonText: '否'
       }).then((result) => {
-        if (result.isConfirmed) doTrash(list, true);
+        if (result.isConfirmed) {
+            doTrash(list);
+        } else {
+            $('.focus').removeClass('focus');
+            monitorToolbar();
+        }
       });
 }
-function doTrash(list, removeFocus){
+function doTrash(list){
     const jsonList = JSON.stringify(list);
     axios.post(API_TRASH, jsonList, {
         headers: {
@@ -200,13 +205,10 @@ function doTrash(list, removeFocus){
             'token': localStorage.getItem('token')
         }
     }).then((response) => {
-        if(removeFocus){
-            $('.focus').remove();
-            resumeHeader();
-        }
+        $('.focus').remove();
+        resumeHeader();
         swalSuccess();
     })
-    // .catch((error) => globalExceptionHandler(error));
 }
 // ----------------- Update: recover ----------------- //
 function recover(){
@@ -214,17 +216,22 @@ function recover(){
     if(list.length === 0) swalWarning(SWAL_NULL_DEST);
     else swalRecover(list, true);
 }
-function swalRecover(list, removeFocus){
+function swalRecover(list){
     Swal.fire({
         text: '是否要還原已選擇的檔案？',
         showCancelButton: true,
         confirmButtonText: '是',
         cancelButtonText: '否'
       }).then((result) => {
-        if (result.isConfirmed) doRecover(list, removeFocus);
+        if (result.isConfirmed) {
+            doRecover(list);
+        } else {
+            $('.focus').removeClass('focus');
+            monitorToolbar();
+        }
       });
 }
-function doRecover(list, removeFocus){
+function doRecover(list){
     const jsonList = JSON.stringify(list);
     axios.post(API_RECOVER, jsonList, {
         headers: {
@@ -232,13 +239,10 @@ function doRecover(list, removeFocus){
             'token': localStorage.getItem('token')
         }
     }).then((response) => {
-        if(removeFocus){
-            $('.focus').remove();
-            resumeHeader();
-        }
+        $('.focus').remove();
+        resumeHeader();
         swalSuccess();
     })
-    // .catch((error) => globalExceptionHandler(error));
 }
 // ----------------- Update: relocate: render menu ----------------- //
 function fetchSuperFolders(folderId){
