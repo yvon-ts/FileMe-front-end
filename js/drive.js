@@ -62,7 +62,7 @@ function clearFocused(){
 function fetchMyDrive(){
     axios.get(API_MY_DRIVE, {
         headers: {
-            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/json',
             'token': localStorage.getItem('token')}
     }).then(response => {
         const result = response.data.data;
@@ -77,7 +77,7 @@ function fetchMyDrive(){
 function fetchMyTrash(){
     axios.get(API_MY_TRASH, {
         headers: {
-            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/json',
             'token': localStorage.getItem('token')}
     }).then(response => {
         const result = response.data.data;
@@ -92,7 +92,7 @@ async function fetchDrive(folderId){
     const api_drive = API_DRIVE_PREFIX + folderId;
     axios.get(api_drive, {
         headers: {
-            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/json',
             'token': localStorage.getItem('token')}
     }).then(response => {
         const result = response.data.data;
@@ -101,6 +101,23 @@ async function fetchDrive(folderId){
         }else{
             renderDriveData(result);
         }
+    })
+}
+function fetchPreview(fileId){
+    const api_preview = API_PREVIEW_PREFIX + fileId;
+    axios.get(api_preview, {
+        headers: {
+            // 'Content-Type': 'application/json',
+            'token': localStorage.getItem('token')},
+        responseType: 'blob'
+    }).then(response => {
+        let url = URL.createObjectURL(new Blob([response.data]));
+        $('#preview').attr('src', url);
+        renderDialogPreview();
+    }).catch(() => {
+        $('#preview').attr('src', '');
+        $('#preview').attr('alt', '該檔案不支援預覽，請直接下載查看');
+        renderDialogPreview();
     })
 }
 // ----------------- Render data ----------------- //
@@ -162,6 +179,7 @@ function renderFiles(rawData){
         return `<div class="file" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
     });
     files.forEach(file => $('#file').append(file));
+    $('.file').dblclick(e => fetchPreview(e.target.id));
 }
 
 function renderFolderTrash(rawData){
@@ -180,6 +198,33 @@ function renderFileTrash(rawData){
        });
        files.forEach(file => $('#file').append(file));
    }
+// ----------------- Read: preview ----------------- //
+   function renderDialogPreview() {
+    $('#dialog').removeClass('hidden');
+    $('.preview').removeClass('hidden');
+    $( "#dialog" ).dialog({
+      resizable: false,
+      height: "auto",
+      width: 900,
+      modal: true,
+      close: () => {
+        $('#preview').attr('src', '');
+        $('#dialog').addClass('hidden');
+        $('.preview').addClass('hidden');
+      },
+      buttons: {
+        '取得連結': function() {
+            // swal會公開喔可以嗎 // 然後同時fetch修改檔案權限
+        },
+        '下載': function() {
+            alert('download');
+        },
+        '關閉視窗': function() {
+            $( this ).dialog( "close" );
+        }
+      }
+    });
+}
 // ----------------- Update: rename ----------------- //
 function swalRename(targetId, dataType){
     Swal.fire({
@@ -215,7 +260,7 @@ function doRename(newName, targetId, dataType){
 // ----------------- Update: trash ----------------- //
 function trash(){
     const list = collectFocused();
-    if(list.length === 0) swalWarning(SWAL_NULL_DEST);
+    if(list.length === 0) swal('warning', SWAL_NULL_DEST);
     else swalTrash(list);
 }
 function swalTrash(list){
@@ -245,7 +290,7 @@ function doTrash(list){
 // ----------------- Update: recover ----------------- //
 function recover(){
     const list = collectFocused();
-    if(list.length === 0) swalWarning(SWAL_NULL_DEST);
+    if(list.length === 0) swal('warning', SWAL_NULL_DEST);
     else swalRecover(list, true);
 }
 function swalRecover(list){
@@ -318,7 +363,7 @@ function renderSuperFolders(rawData){
     folders.forEach(folder => $('#dialog ul').append(folder));
     $('.super-folder').click(e => fetchSubFolders(e.target.id));
 }
-// here
+
 function renderSubFolders(rawData){
     $('#sub-folder').empty();
     const folders = rawData.map(item => {
@@ -346,7 +391,7 @@ function relocate(removeFocus){
         clearRelocateParams();
     })
 }
-function batchRelocateSetting(){
+function relocateSetting(){
     relocateTarget = collectFocused();
     relocateTargetFolders.push(relocateTarget
         .filter(item => item.dataType === 0)
@@ -394,4 +439,39 @@ function clearRelocateParams(){
     relocateTargetFolders.length = 0;
     relocateOrigin = '';
     relocateDestId = '';
+}
+
+function renderDialogRelocate() {
+    $('#dialog').removeClass('hidden');
+    $('.relocate').removeClass('hidden');
+    $( "#dialog" ).dialog({
+      resizable: false,
+      height: "auto",
+      width: 900,
+      modal: true,
+      close: () => {
+        $('#sub-folder').empty();
+        $('.super-folder').remove();
+        $('#dialog').addClass('hidden');
+        $('.relocate').addClass('hidden');
+      },
+      buttons: {
+        '移動到這裡': function() {
+            if(relocateDestId.length === 0){
+                swal('warning', SWAL_NULL_DEST);
+                return;
+            }
+            if(relocateDestId === relocateOrigin){
+                swal('warning', SWAL_RELOCATE_FORBIDDEN);
+                return;
+            }
+            relocate(true);
+            $(this).dialog('close');
+        },
+        '取消': function() {
+            clearFocused();
+            $( this ).dialog( "close" );
+        }
+      }
+    });
 }

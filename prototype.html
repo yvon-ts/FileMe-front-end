@@ -185,53 +185,25 @@
   $('#root').click(() => $('.breadcrumb').remove());
   $('#trash').click(() => trash());
   $('#recover').click(() => recover());
-  $('#relocate').click(() => batchRelocateSetting());
+  $('#relocate').click(() => relocateSetting());
   $('#clearFocus').click(() => clearFocused());
   folderMenu();
   fileMenu();
   trashMenu();
 </script>
-<!-- <script>
-  $( function() {
-    $( "#dialog" ).dialog({
-      resizable: false,
-      height: "auto",
-      width: 900,
-      modal: true,
-      buttons: {
-        "Delete all items": function() {
-          $( this ).dialog( "close" );
-        },
-        Cancel: function() {
-          $( this ).dialog( "close" );
-        }
-      }
-    });
-    $('#root-super').click(() => {
-                    console.log('hi');
-                    let id = '1726514820467744769';
-                    axios.get(API_SUPER_FOLDER,{
-                        params: {
-                            folderId: id},
-                        headers: {
-                            'token': localStorage.getItem('token')
-                        }
-                    }).then(response => renderSuperFolders(response.data.data));
-                });
-  } );
-  </script> -->
 <div id="dialog" class="flex just-btwn hidden">
-        <aside>
+        <aside class="relocate hidden">
             <nav>
                 <ul class="flex-col">
                     <li id="root-super">根目錄</li>
                 </ul>
             </nav>
         </aside>
-        <main>
+        <main class="relocate hidden">
             <div id="sub-folder" class="flex">
             </div>
         </main>
+        <img id="preview" class="preview hidden" src="" alt="">
     </div>
 </body>
 </html>

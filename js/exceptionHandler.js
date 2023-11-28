@@ -5,7 +5,57 @@ axios.interceptors.response.use(
         return response;
     },
     error => {
-        globalExceptionHandler(error);
+        // globalExceptionHandler(error);
+        let errorCode = error.response.data.code;
+    switch(errorCode){
+        // PREVIEW_NOT_ALLOWED
+        case 11310:{
+            Swal.fire({
+                icon: 'info',
+                text: error.response.data.msg + ' (錯誤代碼: ' + errorCode + ')'
+            });
+            throw error;
+        }
+        // EXPIRED_TOKEN
+        case 11411: {
+            Swal.fire({
+                icon: 'error',
+                text: error.response.data.msg + ' (錯誤代碼: ' + errorCode + ')',
+                didClose: () => logout()
+            });
+            throw error;
+        }
+        // EMPTY_FOLDER
+        // case 13010: {
+        //     clearDriveData();
+        //     $('#folder').append('<div><span>請使用「新增」建立資料</span></div>');
+        //     throw error;
+        // }
+        // NO_SUCH_DATA
+        // case 13020: {
+        //     Swal.fire({
+        //         icon: 'info',
+        //         text:  '沒有更多資料了 (錯誤代碼: ' + errorCode + ')'
+        //     });
+        //     throw error;
+        // }
+        default:{
+            let initial = errorCode.toString().charAt(0);
+            switch(initial){
+                case '1': {
+                    Swal.fire({
+                        icon: 'error',
+                        text: error.response.data.msg + ' (錯誤代碼: ' + errorCode + ')'
+                    });
+                    throw error;
+                }
+                default:{
+                    swalBackEndError();
+                    throw error;
+                }
+            }
+        }
+    }
     }
 );
 
@@ -43,26 +93,26 @@ function globalExceptionHandler(error){
         }
     }
  }
- function filterErrorCode(errorCode){
-    return errorCode.toString().charAt(0);
-}
- function generalExceptionHandler(errorCode){
-    // let errorCode = error.response.data.code;
-    switch(filterErrorCode(errorCode)){
-        case '1': {
-            Swal.fire({
-                icon: 'error',
-                text: error.response.data.msg + ' (錯誤代碼: ' + errorCode + ')'
-            });
-            throw error;
-        }
+//  function filterErrorCode(errorCode){
+//     return errorCode.toString().charAt(0);
+// }
+//  function generalExceptionHandler(errorCode){
+//     // let errorCode = error.response.data.code;
+//     switch(filterErrorCode(errorCode)){
+//         case '1': {
+//             Swal.fire({
+//                 icon: 'error',
+//                 text: error.response.data.msg + ' (錯誤代碼: ' + errorCode + ')'
+//             });
+//             throw error;
+//         }
             
-        default:{
-            swalBackEndError();
-            throw error;
-        }
-    }
- }
+//         default:{
+//             swalBackEndError();
+//             throw error;
+//         }
+//     }
+//  }
 function handleEmptyFolder(){
     clearDriveData();
     $('#folder').append('<div><span>請使用「新增」建立資料</span></div>');

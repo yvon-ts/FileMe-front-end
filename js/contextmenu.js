@@ -18,7 +18,7 @@ function folderMenu(){
                 callback: (key, opt) => {
                     const target = opt.$trigger[0];
                     target.classList.add('focus');
-                    batchRelocateSetting();
+                    relocateSetting();
                     displaySelectedMenu(relocateOrigin);
                 }},
             'trash': {
@@ -36,7 +36,14 @@ function fileMenu(){
     $.contextMenu({
         selector: '.file',
         items: {
-            'preview': {name: '預覽', icon: 'fa-search'},
+            'preview': {
+                name: '預覽',
+                icon: 'fa-search',
+                callback: (key, opt) => {
+                    const fileId = opt.$trigger[0].id;
+                    fetchPreview(fileId);
+                }
+            },
             'download': {name: '下載', icon: 'fa-save'},
             'rename': {
                 name: '重新命名',
@@ -54,7 +61,7 @@ function fileMenu(){
                 callback: (key, opt) => {
                     const target = opt.$trigger[0];
                     target.classList.add('focus');
-                    batchRelocateSetting();
+                    relocateSetting();
                     displaySelectedMenu(relocateOrigin);
                 }},
             'trash': {

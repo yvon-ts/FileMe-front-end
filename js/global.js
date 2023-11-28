@@ -32,9 +32,9 @@ function swalBackEndError(){
         text: SWAL_DEFAULT + ' (錯誤代碼: ' + errorCode + ')'
     })
 }
-function swalWarning(wording){
+function swal(icon, wording){
     Swal.fire({
-        icon: 'warning',
+        icon: icon,
         text: wording
     })
 }
@@ -42,36 +42,3 @@ let relocateTarget = [];
 let relocateTargetFolders = [];
 let relocateOrigin = '';
 let relocateDestId = '';
-
-function renderDialogRelocate() {
-    $('#dialog').removeClass('hidden');
-    $( "#dialog" ).dialog({
-      resizable: false,
-      height: "auto",
-      width: 900,
-      modal: true,
-      close: () => {
-        $('#sub-folder').empty();
-        $('.super-folder').remove();
-        $('#dialog').addClass('hidden');
-      },
-      buttons: {
-        '移動到這裡': function() {
-            if(relocateDestId.length === 0){
-                swalWarning(SWAL_NULL_DEST);
-                return;
-            }
-            if(relocateDestId === relocateOrigin){
-                swalWarning(SWAL_RELOCATE_FORBIDDEN);
-                return;
-            }
-            relocate(true);
-            $(this).dialog('close');
-        },
-        '取消': function() {
-            clearFocused();
-            $( this ).dialog( "close" );
-        }
-      }
-    });
-}
