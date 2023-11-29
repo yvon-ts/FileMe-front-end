@@ -62,7 +62,6 @@ function clearFocused(){
 function fetchMyDrive(){
     axios.get(API_MY_DRIVE, {
         headers: {
-            // 'Content-Type': 'application/json',
             'token': localStorage.getItem('token')}
     }).then(response => {
         const result = response.data.data;
@@ -77,7 +76,6 @@ function fetchMyDrive(){
 function fetchMyTrash(){
     axios.get(API_MY_TRASH, {
         headers: {
-            // 'Content-Type': 'application/json',
             'token': localStorage.getItem('token')}
     }).then(response => {
         const result = response.data.data;
@@ -92,7 +90,6 @@ async function fetchDrive(folderId){
     const api_drive = API_DRIVE_PREFIX + folderId;
     axios.get(api_drive, {
         headers: {
-            // 'Content-Type': 'application/json',
             'token': localStorage.getItem('token')}
     }).then(response => {
         const result = response.data.data;
@@ -107,7 +104,6 @@ function fetchPreview(fileId){
     const api_preview = API_PREVIEW_PREFIX + fileId;
     axios.get(api_preview, {
         headers: {
-            // 'Content-Type': 'application/json',
             'token': localStorage.getItem('token')},
         responseType: 'blob'
     }).then(response => {
@@ -118,6 +114,28 @@ function fetchPreview(fileId){
         $('#preview').attr('src', '');
         $('#preview').attr('alt', '該檔案不支援預覽，請直接下載查看');
         renderDialogPreview();
+    })
+}
+function fetchDownload(fileId){
+    const api_download = API_DOWNLOAD_PREFIX + fileId;
+    axios.get(api_download, {
+        headers: {
+            'token': localStorage.getItem('token')},
+        responseType: 'blob'
+    }).then(response => {
+        const contentDisposition = response.headers['content-disposition'];
+        let fileName = contentDisposition.split('filename=')[1].split(';')[0];
+        fileName = fileName.replace(/\"/g, "");
+        fileName = decodeURIComponent(fileName);
+        
+        let url = URL.createObjectURL(new Blob([response.data]));
+        let link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        downloadFileId = '';
+    }).catch(() => {
     })
 }
 // ----------------- Render data ----------------- //
@@ -179,7 +197,10 @@ function renderFiles(rawData){
         return `<div class="file" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
     });
     files.forEach(file => $('#file').append(file));
-    $('.file').dblclick(e => fetchPreview(e.target.id));
+    $('.file').dblclick(e => {
+        downloadFileId = e.target.id;
+        fetchPreview(downloadFileId);
+    });
 }
 
 function renderFolderTrash(rawData){
@@ -217,13 +238,25 @@ function renderFileTrash(rawData){
             // swal會公開喔可以嗎 // 然後同時fetch修改檔案權限
         },
         '下載': function() {
-            alert('download');
+            swalDownload(downloadFileId);
         },
         '關閉視窗': function() {
+            downloadFileId = '';
             $( this ).dialog( "close" );
         }
       }
     });
+}
+function swalDownload(downloadFileId){
+    Swal.fire({
+        text: '是否要下載？',
+        showCancelButton: true,
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        showLoaderOnConfirm: true,
+        preConfirm: () => fetchDownload(downloadFileId),
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then(() => swalSuccess());
 }
 // ----------------- Update: rename ----------------- //
 function swalRename(targetId, dataType){

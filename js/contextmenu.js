@@ -40,11 +40,20 @@ function fileMenu(){
                 name: '預覽',
                 icon: 'fa-search',
                 callback: (key, opt) => {
+                    downloadFileId = '';
                     const fileId = opt.$trigger[0].id;
+                    downloadFileId = fileId;
                     fetchPreview(fileId);
                 }
             },
-            'download': {name: '下載', icon: 'fa-save'},
+            'download': {
+                name: '下載',
+                icon: 'fa-save',
+                callback: (key, opt) => {
+                    downloadFileId = '';
+                    downloadFileId = downloadFileId.length === 0 ? opt.$trigger[0].id : downloadFileId;
+                    swalDownload(downloadFileId);
+                }},
             'rename': {
                 name: '重新命名',
                 icon: 'fa-edit',

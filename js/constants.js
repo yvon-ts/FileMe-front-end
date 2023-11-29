@@ -5,6 +5,7 @@ const API_MY_DRIVE = API_DOMAIN + '/drive/my-drive';
 const API_MY_TRASH = API_DOMAIN + '/drive/my-trash';
 const API_DRIVE_PREFIX = API_DOMAIN + '/drive/';
 const API_PREVIEW_PREFIX = API_DOMAIN + '/drive/preview/';
+const API_DOWNLOAD_PREFIX = API_DOMAIN + '/drive/download/';
 const API_TRASH = API_DOMAIN + '/drive/trash';
 const API_RECOVER = API_DOMAIN + '/drive/recover';
 const API_SUPER_FOLDER = API_DOMAIN + '/drive/folder/super';
