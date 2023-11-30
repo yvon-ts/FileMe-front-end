@@ -189,18 +189,21 @@
     // const folderId = currentUrl.pathname.split('/').pop();
     const folderId = currentUrl.searchParams.get('query');
     fetchPublicDrive(folderId);
+    console.log('hi1')
   }
   function fetchPublicDrive(folderId){
     const api_pub_drive = API_PUBLIC_DRIVE_PREFIX + folderId;
+    console.log('hi2')
     axios.get(api_pub_drive)
     .then(response => {
         const result = response.data.data;
+        console.log(response)
         if(result.length === 0){
             handleEmptyFolder();
         }else{
           renderPublicDriveData(result);
         }
-    })
+    }).catch(error => alert(error))
 }
 function renderPublicDriveData(rawData){
   $('#folder').html('');
