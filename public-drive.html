@@ -184,7 +184,8 @@
         <img id="preview" class="preview hidden" src="" alt="">
 </div>
 <script>
-  function renderPublicData(){
+  console.log('hihi')
+  window.onpopstate = function renderPublicData(){
     const currentUrl = new URL(window.location.href);
     // const folderId = currentUrl.pathname.split('/').pop();
     const folderId = currentUrl.searchParams.get('query');
