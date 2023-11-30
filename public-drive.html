@@ -185,7 +185,8 @@
 </div>
 <script>
   console.log('hihi')
-  window.onpopstate = function renderPublicData(){
+  $(document).ready(renderPublicData)
+  function renderPublicData(){
     const currentUrl = new URL(window.location.href);
     // const folderId = currentUrl.pathname.split('/').pop();
     const folderId = currentUrl.searchParams.get('query');
