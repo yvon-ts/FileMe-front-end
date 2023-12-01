@@ -234,7 +234,8 @@ function renderFileTrash(rawData){
         $('.preview').addClass('hidden');
       },
       buttons: {
-        '取得連結': function() {
+        '取得連結': function(downloadFileId) {
+            copyLink(downloadFileId);
             // swal會公開喔可以嗎 // 然後同時fetch修改檔案權限
         },
         '下載': function() {
@@ -257,6 +258,57 @@ function swalDownload(downloadFileId){
         preConfirm: () => fetchDownload(downloadFileId),
         allowOutsideClick: () => !Swal.isLoading()
       }).then(() => swalSuccess());
+}
+// ----------------- Update: access level (temporary ver.)----------------- //
+function generatePublicLink(folderId){
+    const domain = window.location.hostname;
+    return domain + PUBLIC_FOLDER_SUFFIX + folderId;
+}
+function copyLink(folderId){
+    navigator.clipboard.writeText(generatePublicLink(folderId));
+}
+function swalPublicFolder(access){
+    Swal.fire({
+        text: '目前權限：' + access,
+        showCancelButton: true,
+        confirmButtonText: '變更權限',
+        denyButtonText: '取消'
+      }).then((result) => {
+        if (result.isConfirmed) swalToggleAccess();
+      });
+}
+function swalPrivateFolder(access){
+    Swal.fire({
+        text: '目前權限：' + access,
+        showCancelButton: true,
+        confirmButtonText: '變更權限',
+        denyButtonText: '取消'
+      }).then((result) => {
+        if (result.isConfirmed) swalToggleAccess();
+      });
+}
+function swalToggleAccess(){
+    Swal.fire({
+        text: '是否要變更權限？',
+        showCancelButton: true,
+        confirmButtonText: '是',
+        cancelButtonText: '否'
+      }).then((result) => {
+        if (result.isConfirmed) doToggleAccess();
+      });
+}
+function doToggleAccess(){
+    const api_toggle_access = API_ACCESS_CONTROL_PREFIX + accessControlId;
+    axios.post(api_toggle_access, null, {
+        headers: {
+            'token': localStorage.getItem('token')
+        }
+    }).then((response) => {
+        const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+        currentFolderId === 0 ? fetchMyDrive() : fetchDrive(currentFolderId);
+        swalSuccess();
+        accessControlId = '';
+    })
 }
 // ----------------- Update: rename ----------------- //
 function swalRename(targetId, dataType){

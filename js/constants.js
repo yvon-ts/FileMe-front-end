@@ -12,9 +12,10 @@ const API_SUPER_FOLDER = API_DOMAIN + '/drive/folder/super';
 const API_SUB_FOLDER = API_DOMAIN + '/drive/folder/sub';
 const API_RELOCATE = API_DOMAIN + '/drive/relocate';
 const API_RENAME = API_DOMAIN + '/drive/rename';
+const API_ACCESS_CONTROL_PREFIX = API_DOMAIN + '/drive/access-control/';
 
 const API_PUBLIC_DRIVE_PREFIX = API_DOMAIN + '/pub/drive/';
-
+const PUBLIC_FOLDER_SUFFIX = '/folder?query=';
 
 const REGEX_DATA_NAME = /^(?=.{1,32}$)(?![_.])[\p{L}\p{Nd}_.-]+(?<![_.])$/u
 const REGEX_WARN_DATA_NAME = '不符合名稱規定(不得以_.為開頭或結尾，僅接受文字、數字與_.-符號，且不得大於30字)';

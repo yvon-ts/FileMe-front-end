@@ -43,3 +43,4 @@ let relocateTargetFolders = [];
 let relocateOrigin = '';
 let relocateDestId = '';
 let downloadFileId = '';
+let accessControlId = '';

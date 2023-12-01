@@ -123,7 +123,7 @@
     </aside>
     <main>
         <header class="flex just-btwn mb-2" style="border: 1px solid #000">
-            <h2 id="test">好像不能開放搜尋</h2>
+            <h2>好像不能開放搜尋</h2>
             <!-- Search input would go here -->
             <div id="user" style="border: 1px solid #000">
             <a href="login.html" style="border: 1px solid #000"><span>會員頭貼</span></a> <!-- TODO: delete -->
@@ -133,7 +133,7 @@
             <nav>
               <ul id="breadcrumb">
                 <li id="root">
-                  <span class="root-drive tool-drive">名字要改掉</span>
+                  <span class="root-drive">名字要改掉</span>
                 </li>
               </ul>
             </nav>
@@ -168,7 +168,6 @@
   $('.bread-toggler').click(e => toggleBreadcrumb(e));
   $('.root-drive').click(() => fetchMyDrive());
   $('#root').click(() => $('.breadcrumb').remove());
-  $('#test').click(() => fetchPublicDrive('1719253610143797250'))
 </script>
 <div id="dialog" class="flex just-btwn hidden">
         <aside class="relocate hidden">
@@ -195,31 +194,30 @@
   }
   function fetchPublicDrive(folderId){
     const api_pub_drive = API_PUBLIC_DRIVE_PREFIX + folderId;
-    console.log(api_pub_drive)
     axios.get(api_pub_drive)
     .then(response => {
-      console.log(response)
-      console.log('=======')
-      console.log(response.data)
         const result = response.data.data;
         if(result.length === 0){
-            handleEmptyFolder();
+            handlePublicEmptyFolder();
         }else{
           renderPublicDriveData(result);
         }
-    }).catch(error => alert(error))
+    }).catch(() => {
+      $('#folder').append(`<span>404</span>`); // TODO: 之後改放404大圖
+    })
 }
 function renderPublicDriveData(rawData){
+  $('.root-drive').text(rawData.name);
   $('#folder').html('');
-    $('#file').html('');
-    renderPublicFolders(rawData);
-    renderPublicFiles(rawData);
-    $('.folder').click(e => toggleFocus(e));
-    $('.file').click(e => toggleFocus(e));
-    $('.folder').dblclick(e => {
-        fetchDrive(e.target.id);
-        addBreadcrumb(e.target);
-    });
+  $('#file').html('');
+  renderPublicFolders(rawData.list);
+  renderPublicFiles(rawData.list);
+  // $('.folder').click(e => toggleFocus(e));
+  // $('.file').click(e => toggleFocus(e));
+  $('.folder').dblclick(e => {
+      fetchPublicDrive(e.target.id);
+      addBreadcrumb(e.target);
+  });
 }
 function renderPublicFolders(rawData){
     const folders = rawData

@@ -113,6 +113,10 @@ function globalExceptionHandler(error){
 //         }
 //     }
 //  }
+function handlePublicEmptyFolder(){
+    clearDriveData();
+    $('#folder').append('<div><span>該資料夾是空的</span></div>');
+ }
 function handleEmptyFolder(){
     clearDriveData();
     $('#folder').append('<div><span>請使用「新增」建立資料</span></div>');

@@ -12,6 +12,19 @@ function folderMenu(){
                     swalRename(targetId, dataType);
                 }
             },
+            'share': {
+                name: '權限設定',
+                icon: 'fa-edit',
+                callback: (key, opt) => {
+                    accessControlId = '';
+                    const target = opt.$trigger[0];
+                    accessControlId = target.id;
+                    const accessCode = target.getAttribute('access');
+                    const access = accessCode === '0' ? '私人' : '公開'
+                    if(accessCode === '0') swalPublicFolder(access);
+                    else swalPrivateFolder(access);
+                }
+            },
             'relocate': {
                 name: '移動',
                 icon: 'fa-exchange-alt',
