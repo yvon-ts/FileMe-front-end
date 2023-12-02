@@ -7,6 +7,8 @@ axios.interceptors.response.use(
     error => {
         // globalExceptionHandler(error);
         let errorCode = error.response.data.code;
+        // console.log(error.response.data.code)
+        // console.log(errorCode)
     switch(errorCode){
         // PREVIEW_NOT_ALLOWED
         case 11310:{
@@ -23,6 +25,10 @@ axios.interceptors.response.use(
                 text: error.response.data.msg + ' (錯誤代碼: ' + errorCode + ')',
                 didClose: () => logout()
             });
+            throw error;
+        }
+        // 409
+        case 23010: {
             throw error;
         }
         // EMPTY_FOLDER
@@ -50,7 +56,7 @@ axios.interceptors.response.use(
                     throw error;
                 }
                 default:{
-                    swalBackEndError();
+                    swalBackEndError(errorCode);
                     throw error;
                 }
             }

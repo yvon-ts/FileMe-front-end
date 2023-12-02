@@ -195,11 +195,7 @@
   $('#recover').click(() => recover());
   $('#relocate').click(() => relocateSetting());
   $('#clearFocus').click(() => clearFocused());
-  // $('#add').click(() => $('#add').trigger("contextmenu"));
-  $('#add').click(async function(){
-    let result = await swalAddSingleFile()
-    console.log(result);
-  })
+  $('#add').click(() => $('#add').trigger("contextmenu"));
   bodyMenu();
   addMenu();
   folderMenu();
@@ -221,7 +217,96 @@
         <img id="preview" class="preview hidden" src="" alt="">
 </div>
 <script>
+  $(document).ready(function(){
+$("#content").on('dragenter', function(ev) {
+    $("#content").addClass("highlightDropArea");
+});
 
+$("#content").on('dragleave', function(ev) {
+  $("#content").removeClass("highlightDropArea");
+});
+$("#content").on('drop', async function(ev) {
+  ev.preventDefault();
+  ev.stopPropagation();
+
+  if(ev.originalEvent.dataTransfer){
+    if(ev.originalEvent.dataTransfer.files.length) {
+      var droppedFiles = ev.originalEvent.dataTransfer.files;
+      var retryFiles = [];
+
+      for (let i = 0; i < droppedFiles.length; i++) {
+        await uploadFileWithRetry(droppedFiles[i], i, retryFiles);
+      }
+
+    //   if(retryFiles.length != 0){
+    //     for(let i = 0; i < retryFiles.length; i++){
+    //       await uploadFileSimple(retryFiles[i]);
+    //   }
+    // }
+      console.log('迴圈結束');
+    }
+  }
+});
+
+// async function uploadFileSimple(file){
+//   var formData = new FormData();
+//   formData.append('file', file);
+//   const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+//   formData.append('folderId', currentFolderId);
+
+//   axios.post(API_ADD_FILE, formData, {
+//     headers: {
+//       'token': localStorage.getItem('token'),
+//       'Content-Type': 'multipart/form-data'
+//     }
+// }).then(() => {
+//   const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+//         currentFolderId === 0 ? fetchMyDrive() : fetchDrive(currentFolderId);
+//         swalSuccess();
+// });
+// }
+
+async function uploadFileWithRetry(file, index, retryFiles) {
+  let fileName = file.name.split('.')[0];
+  if(fileName.match(REGEX_DATA_NAME) === null){
+    swal('warning', '請修改檔名', REGEX_WARN_DATA_NAME);
+    return;
+  }
+
+  var formData = new FormData();
+  formData.append('file', file);
+  const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+  formData.append('folderId', currentFolderId);
+  try {
+    await axios.post(API_ADD_FILE, formData, {
+      headers: {
+        'token': localStorage.getItem('token'),
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+
+    console.log('File uploaded successfully:', file.name);
+    if (index < droppedFiles.length - 1) {
+      alert('upload next');
+    } else {
+      fecthDrive(currentFolderId);
+      swalSuccess();
+    }
+  } catch (error) {
+
+    let newFileName = getRewriteName(file.name);
+    let newFile = new File([file], newFileName, { type: file.type });
+
+    retryFiles.push(newFile);
+  }
+
+
+$("#content").on('dragover', function(ev) {
+    ev.preventDefault();
+});
+}
+// end of function
+})
 function swalRewriteOrIgore(file){
   Swal.fire({
   text: '檔案 ' + file.name + ' 已存在，請問要',
@@ -276,51 +361,23 @@ function swalAddSingleFile(){
   inputValidator: value => {
       if (value)
         if(!REGEX_DATA_NAME.test(value.name.split('.')[0])) return REGEX_WARN_DATA_NAME;
-        
   }
 }).then(result => {
-  let file = result.value;
-    console.log(file)
-    let retryFiles = [];
-    return uploadFileWithRetry(file, retryFiles)
+  if (result.value) {
+    const file = result.value;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      Swal.fire({
+        title: "Your uploaded picture",
+        imageUrl: e.target.result,
+        imageAlt: "The uploaded picture"
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
 }
-
-);
-
-}
-async function uploadFileWithRetry(file, retryFiles) {
-  let fileName = file.name.split('.')[0];
-  if(fileName.match(REGEX_DATA_NAME) === null){
-    swal('warning', '請修改檔名', REGEX_WARN_DATA_NAME);
-    return;
-  }
-
-  var formData = new FormData();
-  formData.append('file', file);
-  const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
-  formData.append('folderId', currentFolderId);
-  console.log(formData)
-  let result;
-  try {
-    await axios.post(API_ADD_FILE, formData, {
-      headers: {
-        'token': localStorage.getItem('token'),
-        'Content-Type': 'multipart/form-data'
-      }
-    });
-    console.log('有成功')
-  } catch (error) {
-    console.log('有error')
-    let newFileName = getRewriteName(file.name);
-    let newFile = new File([file], newFileName, { type: file.type });
-
-    retryFiles.push(newFile);
-    console.log(retryFiles)
-    console.log(retryFiles.length)
-    result =  retryFiles;
-  }
-  return result;
-  }
 </script>
 </body>
 </html>

@@ -58,6 +58,38 @@ function clearFocused(){
     $('.focus').removeClass('focus');
     monitorToolbar();
 }
+// ----------------- Create ----------------- //
+function swalAddFolder(){
+    Swal.fire({
+        text: '請輸目錄名稱',
+        input: 'text',
+        inputValidator: (value) => {
+            if(!REGEX_DATA_NAME.test(value)) return REGEX_WARN_DATA_NAME;
+        },
+        showCancelButton: true,
+        confirmButtonText: '確認新增',
+        showLoaderOnConfirm: true,
+        preConfirm: folderName => {
+            doAddFolder(folderName)},
+        allowOutsideClick: () => !Swal.isLoading()
+    })
+}
+function doAddFolder(folderName){
+    const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+    axios.post(API_ADD_FOLDER, {
+        parentId: currentFolderId,
+        dataName: folderName,
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+            'token': localStorage.getItem('token')
+        }
+    }).then((response) => {
+        const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+        currentFolderId === 0 ? fetchMyDrive() : fetchDrive(currentFolderId);
+        swalSuccess();
+    })
+}
 // ----------------- Fetch data ----------------- //
 function fetchMyDrive(){
     axios.get(API_MY_DRIVE, {
@@ -337,15 +369,15 @@ function doRename(newName, targetId, dataType){
             'token': localStorage.getItem('token')
         }
     }).then((response) => {
-        const folderId = $('.breadcrumb').last().attr('id') || 0;
-        fetchDrive(folderId);
+        const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+        currentFolderId === 0 ? fetchMyDrive() : fetchDrive(currentFolderId);
         swalSuccess();
     })
 }
 // ----------------- Update: trash ----------------- //
 function trash(){
     const list = collectFocused();
-    if(list.length === 0) swal('warning', SWAL_NULL_DEST);
+    if(list.length === 0) swal('warning', null, SWAL_NULL_DEST);
     else swalTrash(list);
 }
 function swalTrash(list){
@@ -375,7 +407,7 @@ function doTrash(list){
 // ----------------- Update: recover ----------------- //
 function recover(){
     const list = collectFocused();
-    if(list.length === 0) swal('warning', SWAL_NULL_DEST);
+    if(list.length === 0) swal('warning', null, SWAL_NULL_DEST);
     else swalRecover(list, true);
 }
 function swalRecover(list){
@@ -543,11 +575,11 @@ function renderDialogRelocate() {
       buttons: {
         '移動到這裡': function() {
             if(relocateDestId.length === 0){
-                swal('warning', SWAL_NULL_DEST);
+                swal('warning', null, SWAL_NULL_DEST);
                 return;
             }
             if(relocateDestId === relocateOrigin){
-                swal('warning', SWAL_RELOCATE_FORBIDDEN);
+                swal('warning', null, SWAL_RELOCATE_FORBIDDEN);
                 return;
             }
             relocate(true);

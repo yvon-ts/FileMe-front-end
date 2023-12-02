@@ -1,3 +1,31 @@
+function bodyMenu(){
+    $.contextMenu({
+        selector: '#content',
+        items: {
+            'addFolder': {
+                name: '新增目錄',
+                icon: 'fa-folder',
+                callback: (key, opt) => {
+                    swalAddFolder();
+                }
+            }
+        }
+    })
+}
+function addMenu(){
+    $.contextMenu({
+        selector: '#add',
+        items: {
+            'addFolder': {
+                name: '新增目錄',
+                icon: 'fa-folder',
+                callback: (key, opt) => {
+                    swalAddFolder();
+                }
+            }
+        }
+    })
+}
 function folderMenu(){
     $.contextMenu({
         selector: '.folder',
@@ -14,7 +42,7 @@ function folderMenu(){
             },
             'share': {
                 name: '權限設定',
-                icon: 'fa-edit',
+                icon: 'fa-wrench',
                 callback: (key, opt) => {
                     accessControlId = '';
                     const target = opt.$trigger[0];

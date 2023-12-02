@@ -26,15 +26,16 @@ function swalFrontEndError(){
         text: SWAL_DEFAULT
     })
 }
-function swalBackEndError(){
+function swalBackEndError(errorCode){
     Swal.fire({
         icon: 'error',
         text: SWAL_DEFAULT + ' (錯誤代碼: ' + errorCode + ')'
     })
 }
-function swal(icon, wording){
+function swal(icon, title, wording){
     Swal.fire({
         icon: icon,
+        title: title,
         text: wording
     })
 }
