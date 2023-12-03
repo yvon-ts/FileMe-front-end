@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./jquery-ui-1.13.2-2.custom/jquery-ui.min.css">
+    <link rel="stylesheet" href="./jquery-ui-1.13.2-2.custom/jquery-ui.structure.min.css">
     <link rel="stylesheet" href="./css/global.css">
 </head>
 <body>
@@ -44,7 +46,7 @@
     $( "#dialog" ).dialog({
       resizable: false,
       height: "auto",
-      width: 1200,
+      width: 900,
       modal: true,
       close: () => {
         $('#preview').attr('src', '');
@@ -67,14 +69,10 @@
       }
     });
 }
-
-
   function fetchPublicPreview(fileId){
     const api_pub_file = API_PUBLIC_FILE_PREFIX + fileId;
     axios.get(api_pub_file, {
-        headers: {
-            responseType: 'blob'
-        }
+        responseType: 'blob'
     }).then(response => {
         let url = URL.createObjectURL(new Blob([response.data]));
         $('#preview').attr('src', url);
@@ -85,22 +83,6 @@
         renderDialogPreview();
     })
   }
-  function fetchPreview(fileId){
-    const api_preview = API_PREVIEW_PREFIX + fileId;
-    axios.get(api_preview, {
-        headers: {
-            'token': localStorage.getItem('token')},
-        responseType: 'blob'
-    }).then(response => {
-        let url = URL.createObjectURL(new Blob([response.data]));
-        $('#preview').attr('src', url);
-        renderDialogPreview();
-    }).catch(() => {
-        $('#preview').attr('src', '');
-        $('#preview').attr('alt', '該檔案不支援預覽，請直接下載查看');
-        renderDialogPreview();
-    })
-}
 
     </script>
 </body>
