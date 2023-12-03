@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/global.css">
+</head>
+<body>
+    <div id="dialog" class="flex just-btwn hidden">
+        <img id="preview" class="preview hidden" src="" alt="">
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <script src="./jquery-contextmenu/jquery.contextMenu.js"></script> -->
+    <script src="./jquery-contextmenu/jquery.ui.position.min.js"></script>
+    <script src="./jquery-ui-1.13.2-2.custom/jquery-ui.min.js"></script>
+    <script src="./js/constants.js"></script>
+    <script src="./js/global.js"></script>
+    <script src="./js/exceptionHandler.js"></script>
+    <!-- <script src="./js/user.js"></script> -->
+    <script src="./js/drive.js"></script>
+    <!-- <script src="./js/contextmenu.js"></script> -->
+    <script>
+    /**
+     * 應該是直接dialog開出來
+     * fetch
+     * 呈現
+     * **/
+    $(document).ready(renderPublicData)
+    function renderPublicData(){
+        const currentUrl = new URL(window.location.href);
+        const fileId = currentUrl.searchParams.get('share');
+        console.log('fileId=' + fileId)
+        // fetchPublicPreview(fileId);
+  }
+
+
+  function renderPublicDialogPreview() {
+    $('#dialog').removeClass('hidden');
+    $('.preview').removeClass('hidden');
+    $( "#dialog" ).dialog({
+      resizable: false,
+      height: "auto",
+      width: 1200,
+      modal: true,
+      close: () => {
+        $('#preview').attr('src', '');
+        $('#dialog').addClass('hidden');
+        $('.preview').addClass('hidden');
+      },
+      buttons: {
+        // '取得連結': function(downloadFileId) {
+        //     copyLink(downloadFileId);
+        //     // swal會公開喔可以嗎 // 然後同時fetch修改檔案權限
+        // },
+        '下載': function() {
+            alert('public download')
+            // swalDownload(downloadFileId);
+        },
+        '關閉視窗': function() {
+            // downloadFileId = '';
+            $( this ).dialog( "close" );
+        }
+      }
+    });
+}
+
+
+  function fetchPublicPreview(fileId){
+    const api_pub_file = API_PUBLIC_FILE_PREFIX + fileId;
+    axios.get(api_pub_file, {
+        headers: {
+            responseType: 'blob'
+        }
+    }).then(response => {
+        let url = URL.createObjectURL(new Blob([response.data]));
+        $('#preview').attr('src', url);
+        renderPublicDialogPreview();
+    }).catch(() => {
+        $('#preview').attr('src', '');
+        $('#preview').attr('alt', '該檔案不支援預覽，請直接下載查看');
+        renderDialogPreview();
+    })
+  }
+  function fetchPreview(fileId){
+    const api_preview = API_PREVIEW_PREFIX + fileId;
+    axios.get(api_preview, {
+        headers: {
+            'token': localStorage.getItem('token')},
+        responseType: 'blob'
+    }).then(response => {
+        let url = URL.createObjectURL(new Blob([response.data]));
+        $('#preview').attr('src', url);
+        renderDialogPreview();
+    }).catch(() => {
+        $('#preview').attr('src', '');
+        $('#preview').attr('alt', '該檔案不支援預覽，請直接下載查看');
+        renderDialogPreview();
+    })
+}
+
+    </script>
+</body>
+</html>

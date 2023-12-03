@@ -1,0 +1,104 @@
+.flex{
+    display: flex;
+  }
+  .flex-col{
+    display: flex;
+    flex-direction: column;
+  }
+  .just-btwn{
+    justify-content: space-between;
+  }
+  .just-around{
+    justify-content: space-around;
+  }
+  .just-center{
+    justify-content: center;
+  }
+  .align-items-center{
+    align-items: center;
+  }
+  #container{
+    height: 100vh;
+  }
+  aside{
+    width: 20%;
+  }
+  main{
+    width: 78%;
+  }
+  header{
+    height: 10%;
+  }
+  section{
+    height: 88%;
+  }
+  .mb-2{
+    margin-bottom: 2%;
+  }
+  .folder{
+    /* width: 18%; */
+    border: 1px solid #000;
+    background-color: #f1f1f1;
+  }
+  .file{
+    /* width: 18%; */
+    border: 1px solid #000;
+    background-color: #f1f1f1;
+  }
+  #add{
+    background-color: #f3f3f3; /* Folder background */
+    text-align: center;
+    width: 60%;
+  }
+  #folder, #file, #sub-folder {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px; /* Adjust the gap as needed */
+    padding: 16px; /* Adjust the padding as needed */
+  }
+  .folder, .file, .folder-trash, .file-trash {
+    border: 1px solid #ccc; /* For visualizing the folders */
+    padding: 8px; /* Adjust the padding as needed */
+    text-align: center; /* Centering the text */
+    background-color: #f3f3f3; /* Folder background */
+  }
+  .focus, .selected{
+    border: 5px solid #9dc8f0;
+  }
+  /* .folder:not(.focus):hover,
+  .folder:not(.origin):hover,
+  .file:not(.focus):hover,
+  .file:not(.origin):hover,
+  .folder-trash:hover,
+  .file-trash:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+  } */
+  #sub-folder .focus, #sub-folder .origin{
+    color: #ccc;
+    border: none;
+  }
+  [access="1"]{
+    background-color: #dfedfa;
+  }
+  nav ul li{
+    border: 1px solid #ccc;
+    padding: 16px; /* Adjust the padding as needed */
+  }
+  a{
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  #side-bar li:not(.active):hover{
+    background-color: #ccc;
+  }
+  .hidden{
+    display: none;
+  }
+  .dropFiles {
+  border: 5px red dashed; 
+}
+
+.highlightDropArea {
+  border: 5px green dashed;
+}
