@@ -17,7 +17,7 @@ const API_ADD_FOLDER = API_DOMAIN + '/drive/folder';
 const API_ADD_FILE = API_DOMAIN + '/drive/file';
 
 const API_PUBLIC_DRIVE_PREFIX = API_DOMAIN + '/pub/drive/';
-const API_PUBLIC_FILE_PREFIX = API_DOMAIN + '/pub/drive/preview';
+const API_PUBLIC_FILE_PREFIX = API_DOMAIN + '/pub/drive/preview/';
 const PUBLIC_FOLDER_SUFFIX = '/folder?share=';
 const PUBLIC_FILE_SUFFIX = '/file?share=';
 
