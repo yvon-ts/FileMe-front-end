@@ -26,11 +26,6 @@
     <script src="./js/drive.js"></script>
     <!-- <script src="./js/contextmenu.js"></script> -->
     <script>
-    /**
-     * 應該是直接dialog開出來
-     * fetch
-     * 呈現
-     * **/
     $(document).ready(renderPublicData)
     function renderPublicData(){
         const currentUrl = new URL(window.location.href);
@@ -39,14 +34,13 @@
         fetchPublicPreview(fileId);
   }
 
-
   function renderPublicDialogPreview() {
     $('#dialog').removeClass('hidden');
     $('.preview').removeClass('hidden');
     $( "#dialog" ).dialog({
       resizable: false,
       height: "auto",
-      width: 900,
+      width: 1200,
       modal: true,
       close: () => {
         $('#preview').attr('src', '');
@@ -54,16 +48,10 @@
         $('.preview').addClass('hidden');
       },
       buttons: {
-        // '取得連結': function(downloadFileId) {
-        //     copyLink(downloadFileId);
-        //     // swal會公開喔可以嗎 // 然後同時fetch修改檔案權限
-        // },
         '下載': function() {
-            alert('public download')
-            // swalDownload(downloadFileId);
+            swalPulbicDownload();
         },
         '關閉視窗': function() {
-            // downloadFileId = '';
             $( this ).dialog( "close" );
         }
       }
@@ -83,6 +71,39 @@
         renderDialogPreview();
     })
   }
+  function swalPulbicDownload(){
+    const fileId = currentUrl.searchParams.get('share');
+    Swal.fire({
+        text: '是否要下載？',
+        showCancelButton: true,
+        confirmButtonText: '是',
+        cancelButtonText: '否',
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+            console.log(fileId)
+            fetchPublicDownload(fileId)},
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then(() => swalSuccess());
+}
+
+function fetchPublicDownload(fileId){
+    const api_pub_download = API_PUBLBIC_DOWNLOAD_PREFIX + fileId;
+    axios.get(api_pub_download, {
+        responseType: 'blob'
+    }).then(response => {
+        const contentDisposition = response.headers['content-disposition'];
+        let fileName = contentDisposition.split('filename=')[1].split(';')[0];
+        fileName = fileName.replace(/\"/g, "");
+        fileName = decodeURIComponent(fileName);
+        
+        let url = URL.createObjectURL(new Blob([response.data]));
+        let link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+    }).catch(error => console.log(error))
+}
 
     </script>
 </body>
