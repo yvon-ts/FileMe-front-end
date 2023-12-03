@@ -16,10 +16,11 @@ const API_ACCESS_CONTROL_PREFIX = API_DOMAIN + '/drive/access-control/';
 const API_ADD_FOLDER = API_DOMAIN + '/drive/folder';
 const API_ADD_FILE = API_DOMAIN + '/drive/file';
 
+const API_PUBLBIC_DOWNLOAD_PREFIX = API_DOMAIN + '/pub/drive/download/';
 const API_PUBLIC_DRIVE_PREFIX = API_DOMAIN + '/pub/drive/';
 const API_PUBLIC_FILE_PREFIX = API_DOMAIN + '/pub/drive/preview/';
-const PUBLIC_FOLDER_SUFFIX = '/folder?share=';
-const PUBLIC_FILE_SUFFIX = '/file?share=';
+// const PUBLIC_FOLDER_SUFFIX = '/folder?share=';
+const PUBLIC_FILE_SUFFIX = '?share=';
 
 const REGEX_DATA_NAME = /^(?=.{1,32}$)(?![_.])[\p{L}\p{Nd}_.-]+(?<![_.])$/u
 const REGEX_WARN_DATA_NAME = '不符合名稱規定(不得以_.為開頭或結尾，僅接受文字、數字與_.-符號，不得有空格，且不得大於30字)';

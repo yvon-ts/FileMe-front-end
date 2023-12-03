@@ -188,7 +188,7 @@
   function renderPublicData(){
     const currentUrl = new URL(window.location.href);
     // const folderId = currentUrl.pathname.split('/').pop();
-    const folderId = currentUrl.searchParams.get('query');
+    const folderId = currentUrl.searchParams.get('share');
     console.log('folderId=' + folderId)
     fetchPublicDrive(folderId);
   }

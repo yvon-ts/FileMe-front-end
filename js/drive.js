@@ -266,8 +266,8 @@ function renderFileTrash(rawData){
         $('.preview').addClass('hidden');
       },
       buttons: {
-        '取得連結': function(downloadFileId) {
-            copyLink(downloadFileId);
+        '取得連結': function() {
+            copyLink();
             // swal會公開喔可以嗎 // 然後同時fetch修改檔案權限
         },
         '下載': function() {
@@ -292,14 +292,21 @@ function swalDownload(downloadFileId){
       }).then(() => swalSuccess());
 }
 // ----------------- Update: access level (temporary ver.)----------------- //
-function generatePublicLink(folderId){
+// function generatePublicFileLink(domain, fileId){
+//     return domain + PUBLIC_FILE_SUFFIX + fileId;
+// }
+function copyLink() {
+    // TODO: 抓不到domain
     const domain = window.location.hostname;
-    return domain + PUBLIC_FOLDER_SUFFIX + folderId;
+    const publicFileLink = generatePublicFileLink(domain, downloadFileId);
+    console.log(publicFileLink)
+    navigator.clipboard.writeText(publicFileLink);
 }
-function copyLink(folderId){
-    navigator.clipboard.writeText(generatePublicLink(folderId));
+function generatePublicFileLink(domain, fileId) {
+    return domain + PUBLIC_FILE_SUFFIX + fileId;
 }
-function swalPublicFolder(access){
+
+function swalPublicData(access){
     Swal.fire({
         text: '目前權限：' + access,
         showCancelButton: true,
@@ -309,7 +316,7 @@ function swalPublicFolder(access){
         if (result.isConfirmed) swalToggleAccess();
       });
 }
-function swalPrivateFolder(access){
+function swalPrivateData(access){
     Swal.fire({
         text: '目前權限：' + access,
         showCancelButton: true,

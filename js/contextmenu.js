@@ -40,19 +40,19 @@ function folderMenu(){
                     swalRename(targetId, dataType);
                 }
             },
-            'share': {
-                name: '權限設定',
-                icon: 'fa-wrench',
-                callback: (key, opt) => {
-                    accessControlId = '';
-                    const target = opt.$trigger[0];
-                    accessControlId = target.id;
-                    const accessCode = target.getAttribute('access');
-                    const access = accessCode === '0' ? '私人' : '公開'
-                    if(accessCode === '0') swalPublicFolder(access);
-                    else swalPrivateFolder(access);
-                }
-            },
+            // 'access-control': {
+            //     name: '權限設定',
+            //     icon: 'fa-wrench',
+            //     callback: (key, opt) => {
+            //         accessControlId = '';
+            //         const target = opt.$trigger[0];
+            //         accessControlId = target.id;
+            //         const accessCode = target.getAttribute('access');
+            //         const access = accessCode === '0' ? '私人' : '公開'
+            //         if(accessCode === '0') swalPublicData(access);
+            //         else swalPrivateData(access);
+            //     }
+            // },
             'relocate': {
                 name: '移動',
                 icon: 'fa-exchange-alt',
@@ -103,6 +103,19 @@ function fileMenu(){
                     const targetId = target.id
                     const dataType = opt.$trigger[0].classList.contains('folder') ? 0 : 1;
                     swalRename(targetId, dataType);
+                }
+            },
+            'access-control': {
+                name: '權限設定',
+                icon: 'fa-wrench',
+                callback: (key, opt) => {
+                    accessControlId = '';
+                    const target = opt.$trigger[0];
+                    accessControlId = target.id;
+                    const accessCode = target.getAttribute('access');
+                    const access = accessCode === '0' ? '私人' : '公開'
+                    if(accessCode === '0') swalPublicData(access);
+                    else swalPrivateData(access);
                 }
             },
             'relocate': {
