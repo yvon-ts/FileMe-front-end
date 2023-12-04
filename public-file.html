@@ -30,7 +30,6 @@
     function renderPublicData(){
         const currentUrl = new URL(window.location.href);
         const fileId = currentUrl.searchParams.get('share');
-        console.log('fileId=' + fileId)
         fetchPublicPreview(fileId);
   }
 
@@ -49,8 +48,28 @@
       },
       buttons: {
         '下載': function() {
-            swalPulbicDownload();
+            swalPublicDownload();
         },
+        '關閉視窗': function() {
+            $( this ).dialog( "close" );
+        }
+      }
+    });
+}
+function renderFailPublicDialogPreview() {
+    $('#dialog').removeClass('hidden');
+    $('.preview').removeClass('hidden');
+    $( "#dialog" ).dialog({
+      resizable: false,
+      height: "auto",
+      width: 1200,
+      modal: true,
+      close: () => {
+        $('#preview').attr('src', '');
+        $('#dialog').addClass('hidden');
+        $('.preview').addClass('hidden');
+      },
+      buttons: {
         '關閉視窗': function() {
             $( this ).dialog( "close" );
         }
@@ -67,11 +86,12 @@
         renderPublicDialogPreview();
     }).catch(() => {
         $('#preview').attr('src', '');
-        $('#preview').attr('alt', '該檔案不支援預覽，請直接下載查看');
-        renderDialogPreview();
+        $('#preview').attr('alt', '該檔案為私人資料');
+        renderFailPublicDialogPreview();
     })
   }
-  function swalPulbicDownload(){
+  function swalPublicDownload(){
+    const currentUrl = new URL(window.location.href);
     const fileId = currentUrl.searchParams.get('share');
     Swal.fire({
         text: '是否要下載？',
