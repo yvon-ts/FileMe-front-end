@@ -95,6 +95,7 @@
   $('#clearFocus').click(() => clearFocused());
   // $('#add').click(() => $('#add').trigger("contextmenu"));
   $('#add').click(async function(){
+    swalAddSingleFile.then
     let result = await swalAddSingleFile()
     console.log(result)
   })
@@ -172,17 +173,15 @@ function swalAddSingleFile(){
     "accept": ACCEPTED_MIME,
   },
   inputValidator: value => {
-      if (value)
-        if(!REGEX_DATA_NAME.test(value.name.split('.')[0])) return REGEX_WARN_DATA_NAME;
-        
+    if (value)
+    if(!REGEX_DATA_NAME.test(value.name.split('.')[0])) return REGEX_WARN_DATA_NAME;      
   }
-}).then(result => {
+})
+.then(result => {
   let file = result.value;
-    let retryFiles = [];
-    return uploadFileWithRetry(file, retryFiles)
-}
-
-);
+  let retryFiles = [];
+  return uploadFileWithRetry(file, retryFiles);
+});
 
 }
 async function uploadFileWithRetry(file, retryFiles) {

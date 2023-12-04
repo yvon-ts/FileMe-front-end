@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>FileMe 檔案分享</title>
     <link rel="stylesheet" href="./jquery-ui-1.13.2-2.custom/jquery-ui.min.css">
     <link rel="stylesheet" href="./jquery-ui-1.13.2-2.custom/jquery-ui.structure.min.css">
     <link rel="stylesheet" href="./css/global.css">
@@ -100,10 +100,9 @@ function renderFailPublicDialogPreview() {
         cancelButtonText: '否',
         showLoaderOnConfirm: true,
         preConfirm: () => {
-            console.log(fileId)
             fetchPublicDownload(fileId)},
         allowOutsideClick: () => !Swal.isLoading()
-      }).then(() => swalSuccess());
+      });
 }
 
 function fetchPublicDownload(fileId){
@@ -122,7 +121,7 @@ function fetchPublicDownload(fileId){
         link.setAttribute('download', fileName);
         document.body.appendChild(link);
         link.click();
-    }).catch(error => console.log(error))
+    });
 }
 
     </script>

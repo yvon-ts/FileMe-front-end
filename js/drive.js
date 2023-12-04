@@ -92,6 +92,7 @@ function doAddFolder(folderName){
 }
 // ----------------- Fetch data ----------------- //
 function fetchMyDrive(){
+    globalTargetId = '';
     axios.get(API_MY_DRIVE, {
         headers: {
             'token': localStorage.getItem('token')}
@@ -166,9 +167,8 @@ function fetchDownload(fileId){
         link.setAttribute('download', fileName);
         document.body.appendChild(link);
         link.click();
-        downloadFileId = '';
-    }).catch(() => {
-    })
+        globalTargetId = '';
+    });
 }
 // ----------------- Render data ----------------- //
 
@@ -230,8 +230,8 @@ function renderFiles(rawData){
     });
     files.forEach(file => $('#file').append(file));
     $('.file').dblclick(e => {
-        downloadFileId = e.target.id;
-        fetchPreview(downloadFileId);
+        globalTargetId = e.target.id;
+        fetchPreview(globalTargetId);
     });
 }
 
@@ -267,48 +267,57 @@ function renderFileTrash(rawData){
       },
       buttons: {
         '取得連結': function() {
-            copyLink();
-            // swal會公開喔可以嗎 // 然後同時fetch修改檔案權限
+            let currentAccess = $('.file').filter(function() {
+                return this.id === globalTargetId;
+            }).attr('access');
+            switch(currentAccess){
+                case '0': {
+                    swalGoPublicDataAndGetLink();
+                    return;
+                }
+                case '1':{
+                    copyLink();
+                    return;
+                }
+                default: {
+                }
+            }
         },
         '下載': function() {
-            swalDownload(downloadFileId);
+            swalDownload(globalTargetId);
         },
         '關閉視窗': function() {
-            downloadFileId = '';
+            globalTargetId = '';
             $( this ).dialog( "close" );
         }
       }
     });
 }
-function swalDownload(downloadFileId){
+
+function swalDownload(globalTargetId){
     Swal.fire({
         text: '是否要下載？',
         showCancelButton: true,
         confirmButtonText: '是',
         cancelButtonText: '否',
         showLoaderOnConfirm: true,
-        preConfirm: () => fetchDownload(downloadFileId),
+        preConfirm: () => fetchDownload(globalTargetId),
         allowOutsideClick: () => !Swal.isLoading()
       }).then(() => swalSuccess());
 }
-// ----------------- Update: access level (temporary ver.)----------------- //
-// function generatePublicFileLink(domain, fileId){
-//     return domain + PUBLIC_FILE_SUFFIX + fileId;
-// }
+// ----------------- Update: access level (only files)----------------- //
 function copyLink() {
     const domain = window.location.hostname;
-    const publicFileLink = generatePublicFileLink(domain, downloadFileId);
-    console.log(publicFileLink)
-    navigator.clipboard.writeText(publicFileLink)
-    .then(() => swal('success', null, '連結已複製'));
+    const publicFileLink = generatePublicFileLink(domain, globalTargetId);
+    navigator.clipboard.writeText(publicFileLink).then(() => swal('success', null, '連結已複製'));
 }
 function generatePublicFileLink(domain, fileId) {
     return domain + PUBLIC_FILE_SUFFIX + fileId;
 }
 
-function swalPublicData(access){
+function swalGoPublicData(){
     Swal.fire({
-        text: '目前權限：' + access,
+        text: '目前權限：私人',
         showCancelButton: true,
         confirmButtonText: '變更權限',
         denyButtonText: '取消'
@@ -316,14 +325,25 @@ function swalPublicData(access){
         if (result.isConfirmed) swalToggleAccess();
       });
 }
-function swalPrivateData(access){
+function swalGoPrivateData(){
     Swal.fire({
-        text: '目前權限：' + access,
+        text: '目前權限：公開',
         showCancelButton: true,
         confirmButtonText: '變更權限',
         denyButtonText: '取消'
       }).then((result) => {
         if (result.isConfirmed) swalToggleAccess();
+      });
+}
+function swalGoPublicDataAndGetLink(){
+    Swal.fire({
+        title: '目前權限：私人',
+        text: '需將檔案設定為公開才能取得連結，請問要公開嗎？',
+        showCancelButton: true,
+        confirmButtonText: '是，公開檔案',
+        denyButtonText: '否'
+      }).then((result) => {
+        if (result.isConfirmed) doPublicAndGetLink();
       });
 }
 function swalToggleAccess(){
@@ -336,8 +356,20 @@ function swalToggleAccess(){
         if (result.isConfirmed) doToggleAccess();
       });
 }
+function doPublicAndGetLink(){
+    const api_toggle_access = API_ACCESS_CONTROL_PREFIX + globalTargetId;
+    axios.post(api_toggle_access, null, {
+        headers: {
+            'token': localStorage.getItem('token')
+        }
+    }).then((response) => {
+        copyLink();
+        const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+        currentFolderId === 0 ? fetchMyDrive() : fetchDrive(currentFolderId);
+    })
+}
 function doToggleAccess(){
-    const api_toggle_access = API_ACCESS_CONTROL_PREFIX + accessControlId;
+    const api_toggle_access = API_ACCESS_CONTROL_PREFIX + globalTargetId;
     axios.post(api_toggle_access, null, {
         headers: {
             'token': localStorage.getItem('token')
@@ -346,7 +378,7 @@ function doToggleAccess(){
         const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
         currentFolderId === 0 ? fetchMyDrive() : fetchDrive(currentFolderId);
         swalSuccess();
-        accessControlId = '';
+        globalTargetId = '';
     })
 }
 // ----------------- Update: rename ----------------- //
