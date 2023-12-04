@@ -54,6 +54,14 @@ function collectFocused(){
     });
     return list;
 }
+function collectFocusedInfo(){
+    let list = [];
+    $('.focus').each((index, item) => {
+        let dataTypeValue = $(item).hasClass('folder') || $(item).hasClass('folder-trash')? 0 : 1;
+        list.push({id: item.id, dataName: item.innerText, dataType: dataTypeValue});
+    });
+    return list;
+}
 function clearFocused(){
     $('.focus').removeClass('focus');
     monitorToolbar();
@@ -431,7 +439,19 @@ function swalTrash(list){
       });
 }
 function swalTrashConflict(){
-
+    Swal.fire({
+        icon: 'warning',
+        title: '垃圾桶已有同名檔案',
+        text: '請問是否以新檔案取代？(原先在垃圾桶的檔案將無法復原)',
+        showCancelButton: true,
+        confirmButtonText: '是',
+        cancelButtonText: '否'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            const list = collectFocusedInfo();
+            handleTrashConflict(list);
+        }
+      });
 }
 function doTrash(list){
     const jsonList = JSON.stringify(list);
@@ -445,9 +465,24 @@ function doTrash(list){
         resumeHeader();
         swalSuccess();
     })
-    // .catch(error => {
-    //     if(errorCode === 23010) 
-    // })
+    .catch(error => {
+        let errorCode = error.response.data.code;
+        if(errorCode === 23010) {
+            swalTrashConflict()
+        }
+    });
+}
+function handleTrashConflict(list){
+    axios.post(API_CONFLICT_TRASH, list[0], {
+        headers: {
+            'Content-Type': 'application/json',
+            'token': localStorage.getItem('token')
+        }
+    }).then((response) => {
+        const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+        currentFolderId === 0 ? fetchMyDrive() : fetchDrive(currentFolderId);
+        swalSuccess();
+    });
 }
 // ----------------- Update: soft delete ----------------- //
 function softDelete(){
