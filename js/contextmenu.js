@@ -149,7 +149,14 @@ function trashMenu(){
                     target.classList.add('focus');
                     recover();
                 }},
-            'delete': {name: '立即刪除', icon: 'fa-solid fa-ban', callback: () => {alert('立即刪除')}}
+            'delete': {
+                name: '立即刪除',
+                icon: 'fa-solid fa-ban',
+                callback: (key, opt) => {
+                    const target = opt.$trigger[0];
+                    target.classList.add('focus');
+                    softDelete();
+                }}
         }
       })
 }

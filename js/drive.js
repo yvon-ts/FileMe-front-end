@@ -430,6 +430,9 @@ function swalTrash(list){
         else clearFocused();
       });
 }
+function swalTrashConflict(){
+
+}
 function doTrash(list){
     const jsonList = JSON.stringify(list);
     axios.post(API_TRASH, jsonList, {
@@ -442,6 +445,39 @@ function doTrash(list){
         resumeHeader();
         swalSuccess();
     })
+    // .catch(error => {
+    //     if(errorCode === 23010) 
+    // })
+}
+// ----------------- Update: soft delete ----------------- //
+function softDelete(){
+    const list = collectFocused();
+    if(list.length === 0) swal('warning', null, SWAL_NULL_DEST);
+    else swalDelete(list);
+}
+function swalDelete(list){
+    Swal.fire({
+        text: '是否要將已選擇的檔案刪除？(注意：此動作不可復原)',
+        showCancelButton: true,
+        confirmButtonText: '是',
+        cancelButtonText: '否'
+      }).then((result) => {
+        if (result.isConfirmed) doDelete(list);
+        else clearFocused();
+      });
+}
+function doDelete(list){
+    const jsonList = JSON.stringify(list);
+    axios.post(API_DELETE, jsonList, {
+        headers: {
+            'Content-Type': 'application/json',
+            'token': localStorage.getItem('token')
+        }
+    }).then((response) => {
+        $('.focus').remove();
+        resumeHeader();
+        swalSuccess();
+    });
 }
 // ----------------- Update: recover ----------------- //
 function recover(){
