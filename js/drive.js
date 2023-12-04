@@ -296,11 +296,11 @@ function swalDownload(downloadFileId){
 //     return domain + PUBLIC_FILE_SUFFIX + fileId;
 // }
 function copyLink() {
-    // TODO: 抓不到domain
     const domain = window.location.hostname;
     const publicFileLink = generatePublicFileLink(domain, downloadFileId);
     console.log(publicFileLink)
-    navigator.clipboard.writeText(publicFileLink);
+    navigator.clipboard.writeText(publicFileLink)
+    .then(() => swal('success', null, '連結已複製'));
 }
 function generatePublicFileLink(domain, fileId) {
     return domain + PUBLIC_FILE_SUFFIX + fileId;
