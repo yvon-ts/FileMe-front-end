@@ -9,6 +9,7 @@ const API_DOWNLOAD_PREFIX = API_DOMAIN + '/drive/download/';
 const API_TRASH = API_DOMAIN + '/drive/trash';
 const API_CONFLICT_TRASH = API_DOMAIN + '/drive/conflict/trash';
 const API_DELETE = API_DOMAIN + '/drive/softDelete';
+const API_CLEAN = API_DOMAIN + '/drive/clean';
 const API_RECOVER = API_DOMAIN + '/drive/recover';
 const API_SUPER_FOLDER = API_DOMAIN + '/drive/folder/super';
 const API_SUB_FOLDER = API_DOMAIN + '/drive/folder/sub';

@@ -44,12 +44,11 @@
                   <button id="trash" class="tool-drive">移至垃圾桶</button>
                   <button id="relocate" class="tool-drive">移動</button>
                   <button id="clearFocus" class="tool-drive">取消全部選取</button>
-                  <button class="tool-trash hidden">清空</button>
-                  <button id="recover" class="tool-trash hidden">還原</button>
                 </li>
                 <li id="root">
                   <span class="my-drive tool-drive">我的雲端硬碟</span>
                   <span class="hidden my-trash tool-trash">垃圾桶</span>
+                  <button id="clean" class="tool-trash hidden">全部清空</button>
                 </li>
               </ul>
             </nav>
@@ -90,7 +89,7 @@
   $('#my-trash').click(() => fetchMyTrash());
   $('#root').click(() => $('.breadcrumb').remove());
   $('#trash').click(() => trash());
-  $('#recover').click(() => recover());
+  $('#clean').click(() => swalClean())
   $('#relocate').click(() => relocateSetting());
   $('#clearFocus').click(() => clearFocused());
   $('#add').click(() => $('#add').trigger("contextmenu"));

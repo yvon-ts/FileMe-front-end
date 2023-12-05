@@ -535,6 +535,8 @@ function doTrash(list){
     }).then((response) => {
         $('.focus').remove();
         resumeHeader();
+        const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+        currentFolderId === 0 ? fetchMyDrive() : fetchDrive(currentFolderId);
         swalSuccess();
     })
     .catch(error => {
@@ -557,7 +559,28 @@ function handleTrashConflict(list){
         swalSuccess();
     });
 }
-// ----------------- Update: soft delete ----------------- //
+// ----------------- Delete: clean all ----------------- //
+function swalClean(){
+    Swal.fire({
+        text: '是否要清空垃圾桶？(注意：此動作不可復原)',
+        showCancelButton: true,
+        confirmButtonText: '是',
+        cancelButtonText: '否'
+      }).then((result) => {
+        if (result.isConfirmed) doClean();
+      });
+}
+function doClean(){
+    axios.post(API_CLEAN, {}, {
+        headers: {
+            'token': localStorage.getItem('token')
+        }
+    }).then((response) => {
+        fetchMyTrash();
+        swalSuccess();
+    });
+}
+// ----------------- Delete: soft delete ----------------- //
 function softDelete(){
     const list = collectFocused();
     if(list.length === 0) swal('warning', null, SWAL_NULL_DEST);
