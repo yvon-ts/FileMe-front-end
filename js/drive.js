@@ -66,7 +66,42 @@ function clearFocused(){
     $('.focus').removeClass('focus');
     monitorToolbar();
 }
-// ----------------- Create ----------------- //
+// ----------------- Init drag drop area ----------------- //
+function initDragDropArea(){
+    $("#content").on('dragenter', function(ev) {
+        $("#content").addClass("highlightDropArea");
+    });
+    
+    $("#content").on('dragleave', function(ev) {
+      $("#content").removeClass("highlightDropArea");
+    });
+    
+    $("#content").on('drop', function(ev) {
+      // Dropping files
+      ev.preventDefault();
+      ev.stopPropagation();
+      // Clear previous messages
+      $("#messages").empty();
+      if(ev.originalEvent.dataTransfer){
+        if(ev.originalEvent.dataTransfer.files.length) {
+          var droppedFiles = ev.originalEvent.dataTransfer.files;
+          for(var i = 0; i < droppedFiles.length; i++)
+          {
+            // Upload droppedFiles[i] to server
+            uploadSingleFile(droppedFiles[i]);
+          }
+        }
+      }
+  
+      $("#content").removeClass("highlightDropArea");
+      return false;
+    });
+    
+    $("#content").on('dragover', function(ev) {
+        ev.preventDefault();
+    });
+}
+// ----------------- Create Folder ----------------- //
 function swalAddFolder(){
     Swal.fire({
         text: '請輸目錄名稱',
@@ -98,6 +133,43 @@ function doAddFolder(folderName){
         swalSuccess();
     })
 }
+// ----------------- Create Single File----------------- //
+
+function swalAddSingleFile(){
+    Swal.fire({
+    title: "檔案上傳",
+    input: "file",
+    inputAttributes: {
+      "accept": ACCEPTED_MIME,
+    },
+    inputValidator: value => {
+      if (value)
+      if(!REGEX_DATA_NAME.test(value.name.split('.')[0])) return REGEX_WARN_DATA_NAME;      
+    }
+  })
+  .then(result => {
+    let file = result.value;
+    return uploadSingleFile(file);
+  });
+  
+  }
+  function uploadSingleFile(file){
+    var formData = new FormData();
+    formData.append('file', file);
+    const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+    formData.append('folderId', currentFolderId);
+  
+    axios.post(API_ADD_FILE, formData, {
+        headers: {
+          'token': localStorage.getItem('token'),
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(() => {
+        const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+          currentFolderId === 0 ? fetchMyDrive() : fetchDrive(currentFolderId);
+          swalSuccess();
+      });
+  }
 // ----------------- Fetch data ----------------- //
 function fetchMyDrive(){
     globalTargetId = '';
@@ -473,7 +545,8 @@ function doTrash(list){
     });
 }
 function handleTrashConflict(list){
-    axios.post(API_CONFLICT_TRASH, list[0], {
+    const jsonList = JSON.stringify(list);
+    axios.post(API_CONFLICT_TRASH, jsonList, {
         headers: {
             'Content-Type': 'application/json',
             'token': localStorage.getItem('token')

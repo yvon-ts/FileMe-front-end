@@ -83,7 +83,7 @@
 <script src="./js/contextmenu.js"></script>
 <script>
   $(document).ready(fetchMyDrive());
-  // $('#add').click(() => fetchMyDrive());
+  $(document).ready(initDragDropArea());
   $('#side-bar li').click(e => toggleSideBar(e));
   $('.bread-toggler').click(e => toggleBreadcrumb(e));
   $('.my-drive').click(() => fetchMyDrive());
@@ -93,12 +93,7 @@
   $('#recover').click(() => recover());
   $('#relocate').click(() => relocateSetting());
   $('#clearFocus').click(() => clearFocused());
-  // $('#add').click(() => $('#add').trigger("contextmenu"));
-  $('#add').click(async function(){
-    swalAddSingleFile.then
-    let result = await swalAddSingleFile()
-    console.log(result)
-  })
+  $('#add').click(() => $('#add').trigger("contextmenu"));
   bodyMenu();
   addMenu();
   folderMenu();
@@ -120,102 +115,6 @@
         <img id="preview" class="preview hidden" src="" alt="">
 </div>
 <script>
-
-function swalRewriteOrIgore(file){
-  Swal.fire({
-  text: '檔案 ' + file.name + ' 已存在，請問要',
-  showDenyButton: true,
-  showCancelButton: true,
-  confirmButtonText: '兩個檔案都保留',
-  denyButtonText: '取代舊檔案'
-}).then((result) => {
-  if (result.isConfirmed) {
-    file.name
-    Swal.fire("Saved!", "", "success");
-  } else if (result.isDenied) {
-    Swal.fire("Changes are not saved", "", "info");
-  }
-});
-}
-function getRewriteName(localFileName){
-  localFileName = generateName(localFileName);
-  
-  while(checkIfFileNameExists(localFileName)){
-    localFileName = generateName(localFileName);
-  }
-  return localFileName;
-}
-function generateName(localFileName){
-  let prefix = localFileName.split('.')[0];
-  let suffix = localFileName.split('.')[1];
-  return prefix + '-複製.' + suffix;
-}
-function checkIfFileNameExists(localFileName) {
-    var fileTexts = [];
-
-    $('.file').each(function() {
-        var text = $(this).text();
-        fileTexts.push(text);
-    });
-
-    // Check if valueToCheck is in the array of fileTexts
-    var index = $.inArray(localFileName, fileTexts);
-
-    // If index is -1, the value is not found; otherwise, it is found
-    return index !== -1;
-}
-
-function swalAddSingleFile(){
-  Swal.fire({
-  title: "檔案上傳",
-  input: "file",
-  inputAttributes: {
-    "accept": ACCEPTED_MIME,
-  },
-  inputValidator: value => {
-    if (value)
-    if(!REGEX_DATA_NAME.test(value.name.split('.')[0])) return REGEX_WARN_DATA_NAME;      
-  }
-})
-.then(result => {
-  let file = result.value;
-  let retryFiles = [];
-  return uploadFileWithRetry(file, retryFiles);
-});
-
-}
-async function uploadFileWithRetry(file, retryFiles) {
-  let fileName = file.name.split('.')[0];
-  if(fileName.match(REGEX_DATA_NAME) === null){
-    swal('warning', '請修改檔名', REGEX_WARN_DATA_NAME);
-    return;
-  }
-
-  var formData = new FormData();
-  formData.append('file', file);
-  const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
-  formData.append('folderId', currentFolderId);
-  console.log(formData)
-  let result;
-  try {
-    await axios.post(API_ADD_FILE, formData, {
-      headers: {
-        'token': localStorage.getItem('token'),
-        'Content-Type': 'multipart/form-data'
-      }
-    });
-  } catch (error) {
-    console.log('有error')
-    // TODO: swal要覆蓋還是都保留(先做保留就好..)
-    let newFileName = getRewriteName(file.name);
-    let newFile = new File([file], newFileName, { type: file.type });
-
-    retryFiles.push(newFile);
-    console.log(retryFiles)
-    result =  retryFiles;
-  }
-  return result;
-  }
 </script>
 </body>
 </html>

@@ -8,6 +8,13 @@ function bodyMenu(){
                 callback: (key, opt) => {
                     swalAddFolder();
                 }
+            },
+            'addFile': {
+                name: '新增檔案',
+                icon: 'fa-file',
+                callback: (key, opt) => {
+                    swalAddSingleFile();
+                }
             }
         }
     })
@@ -21,6 +28,13 @@ function addMenu(){
                 icon: 'fa-folder',
                 callback: (key, opt) => {
                     swalAddFolder();
+                }
+            },
+            'addFile': {
+                name: '新增檔案',
+                icon: 'fa-file',
+                callback: (key, opt) => {
+                    swalAddSingleFile();
                 }
             }
         }
