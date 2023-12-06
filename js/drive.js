@@ -106,6 +106,9 @@ function swalAddFolder(){
     Swal.fire({
         text: '請輸目錄名稱',
         input: 'text',
+        inputAttributes:{
+            maxlength: '30'
+        },
         inputValidator: (value) => {
             if(!REGEX_DATA_NAME.test(value)) return REGEX_WARN_DATA_NAME;
         },
@@ -466,6 +469,9 @@ function swalRename(targetId, dataType){
     Swal.fire({
         text: '請輸入新的名稱',
         input: 'text',
+        inputAttributes:{
+            maxlength: '30'
+        },
         inputValidator: (value) => {
             if(!REGEX_DATA_NAME.test(value)) return REGEX_WARN_DATA_NAME;
         },

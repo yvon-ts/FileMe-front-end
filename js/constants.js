@@ -19,14 +19,26 @@ const API_ACCESS_CONTROL_PREFIX = API_DOMAIN + '/drive/access-control/';
 const API_ADD_FOLDER = API_DOMAIN + '/drive/folder';
 const API_ADD_FILE = API_DOMAIN + '/drive/file';
 
+const API_REGISTER = API_DOMAIN + '/support/sign-up';
+
 const API_PUBLBIC_DOWNLOAD_PREFIX = API_DOMAIN + '/pub/drive/download/';
 const API_PUBLIC_DRIVE_PREFIX = API_DOMAIN + '/pub/drive/';
 const API_PUBLIC_FILE_PREFIX = API_DOMAIN + '/pub/drive/preview/';
 // const PUBLIC_FOLDER_SUFFIX = '/folder?share=';
 const PUBLIC_FILE_SUFFIX = '/public-file?share=';
 
+const REGEX_USERNAME = /^(?=.{3,20}$)(?=.*[a-z])(?![_.])[a-z0-9._]+(?<![_.])$/u
+const REGEX_WARN_USERNAME = '不符合帳號規定(不得以_.為開頭或結尾，僅接受英數字與_.符號，且至少需有1英文字，不得有空格，且不得小於3字)';
+const RESERVED_WORD_USERNAME = /^(?!(.*admin|.*fileme)).*$/iu
+const REGEX_WARN_RESERVED_USERNAME = '帳號不得包括admin或fileme等字樣，請使用其他名稱';
+const REGEX_PASSWORD = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+|~=?<>{}\[\]:;/.,-])[A-Za-z0-9!@#$%^&*()_+|~=?<>{}\[\]:;/.,-]{8,50}$/u
+const REGEX_WARN_PASSWORD = '不符合密碼規定(包括大小寫英數字及特殊符號，且不得小於8字)';
+const REGEX_WARN_DIFFERENT_PASSWORD = '兩次輸入的密碼不同，請再次輸入或重新註冊';
+const REGEX_EMAIL = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+const REGEX_WARN_EMAIL = '請輸入正確的電子信箱';
 const REGEX_DATA_NAME = /^(?=.{1,32}$)(?![_.])[\p{L}\p{Nd}_.-]+(?<![_.])$/u
 const REGEX_WARN_DATA_NAME = '不符合名稱規定(不得以_.為開頭或結尾，僅接受文字、數字與_.-符號，不得有空格，且不得大於30字)';
+
 const ROOT_FOLDER_ID = 0;
 
 const SWAL_DEFAULT = '系統錯誤';

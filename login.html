@@ -14,7 +14,7 @@
     background-color: #f7f7f7;
   }
 
-  .login-box {
+  .box {
     width: 300px;
     padding: 2em;
     background: #ffffff;
@@ -23,8 +23,8 @@
     border-radius: 5px;
   }
 
-  .login-box input[type="text"],
-  .login-box input[type="password"] {
+  .box input[type="text"],
+  .box input[type="password"] {
     width: 90%;
     padding: 10px;
     margin: 10px 0;
@@ -46,15 +46,24 @@
  #login:hover {
     background-color: #3949ab;
   }
+  a{
+    display: block;
+    cursor: pointer;
+  }
+  .swal2-actions {
+    display: flex;
+    flex-direction: row-reverse; /* Reverses the order of the buttons */
+}
 </style>
 </head>
 <body>
 
-<div class="login-box">
+<div class="box">
   <h2>Login</h2>
   <input type="text" id="username" placeholder="Username" required><br>
   <input type="password" id="password" placeholder="Password" required><br>
-  <button id="login" style="border: 1px solid #000">Login</button>
+  <button id="login">Login</button>
+  <a id="register">還沒有帳號嗎？點此註冊</a>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
@@ -73,6 +82,11 @@
     let password = $('#password').val();
     login(username, password);
   });
+  $('#register').click(() => {
+    swalRegister();
+  });
+
+
 </script>
 </body>
 </html>
