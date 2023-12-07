@@ -55,7 +55,7 @@ function settingMenu(){
                 name: '變更信箱',
                 icon: 'fa-envelope',
                 callback: (key, opt) => {
-                    alert('hi')
+                    swalChangeEmail();
                 }
             }
         }

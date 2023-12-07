@@ -21,6 +21,7 @@ const API_ADD_FILE = API_DOMAIN + '/drive/file';
 
 const API_REGISTER = API_DOMAIN + '/support/sign-up';
 const API_CHANGE_PASSWORD = API_DOMAIN + '/user/setting/password';
+const API_CHANGE_EMAIL = API_DOMAIN + '/user/setting/email';
 
 const API_PUBLBIC_DOWNLOAD_PREFIX = API_DOMAIN + '/pub/drive/download/';
 const API_PUBLIC_DRIVE_PREFIX = API_DOMAIN + '/pub/drive/';

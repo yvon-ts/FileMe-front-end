@@ -33,7 +33,8 @@ async function swalRegister(){
         inputValidator: (value) => {
             if(!REGEX_PASSWORD.test(value)) return REGEX_WARN_PASSWORD;
         },
-        allowOutsideClick: false
+        allowOutsideClick: false,
+        allowEnterKey: false
     });
 
     if(resultPassword.isDismissed) return;
@@ -54,7 +55,8 @@ async function swalRegister(){
         inputValidator: (value) => {
             if(value !== password) return REGEX_WARN_DIFFERENT_PASSWORD;
         },
-        allowOutsideClick: false
+        allowOutsideClick: false,
+        allowEnterKey: false
     });
 
     if(resultRepeatpassword.isDismissed) return;
@@ -65,13 +67,15 @@ async function swalRegister(){
         input: 'email',
         inputPlaceholder: 'Enter your email address',
         inputAttributes:{
+            maxlength: '64',
             autocapitalize: "off",
             autocorrect: "off"
         },
         inputValidator: (value) => {
             if(!REGEX_EMAIL.test(value)) return REGEX_WARN_EMAIL;
         },
-        allowOutsideClick: false
+        allowOutsideClick: false,
+        allowEnterKey: false
     });
 
     register(username, password, email.toLowerCase());
@@ -128,7 +132,8 @@ async function swalChangePassword(){
         inputValidator: (value) => {
             if(!REGEX_PASSWORD.test(value)) return PASSWORD_ERROR;
         },
-        allowOutsideClick: true
+        allowOutsideClick: true,
+        allowEnterKey: false
     });
     if(resultOldPassword.isDismissed) return;
     const oldPassword = resultOldPassword.value;
@@ -145,7 +150,8 @@ async function swalChangePassword(){
         inputValidator: (value) => {
             if(!REGEX_PASSWORD.test(value)) return REGEX_WARN_PASSWORD;
         },
-        allowOutsideClick: false
+        allowOutsideClick: false,
+        allowEnterKey: false
     });
 
     if(oldPassword === newPassword) {
@@ -161,10 +167,52 @@ async function swalChangePassword(){
             'token': localStorage.getItem('token')
         }
     }).then(() => {
-        swal('success', null, '操作成功，請重新登入');
         Swal.fire({
             icon: 'success',
             text: '操作成功，請重新登入',
+        }).then(() => {
+            logoutSimple();
+        })
+    });
+}
+// ----------------- Change email ----------------- //
+async function swalChangeEmail(){
+    const result = await Swal.fire({
+        icon: 'warning',
+        text: '請問是否要變更信箱？',
+        showCancelButton: true,
+        confirmButtonText: '是',
+        denyButtonText: '否'
+      });
+      if(result.isDismissed) return;
+
+    const {value: email} = await Swal.fire({
+        text: '請輸入新信箱',
+        input: 'email',
+        inputPlaceholder: 'Enter new email address',
+        inputAttributes:{
+            maxlength: '64',
+            autocapitalize: "off",
+            autocorrect: "off"
+        },
+        inputValidator: (value) => {
+            if(!REGEX_EMAIL.test(value)) return REGEX_WARN_EMAIL;
+        },
+        allowOutsideClick: false,
+        allowEnterKey: false
+    });
+
+    let info = {email: email};
+    const jsonInfo = JSON.stringify(info);
+    axios.post(API_CHANGE_EMAIL, jsonInfo, {
+        headers: {
+            'Content-Type': 'application/json',
+            'token': localStorage.getItem('token')
+        }
+    }).then(() => {
+        Swal.fire({
+            icon: 'warning',
+            text: '稍後請至您的信箱進行驗證，並重新登入',
         }).then(() => {
             logoutSimple();
         })
