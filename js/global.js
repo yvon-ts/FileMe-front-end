@@ -14,6 +14,10 @@ function logout(){
     localStorage.clear();
     window.location.replace('login.html');
 }
+function logoutSimple(){
+    localStorage.clear();
+    window.location.replace('login.html');
+}
 function swalSuccess(){
     Swal.fire({
         icon: 'success',

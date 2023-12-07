@@ -40,6 +40,27 @@ function addMenu(){
         }
     })
 }
+function settingMenu(){
+    $.contextMenu({
+        selector: '#my-settings',
+        items: {
+            'changePassword': {
+                name: '變更密碼',
+                icon: 'fa-key',
+                callback: (key, opt) => {
+                    swalChangePassword();
+                }
+            },
+            'changeEmail': {
+                name: '變更信箱',
+                icon: 'fa-envelope',
+                callback: (key, opt) => {
+                    alert('hi')
+                }
+            }
+        }
+    })
+}
 function folderMenu(){
     $.contextMenu({
         selector: '.folder',

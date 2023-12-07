@@ -20,6 +20,7 @@ const API_ADD_FOLDER = API_DOMAIN + '/drive/folder';
 const API_ADD_FILE = API_DOMAIN + '/drive/file';
 
 const API_REGISTER = API_DOMAIN + '/support/sign-up';
+const API_CHANGE_PASSWORD = API_DOMAIN + '/user/setting/password';
 
 const API_PUBLBIC_DOWNLOAD_PREFIX = API_DOMAIN + '/pub/drive/download/';
 const API_PUBLIC_DRIVE_PREFIX = API_DOMAIN + '/pub/drive/';
@@ -33,6 +34,8 @@ const RESERVED_WORD_USERNAME = /^(?!(.*admin|.*fileme)).*$/iu
 const REGEX_WARN_RESERVED_USERNAME = '帳號不得包括admin或fileme等字樣，請使用其他名稱';
 const REGEX_PASSWORD = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+|~=?<>{}\[\]:;/.,-])[A-Za-z0-9!@#$%^&*()_+|~=?<>{}\[\]:;/.,-]{8,50}$/u
 const REGEX_WARN_PASSWORD = '不符合密碼規定(包括大小寫英數字及特殊符號，且不得小於8字)';
+const PASSWORD_ERROR = '密碼錯誤';
+const SAME_PASSWORD_ERROR = '您輸入的兩次密碼相同，請重試';
 const REGEX_WARN_DIFFERENT_PASSWORD = '兩次輸入的密碼不同，請再次輸入或重新註冊';
 const REGEX_EMAIL = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const REGEX_WARN_EMAIL = '請輸入正確的電子信箱';

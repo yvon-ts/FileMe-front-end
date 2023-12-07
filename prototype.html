@@ -24,6 +24,7 @@
             <ul class="flex-col">
                 <li id="my-drive" class="active my-drive bread-toggler">我的雲端硬碟</li>
                 <li id="my-trash" class="bread-toggler">垃圾桶</li>
+                <li id="my-settings" class="bread-toggler">帳號管理</li>
             </ul>
         </nav>
     </aside>
@@ -92,8 +93,10 @@
   $('#clean').click(() => swalClean())
   $('#relocate').click(() => relocateSetting());
   $('#clearFocus').click(() => clearFocused());
-  $('#add').click(() => $('#add').trigger("contextmenu"));
+  $('#add').click(() => $('#add').trigger('contextmenu'));
+  $('#my-settings').click(() => $('#my-settings').trigger('contextmenu'));
   bodyMenu();
+  settingMenu();
   addMenu();
   folderMenu();
   fileMenu();

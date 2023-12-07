@@ -1,3 +1,4 @@
+// ----------------- Register ----------------- //
 async function swalRegister(){
     const resultUserName = await Swal.fire({
         text: '請輸入您想使用的帳號',
@@ -103,4 +104,69 @@ function register(username, password, email){
             }
         });
     })
+}
+// ----------------- Change password ----------------- //
+async function swalChangePassword(){
+    const result = await Swal.fire({
+        icon: 'warning',
+        text: '請問是否要變更密碼？',
+        showCancelButton: true,
+        confirmButtonText: '是',
+        denyButtonText: '否'
+      });
+      if(result.isDismissed) return;
+    
+      const resultOldPassword = await Swal.fire({
+        text: '請輸入您目前的密碼',
+        input: 'password',
+        inputPlaceholder: 'Enter your password',
+        inputAttributes:{
+            maxlength: '50',
+            autocapitalize: "off",
+            autocorrect: "off"
+        },
+        inputValidator: (value) => {
+            if(!REGEX_PASSWORD.test(value)) return PASSWORD_ERROR;
+        },
+        allowOutsideClick: true
+    });
+    if(resultOldPassword.isDismissed) return;
+    const oldPassword = resultOldPassword.value;
+
+    const {value: newPassword} = await Swal.fire({
+        text: '請輸入新密碼',
+        input: 'password',
+        inputPlaceholder: 'Enter new password',
+        inputAttributes:{
+            maxlength: '50',
+            autocapitalize: "off",
+            autocorrect: "off"
+        },
+        inputValidator: (value) => {
+            if(!REGEX_PASSWORD.test(value)) return REGEX_WARN_PASSWORD;
+        },
+        allowOutsideClick: false
+    });
+
+    if(oldPassword === newPassword) {
+        swal('error', '操作失敗', SAME_PASSWORD_ERROR);
+        return;
+    }
+
+    let info = {oldPassword: oldPassword, newPassword: newPassword};
+    const jsonInfo = JSON.stringify(info);
+    axios.post(API_CHANGE_PASSWORD, jsonInfo, {
+        headers: {
+            'Content-Type': 'application/json',
+            'token': localStorage.getItem('token')
+        }
+    }).then(() => {
+        swal('success', null, '操作成功，請重新登入');
+        Swal.fire({
+            icon: 'success',
+            text: '操作成功，請重新登入',
+        }).then(() => {
+            logoutSimple();
+        })
+    });
 }
