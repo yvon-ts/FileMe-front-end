@@ -9,7 +9,6 @@
 <link rel="stylesheet" href="./jquery-ui-1.13.2-2.custom/jquery-ui.structure.min.css">
 <link rel="stylesheet" href="./css/global.css">
 <style>
-
 </style>
 <!-- <script src="./js/exceptionHandler.js"></script> -->
 <script src="https://kit.fontawesome.com/25fdabb88c.js" crossorigin="anonymous"></script>
@@ -22,9 +21,9 @@
         <div id="add" style="border: 1px solid #000">新增</div>
         <nav id="side-bar">
             <ul class="flex-col">
-                <li id="my-drive" class="active my-drive bread-toggler">我的雲端硬碟</li>
-                <li id="my-trash" class="bread-toggler">垃圾桶</li>
-                <li id="my-settings" class="bread-toggler">帳號管理</li>
+                <li id="my-drive" class="active my-drive bread-toggler"><i class="fab fa-google-drive"></i>我的雲端硬碟</li>
+                <li id="my-trash" class="bread-toggler"><i class="fas fa-trash"></i>垃圾桶</li>
+                <li id="my-settings" class="bread-toggler"><i class="fas fa-cog"></i>帳號設定</li>
             </ul>
         </nav>
     </aside>
@@ -33,7 +32,7 @@
             <h2>在雲端硬碟中搜尋</h2>
             <!-- Search input would go here -->
             <div id="user" style="border: 1px solid #000">
-            <a href="login.html" style="border: 1px solid #000"><span>會員頭貼</span></a> <!-- TODO: delete -->
+            <i id="logout" class="fas fa-user-circle"></i>
             </div>
         </header>
         <!-- <section id="content" class="dropFiles" style="border: 1px solid #000"> -->
@@ -82,6 +81,10 @@
 <script src="./js/drive.js"></script>
 <script src="./js/contextmenu.js"></script>
 <script>
+  $(document).ready(() => {
+    let currentUser = localStorage.getItem('username');
+    if(!currentUser) window.location.replace('login.html');
+  })
   $(document).ready(fetchMyDrive());
   $(document).ready(initDragDropArea());
   $('#side-bar li').click(e => toggleSideBar(e));
@@ -95,6 +98,8 @@
   $('#clearFocus').click(() => clearFocused());
   $('#add').click(() => $('#add').trigger('contextmenu'));
   $('#my-settings').click(() => $('#my-settings').trigger('contextmenu'));
+  $('#logout').click(() => $('#logout').trigger('contextmenu'));
+  logoutMenu();
   bodyMenu();
   settingMenu();
   addMenu();

@@ -3,14 +3,30 @@ function login(username, password){
         'username': username,
         'password': password
     }).then(response => {
-        localStorage.setItem("userId", response.data.data.userId);
+        localStorage.setItem("username", response.data.data.username);
         localStorage.setItem("token", response.data.data.token);
         window.location.replace('prototype.html');
-    }).catch(error => console.log(error));
-// }).catch(error => globalExceptionHandler(error));
+    }).catch(error => {
+        if(error.response.data.code === 10010){
+            Swal.fire({
+                icon: 'error',
+                text: error.response.data.msg,
+                footer: '<a id="forgotPassword" href="#">忘記密碼？</a>',
+                didOpen: () => {
+                    $('#forgotPassword').click(() => {
+                        swalForgotPassword();
+                    })
+                }
+            })
+        }
+    });
 }
 function logout(){
-    // 要再補打後端api?
+    axios.post(API_LOGOUT, {}, {
+        headers: {
+            'token': localStorage.getItem('token')
+        }
+    }).then(() => console.log('logged out'))
     localStorage.clear();
     window.location.replace('login.html');
 }

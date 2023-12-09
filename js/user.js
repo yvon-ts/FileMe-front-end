@@ -218,3 +218,37 @@ async function swalChangeEmail(){
         })
     });
 }
+// ----------------- Forgot password ----------------- //
+async function swalForgotPassword(){
+    const { value: email } = await Swal.fire({
+        title: '忘記密碼',
+        text: '請輸入您註冊時提供的的電子信箱',
+        input: 'email',
+        inputPlaceholder: 'Enter your email address',
+        inputAttributes:{
+            maxlength: '64',
+            autocapitalize: "off",
+            autocorrect: "off"
+        },
+        inputValidator: (value) => {
+            if(!REGEX_EMAIL.test(value)) return REGEX_WARN_EMAIL;
+        },
+        allowOutsideClick: false,
+        allowEnterKey: false
+    })
+    if(email){
+        Swal.fire({
+            icon: 'warning',
+            text: '密碼重置連結已寄送至您的信箱',
+        })
+    }
+
+    const info = {email: email};
+    const jsonInfo = JSON.stringify(info);
+
+    axios.post(API_FORGOT_PASSWORD, jsonInfo, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}

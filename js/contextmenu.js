@@ -1,3 +1,19 @@
+function logoutMenu(){
+    $.contextMenu({
+        selector: '#logout',
+        className: 'data-title',
+        items: {
+            'logout': {
+                name: '登出',
+                icon: 'fa-sign-out-alt',
+                callback: (key, opt) => {
+                    logout();
+                }
+            }
+        }
+    })
+    $('.data-title').attr('data-menutitle', localStorage.getItem('username') + ', 您好')
+}
 function bodyMenu(){
     $.contextMenu({
         selector: '#content',

@@ -10,6 +10,10 @@ axios.interceptors.response.use(
         // console.log(error.response.data.code)
         // console.log(errorCode)
     switch(errorCode){
+        // LOGIN_ERROR
+        case 10010:{
+            throw error;
+        }
         // PREVIEW_NOT_ALLOWED
         case 11310:{
             Swal.fire({

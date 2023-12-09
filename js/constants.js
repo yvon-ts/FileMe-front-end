@@ -1,6 +1,7 @@
 // const API_DOMAIN = 'https://localhost:8443';
 const API_DOMAIN = 'http://localhost:8080';
 const API_LOGIN = API_DOMAIN + '/user/login';
+const API_LOGOUT = API_DOMAIN + '/user/logout';
 const API_MY_DRIVE = API_DOMAIN + '/drive/my-drive';
 const API_MY_TRASH = API_DOMAIN + '/drive/my-trash';
 const API_DRIVE_PREFIX = API_DOMAIN + '/drive/';
@@ -22,6 +23,7 @@ const API_ADD_FILE = API_DOMAIN + '/drive/file';
 const API_REGISTER = API_DOMAIN + '/support/sign-up';
 const API_CHANGE_PASSWORD = API_DOMAIN + '/user/setting/password';
 const API_CHANGE_EMAIL = API_DOMAIN + '/user/setting/email';
+const API_FORGOT_PASSWORD = API_DOMAIN + '/support/password';
 
 const API_PUBLBIC_DOWNLOAD_PREFIX = API_DOMAIN + '/pub/drive/download/';
 const API_PUBLIC_DRIVE_PREFIX = API_DOMAIN + '/pub/drive/';
