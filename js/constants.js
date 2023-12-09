@@ -20,9 +20,12 @@ const API_ACCESS_CONTROL_PREFIX = API_DOMAIN + '/drive/access-control/';
 const API_ADD_FOLDER = API_DOMAIN + '/drive/folder';
 const API_ADD_FILE = API_DOMAIN + '/drive/file';
 
+const API_CHECK_USERNAME = API_DOMAIN + '/pub/valid/user';
+const API_CHECK_EMAIL = API_DOMAIN + '/pub/valid/email';
+const API_RESEND_REGISTER_MAIL = API_DOMAIN + '/support/sign-up/resend';
 const API_REGISTER = API_DOMAIN + '/support/sign-up';
 const API_CHANGE_PASSWORD = API_DOMAIN + '/user/setting/password';
-const API_CHANGE_EMAIL = API_DOMAIN + '/user/setting/email';
+const API_CHANGE_EMAIL = API_DOMAIN + '/user/setting/mail';
 const API_FORGOT_PASSWORD = API_DOMAIN + '/support/password';
 
 const API_PUBLBIC_DOWNLOAD_PREFIX = API_DOMAIN + '/pub/drive/download/';

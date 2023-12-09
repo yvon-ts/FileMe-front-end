@@ -19,6 +19,12 @@ async function swalRegister(){
 
     if(resultUserName.isDismissed) return;
     const username = resultUserName.value.toLowerCase();
+    Swal.showLoading();
+    await axios.get(API_CHECK_USERNAME, {
+        params: {
+            username:  username
+        }
+    });
 
     const resultPassword = await Swal.fire({
         title: username + ', 您好',
@@ -50,8 +56,6 @@ async function swalRegister(){
             autocapitalize: "off",
             autocorrect: "off"
         },
-        cancelButtonText: '重新註冊',
-        showCancelButton: true,
         inputValidator: (value) => {
             if(value !== password) return REGEX_WARN_DIFFERENT_PASSWORD;
         },
@@ -61,7 +65,7 @@ async function swalRegister(){
 
     if(resultRepeatpassword.isDismissed) return;
 
-    const { value: email } = await Swal.fire({
+    const resultEmail = await Swal.fire({
         title: '信箱驗證',
         text: '請輸入您的電子信箱',
         input: 'email',
@@ -78,7 +82,15 @@ async function swalRegister(){
         allowEnterKey: false
     });
 
-    register(username, password, email.toLowerCase());
+    const email = resultEmail.value.toLowerCase();
+
+    await axios.get(API_CHECK_EMAIL, {
+        params: {
+            email: email
+        }
+    });
+
+    register(username, password, email);
 }
 function register(username, password, email){
     let info = {username: username, password: password, email: email};
@@ -91,20 +103,26 @@ function register(username, password, email){
         Swal.fire({
             icon: 'success',
             title: '感謝註冊',
-            text: '稍後請至您的信箱進行驗證，若需要重新寄送可點選以下按鈕',
+            text: '稍後請至您的信箱進行驗證，若需要重新寄送可於30秒後點選以下按鈕',
             showCloseButton: true,
             showDenyButton: true,
             denyButtonText: '重寄驗證信',
             allowOutsideClick: false,
+            didOpen: () => {
+                Swal.getDenyButton().disabled = true;
+                setTimeout(() => {
+                    Swal.getDenyButton().disabled = false;
+                }, 10000); // 30000 milliseconds = 30 seconds
+            },
             preDeny: () => {
-                alert('還不能按！')
-                return new Promise((resolve, reject) => {
-                    reject();
-                    // 範例是2秒後自動關閉
-                    // setTimeout(() => {
-                    //     resolve();
-                    //   }, 2000); // modal will close after 2 seconds
-                     });
+                let info = {email: email};
+                const jsonInfo = JSON.stringify(info);
+                axios.post(API_RESEND_REGISTER_MAIL, jsonInfo, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(() => swalSuccess())
+                
             }
         });
     })

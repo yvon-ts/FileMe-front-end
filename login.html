@@ -80,6 +80,19 @@
   $('#login').click(() => {
     let username = $('#username').val();
     let password = $('#password').val();
+    if(!(username && password)){
+      Swal.fire({
+                icon: 'error',
+                text: '帳號或密碼錯誤',
+                footer: '<a id="forgotPassword" href="#">忘記密碼？</a>',
+                didOpen: () => {
+                    $('#forgotPassword').click(() => {
+                        swalForgotPassword();
+                    })
+                }
+            })
+      return;
+    }
     login(username, password);
   });
   $('#register').click(() => {
