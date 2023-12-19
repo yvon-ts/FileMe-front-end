@@ -135,3 +135,7 @@ function handleEmptyFolder(){
     clearDriveData();
     $('#folder').append('<div><span>您的垃圾桶是空的</span></div>');
  }
+ function handleNoResult(){
+    clearDriveData();
+    $('#folder').append('<div><span>查無資料</span></div>');
+ }

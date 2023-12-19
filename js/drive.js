@@ -161,6 +161,7 @@ function swalAddSingleFile(){
     formData.append('file', file);
     const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
     formData.append('folderId', currentFolderId);
+    formData.append('location', 1); // TODO: 目前寫死
   
     axios.post(API_ADD_FILE, formData, {
         headers: {
@@ -241,6 +242,7 @@ function fetchDownload(fileId){
     }).then(response => {
         const contentDisposition = response.headers['content-disposition'];
         let fileName = contentDisposition.split('filename=')[1].split(';')[0];
+
         fileName = fileName.replace(/\"/g, "");
         fileName = decodeURIComponent(fileName);
         
@@ -252,6 +254,26 @@ function fetchDownload(fileId){
         link.click();
         globalTargetId = '';
     });
+}
+function fetchSearch(keywords){
+    let arr = filterKeywords(keywords);
+    axios.post(API_SEARCH, {keywords: arr}, {
+        headers: {
+            'token': localStorage.getItem('token')
+        }
+    }).then((response) => {
+        const result = response.data.data;
+        if(result.length === 0){
+            handleNoResult();
+        }else{
+            renderDriveData(result);
+        }
+    });
+}
+function filterKeywords(keywords){
+    let cleanKeywords = keywords.replaceAll(/[^\w\s]/g, ''); // filter out any character not a word
+    let arr = cleanKeywords.split(/\s+/);
+    return arr;
 }
 // ----------------- Render data ----------------- //
 
@@ -612,9 +634,14 @@ function doDelete(list){
         }
     }).then((response) => {
         $('.focus').remove();
+        checkIfEmptyTrash();
         resumeHeader();
         swalSuccess();
     });
+}
+function checkIfEmptyTrash(){
+    const trashCount = $('.trash').length;
+    if(trashCount === 0) handleEmptyTrashcan();
 }
 // ----------------- Update: recover ----------------- //
 function recover(){
@@ -642,6 +669,7 @@ function doRecover(list){
         }
     }).then((response) => {
         $('.focus').remove();
+        checkIfEmptyTrash();
         resumeHeader();
         swalSuccess();
     })

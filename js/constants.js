@@ -19,6 +19,7 @@ const API_RENAME = API_DOMAIN + '/drive/rename';
 const API_ACCESS_CONTROL_PREFIX = API_DOMAIN + '/drive/access-control/';
 const API_ADD_FOLDER = API_DOMAIN + '/drive/folder';
 const API_ADD_FILE = API_DOMAIN + '/drive/file';
+const API_SEARCH = API_DOMAIN + '/drive/search';
 
 const API_CHECK_USERNAME = API_DOMAIN + '/pub/valid/user';
 const API_CHECK_EMAIL = API_DOMAIN + '/pub/valid/email';

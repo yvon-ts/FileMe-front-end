@@ -29,7 +29,8 @@
     </aside>
     <main>
         <header class="flex just-btwn mb-2" style="border: 1px solid #000">
-            <h2>在雲端硬碟中搜尋</h2>
+            <input id="keywords" type="text" placeholder="在雲端硬碟中搜尋"/>
+            <button id="search"><i class="fas fa-search"></i></button>
             <!-- Search input would go here -->
             <div id="user" style="border: 1px solid #000">
             <i id="logout" class="fas fa-user-circle"></i>
@@ -99,6 +100,7 @@
   $('#add').click(() => $('#add').trigger('contextmenu'));
   $('#my-settings').click(() => $('#my-settings').trigger('contextmenu'));
   $('#logout').click(() => $('#logout').trigger('contextmenu'));
+  $('#search').click(() => fetchSearch($('#keywords').val()));
   logoutMenu();
   bodyMenu();
   settingMenu();

@@ -112,6 +112,7 @@ function fetchPublicDownload(fileId){
     }).then(response => {
         const contentDisposition = response.headers['content-disposition'];
         let fileName = contentDisposition.split('filename=')[1].split(';')[0];
+
         fileName = fileName.replace(/\"/g, "");
         fileName = decodeURIComponent(fileName);
         
