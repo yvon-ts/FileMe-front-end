@@ -26,9 +26,10 @@ function logout(){
         headers: {
             'token': localStorage.getItem('token')
         }
-    }).then(() => console.log('logged out'))
-    localStorage.clear();
-    window.location.replace('login.html');
+    }).then(() => {
+        localStorage.clear();
+        window.location.replace('login.html');
+    })
 }
 function logoutSimple(){
     localStorage.clear();
