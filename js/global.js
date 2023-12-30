@@ -5,7 +5,7 @@ function login(username, password){
     }).then(response => {
         localStorage.setItem("username", response.data.data.username);
         localStorage.setItem("token", response.data.data.token);
-        window.location.replace('prototype.html');
+        window.location.replace('dashboard');
     }).catch(error => {
         if(error.response.data.code === 10010){
             Swal.fire({
@@ -28,12 +28,12 @@ function logout(){
         }
     }).then(() => {
         localStorage.clear();
-        window.location.replace('login.html');
+        window.location.replace('login');
     })
 }
 function logoutSimple(){
     localStorage.clear();
-    window.location.replace('login.html');
+    window.location.replace('login');
 }
 function swalSuccess(){
     Swal.fire({

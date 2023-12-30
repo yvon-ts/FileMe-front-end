@@ -84,7 +84,7 @@
 <script>
   $(document).ready(() => {
     let currentUser = localStorage.getItem('username');
-    if(!currentUser) window.location.replace('login.html');
+    if(!currentUser) window.location.replace('login');
   })
   $(document).ready(fetchMyDrive());
   $(document).ready(initDragDropArea());
