@@ -218,6 +218,7 @@ async function fetchDrive(folderId){
     })
 }
 function fetchPreview(fileId){
+    $('.loading-mask').css({"display":"block"});
     const api_preview = API_PREVIEW_PREFIX + fileId;
     axios.get(api_preview, {
         headers: {
@@ -287,7 +288,7 @@ function clearDriveData(){
 function addBreadcrumb(target){
     $('#breadcrumb').addClass('flex');
     $('#breadcrumb li').removeClass('active');
-    $('#breadcrumb').append(`<li id="${target.id}" class="active breadcrumb">${target.innerHTML}</li>`);
+    $('#breadcrumb').append(`<li id="${target.id}" class="active breadcrumb"> > ${target.innerHTML}</li>`);
     $('.breadcrumb').click(e => {
         fetchDrive(e.target.id);
         $(e.target).nextAll().remove();});
@@ -309,6 +310,7 @@ function renderTrash(rawData){
     clearDriveData();
     renderFolderTrash(rawData);
     renderFileTrash(rawData);
+    // 好像移除group recover所以focus沒意義
     $('.folder').click(e => toggleFocus(e));
     $('.file').click(e => toggleFocus(e));
     $('.trash').dblclick(e => {
@@ -358,6 +360,7 @@ function renderFileTrash(rawData){
    }
 // ----------------- Read: preview ----------------- //
    function renderDialogPreview() {
+    $('.loading-mask').css({"display":"none"});
     $('#dialog').removeClass('hidden');
     $('.preview').removeClass('hidden');
     $( "#dialog" ).dialog({

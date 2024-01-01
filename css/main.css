@@ -1,0 +1,287 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.box {
+  width: 300px;
+  padding: 2em;
+  background: #ffffff;
+  -webkit-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border-radius: 5px;
+}
+.box input[type=text], .box input[type=password] {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.login-button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  padding: 10px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #5c6bc0;
+  color: white;
+  cursor: pointer;
+}
+.login-button:hover {
+  background-color: #3949ab;
+}
+.login-button:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+a {
+  display: block;
+  cursor: pointer;
+}
+
+.register-remind {
+  margin-top: 12px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.register-text {
+  color: #4e62e3;
+}
+
+.swal2-actions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+      -ms-flex-direction: row-reverse;
+          flex-direction: row-reverse;
+  /* Reverses the order of the buttons */
+}
+
+.header {
+  width: 100vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background-color: #5c6bc0;
+}
+.header .left-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.header .left-content .sys-name {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 240px;
+  padding-left: 24px;
+  font-size: 32px;
+  color: white;
+}
+.header .left-content .search-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-right: 12px;
+}
+.header .left-content .search-content #keywords {
+  width: 300px;
+  padding: 12px 16px;
+  border-radius: 4px 0 0 4px;
+  border: none;
+}
+.header .left-content .search-content #search {
+  border: none;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+  padding: 12px 16px;
+}
+.header .right-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-right: 24px;
+}
+.header .right-content .user-info #logout {
+  font-size: 32px;
+  color: white;
+}
+
+.main-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.main-content .side-bar-container {
+  border-right: 1px solid #aaa;
+  height: calc(100vh - 64px);
+}
+.main-content .side-bar-container .add-button {
+  color: #5c6bc0;
+}
+.main-content .side-bar-container i {
+  margin-right: 12px;
+}
+.main-content .side-bar-container #side-bar li {
+  padding: 16px 20px;
+  cursor: pointer;
+}
+.main-content #breadcrumb {
+  padding: 8px 12px;
+  font-size: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #aaa;
+}
+.main-content #breadcrumb li {
+  padding: 0 4px;
+}
+
+.dropFiles {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 100%;
+  min-height: 100px;
+  height: calc(100vh - 64px);
+  border: 5px olive dashed;
+  text-align: center;
+  font-size: 25px;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+.loading-mask {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(100, 100, 100, 0.5);
+}
+
+.loader-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(farthest-side, #2b21bb 94%, #0000) top/8px 8px no-repeat, conic-gradient(#0000 30%, #3024b0);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+  -webkit-animation: l13 1s infinite linear;
+          animation: l13 1s infinite linear;
+}
+
+.loader-white {
+  display: none;
+  width: 24px;
+  background: radial-gradient(farthest-side, #e6e6e6 94%, #cbcbcb00) top/4px 4px no-repeat, conic-gradient(#cecece00 30%, #ffffff);
+  -webkit-mask: radial-gradient(farthest-side, #eeeeee00 calc(100% - 4px), #d1d1d1 0);
+}
+
+@-webkit-keyframes l13 {
+  100% {
+    -webkit-transform: rotate(1turn);
+            transform: rotate(1turn);
+  }
+}
+
+@keyframes l13 {
+  100% {
+    -webkit-transform: rotate(1turn);
+            transform: rotate(1turn);
+  }
+}

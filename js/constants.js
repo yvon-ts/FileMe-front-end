@@ -1,5 +1,5 @@
-// const API_DOMAIN = 'https://localhost:8443';
-const API_DOMAIN = 'https://service.filesme.net';
+const API_DOMAIN = 'http://localhost:8080';
+// const API_DOMAIN = 'https://service.filesme.net';
 const API_LOGIN = API_DOMAIN + '/user/login';
 const API_LOGOUT = API_DOMAIN + '/user/logout';
 const API_MY_DRIVE = API_DOMAIN + '/drive/my-drive';

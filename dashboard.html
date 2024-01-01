@@ -1,129 +1,159 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FileME</title>
-<link rel="stylesheet" href="./jquery-contextmenu/jquery.contextMenu.min.css">
-<link rel="stylesheet" href="./jquery-ui-1.13.2-2.custom/jquery-ui.min.css">
-<link rel="stylesheet" href="./jquery-ui-1.13.2-2.custom/jquery-ui.structure.min.css">
-<link rel="stylesheet" href="./css/global.css">
-<style>
-</style>
-<!-- <script src="./js/exceptionHandler.js"></script> -->
-<script src="https://kit.fontawesome.com/25fdabb88c.js" crossorigin="anonymous"></script>
-</head>
-<body>
-
-<div id="container" class="flex just-btwn">
-    <aside class="flex-col align-items-center" style="border: 1px solid #000">
-        <h1>FILEME<span style="color: #000;"><i class="fa-solid fa-folder"></i></span></h1>
-        <div id="add" style="border: 1px solid #000">新增</div>
-        <nav id="side-bar">
-            <ul class="flex-col">
-                <li id="my-drive" class="active my-drive bread-toggler"><i class="fab fa-google-drive"></i>我的雲端硬碟</li>
-                <li id="my-trash" class="bread-toggler"><i class="fas fa-trash"></i>垃圾桶</li>
-                <li id="my-settings" class="bread-toggler"><i class="fas fa-cog"></i>帳號設定</li>
-            </ul>
-        </nav>
-    </aside>
-    <main>
-        <header class="flex just-btwn mb-2" style="border: 1px solid #000">
-            <input id="keywords" type="text" placeholder="在雲端硬碟中搜尋"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FileME</title>
+    <link
+      rel="stylesheet"
+      href="./jquery-contextmenu/jquery.contextMenu.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="./jquery-ui-1.13.2-2.custom/jquery-ui.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="./jquery-ui-1.13.2-2.custom/jquery-ui.structure.min.css"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="./css/global.css" />
+    <style></style>
+    <!-- <script src="./js/exceptionHandler.js"></script> -->
+    <script
+      src="https://kit.fontawesome.com/25fdabb88c.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div id="container">
+      <header class="header">
+        <div class="left-content">
+          <h1 class="sys-name">FILEME</h1>
+          <div class="search-content">
+            <input id="keywords" type="text" placeholder="在雲端硬碟中搜尋" />
             <button id="search"><i class="fas fa-search"></i></button>
             <!-- Search input would go here -->
-            <div id="user" style="border: 1px solid #000">
-            <i id="logout" class="fas fa-user-circle"></i>
+          </div>
+        </div>
+        <div class="right-content">
+          <div>
+            <div id="user" class="user-info">
+              <i id="logout" class="fas fa-user-circle"></i>
             </div>
-        </header>
+          </div>
+        </div>
+      </header>
+      <main class="main-content">
+        <aside class="side-bar-container">
+          <nav id="side-bar">
+            <ul class="flex-col">
+              <li id="add" class="bread-toggler add-button">
+                <i class="fas fa-plus"></i>新增
+              </li>
+              <li id="my-drive" class="my-drive bread-toggler">
+                <i class="fab fa-google-drive"></i>我的雲端硬碟
+              </li>
+              <li id="my-trash" class="bread-toggler">
+                <i class="fas fa-trash"></i>垃圾桶
+              </li>
+              <li id="my-settings" class="bread-toggler">
+                <i class="fas fa-cog"></i>帳號設定
+              </li>
+            </ul>
+          </nav>
+        </aside>
         <!-- <section id="content" class="dropFiles" style="border: 1px solid #000"> -->
-          <section id="content" class="dropFiles">
-            <nav>
-              <ul id="breadcrumb">
-                <li id="toolbar" class="hidden">
-                  <span>選取</span>
-                  <button id="trash" class="tool-drive">移至垃圾桶</button>
-                  <button id="relocate" class="tool-drive">移動</button>
-                  <button id="clearFocus" class="tool-drive">取消全部選取</button>
-                </li>
-                <li id="root">
-                  <span class="my-drive tool-drive">我的雲端硬碟</span>
-                  <span class="hidden my-trash tool-trash">垃圾桶</span>
-                  <button id="clean" class="tool-trash hidden">全部清空</button>
-                </li>
-              </ul>
-            </nav>
-            <div id="drive-data">
-              <div id="folder">
-                  <!-- Folder entries would be listed here -->
-                  <!-- <div class="folder"><span style="color: #000;"><i class="fa-solid fa-folder"></i></span>資料夾1</div> -->
-              </div>
-              <div id="file">
-                  <!-- File entries would be listed here -->
-              </div>
+        <section id="content" class="dropFiles">
+          <nav>
+            <ul id="breadcrumb">
+              <li id="toolbar" class="hidden">
+                <span>選取</span>
+                <button id="trash" class="tool-drive">移至垃圾桶</button>
+                <button id="relocate" class="tool-drive">移動</button>
+                <button id="clearFocus" class="tool-drive">取消全部選取</button>
+              </li>
+              <li id="root">
+                <span class="my-drive tool-drive">我的雲端硬碟</span>
+                <span class="hidden my-trash tool-trash">垃圾桶</span>
+                <button id="clean" class="tool-trash hidden">全部清空</button>
+              </li>
+            </ul>
+          </nav>
+          <div id="drive-data">
+            <div id="folder">
+              <!-- Folder entries would be listed here -->
+              <!-- <div class="folder"><span style="color: #000;"><i class="fa-solid fa-folder"></i></span>資料夾1</div> -->
             </div>
+            <div id="file">
+              <!-- File entries would be listed here -->
+            </div>
+          </div>
         </section>
         <!-- 右側保留欄位 -->
         <!-- <section id="details" style="border: 1px solid #000">
-        </section> -->
-    </main>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="./jquery-contextmenu/jquery.contextMenu.js"></script>
-<script src="./jquery-contextmenu/jquery.ui.position.min.js"></script>
-<script src="./jquery-ui-1.13.2-2.custom/jquery-ui.min.js"></script>
-<script src="./js/constants.js"></script>
-<script src="./js/global.js"></script>
-<script src="./js/exceptionHandler.js"></script>
-<script src="./js/user.js"></script>
-<script src="./js/drive.js"></script>
-<script src="./js/contextmenu.js"></script>
-<script>
-  $(document).ready(() => {
-    let currentUser = localStorage.getItem('username');
-    if(!currentUser) window.location.replace('login');
-  })
-  $(document).ready(fetchMyDrive());
-  $(document).ready(initDragDropArea());
-  $('#side-bar li').click(e => toggleSideBar(e));
-  $('.bread-toggler').click(e => toggleBreadcrumb(e));
-  $('.my-drive').click(() => fetchMyDrive());
-  $('#my-trash').click(() => fetchMyTrash());
-  $('#root').click(() => $('.breadcrumb').remove());
-  $('#trash').click(() => trash());
-  $('#clean').click(() => swalClean())
-  $('#relocate').click(() => relocateSetting());
-  $('#clearFocus').click(() => clearFocused());
-  $('#add').click(() => $('#add').trigger('contextmenu'));
-  $('#my-settings').click(() => $('#my-settings').trigger('contextmenu'));
-  $('#logout').click(() => $('#logout').trigger('contextmenu'));
-  $('#search').click(() => fetchSearch($('#keywords').val()));
-  logoutMenu();
-  bodyMenu();
-  settingMenu();
-  addMenu();
-  folderMenu();
-  fileMenu();
-  trashMenu();
-</script>
-<div id="dialog" class="flex just-btwn hidden">
-        <aside class="relocate hidden">
-            <nav>
-                <ul class="flex-col">
-                    <li id="root-super">根目錄</li>
-                </ul>
-            </nav>
-        </aside>
-        <main class="relocate hidden">
-            <div id="sub-folder" class="flex">
-            </div>
-        </main>
-        <img id="preview" class="preview hidden" src="" alt="">
-</div>
-<script>
-</script>
-</body>
+      </section> -->
+      </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="./jquery-contextmenu/jquery.contextMenu.js"></script>
+    <script src="./jquery-contextmenu/jquery.ui.position.min.js"></script>
+    <script src="./jquery-ui-1.13.2-2.custom/jquery-ui.min.js"></script>
+    <script src="./js/constants.js"></script>
+    <script src="./js/global.js"></script>
+    <script src="./js/exceptionHandler.js"></script>
+    <script src="./js/user.js"></script>
+    <script src="./js/drive.js"></script>
+    <script src="./js/contextmenu.js"></script>
+    <script>
+      $(document).ready(() => {
+        let currentUser = localStorage.getItem("username");
+        if (!currentUser) window.location.replace("login");
+      });
+      $(document).ready(fetchMyDrive());
+      $(document).ready(initDragDropArea());
+      $("#side-bar li").click((e) => toggleSideBar(e));
+      $(".bread-toggler").click((e) => toggleBreadcrumb(e));
+      $(".my-drive").click(() => fetchMyDrive());
+      $("#my-trash").click(() => fetchMyTrash());
+      $("#root").click(() => $(".breadcrumb").remove());
+      $("#trash").click(() => trash());
+      $("#clean").click(() => swalClean());
+      $("#relocate").click(() => relocateSetting());
+      $("#clearFocus").click(() => clearFocused());
+      $("#add").click(() => $("#add").trigger("contextmenu"));
+      $("#my-settings").click(() => $("#my-settings").trigger("contextmenu"));
+      $("#logout").click(() => $("#logout").trigger("contextmenu"));
+      $("#search").click(() => fetchSearch($("#keywords").val()));
+      logoutMenu();
+      bodyMenu();
+      settingMenu();
+      addMenu();
+      folderMenu();
+      fileMenu();
+      trashMenu();
+    </script>
+    <div id="dialog" class="flex just-btwn hidden">
+      <aside class="relocate hidden">
+        <nav>
+          <ul class="flex-col">
+            <li id="root-super">根目錄</li>
+          </ul>
+        </nav>
+      </aside>
+      <main class="relocate hidden">
+        <div id="sub-folder" class="flex"></div>
+      </main>
+      <img id="preview" class="preview hidden" src="" alt="" />
+    </div>
+    <div class="loading-mask">
+      <div class="loader-container">
+        <div class="loader"></div>
+      </div>
+    </div>
+    <script></script>
+  </body>
 </html>

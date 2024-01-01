@@ -24,10 +24,10 @@
     width: 20%;
   }
   main{
-    width: 78%;
+    width: 100%;
   }
   header{
-    height: 10%;
+    height: 64px;
   }
   section{
     height: 88%;
@@ -44,11 +44,6 @@
     /* width: 18%; */
     border: 1px solid #000;
     background-color: #f1f1f1;
-  }
-  #add{
-    background-color: #f3f3f3; /* Folder background */
-    text-align: center;
-    width: 60%;
   }
   #folder, #file, #sub-folder {
     display: grid;
@@ -79,10 +74,6 @@
   }
   [access="1"]{
     background-color: #dfedfa;
-  }
-  nav ul li{
-    border: 1px solid #ccc;
-    padding: 16px; /* Adjust the padding as needed */
   }
   a{
     display: block;
@@ -122,7 +113,4 @@ TODO: change drag drop area css
 }
 .data-title :first-child {
   margin-top: 20px;
-}
-#logout{
-font-size: 50px;
 }

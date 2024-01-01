@@ -1,11 +1,12 @@
 function login(username, password){
+    showLoadingSpinner();
     axios.post(API_LOGIN,{
         'username': username,
         'password': password
     }).then(response => {
         localStorage.setItem("username", response.data.data.username);
         localStorage.setItem("token", response.data.data.token);
-        window.location.replace('dashboard');
+        window.location.replace('dashboard.html');
     }).catch(error => {
         if(error.response.data.code === 10010){
             Swal.fire({
@@ -19,6 +20,8 @@ function login(username, password){
                 }
             })
         }
+    }).finally(() => {
+        hideLoadingSpinner();
     });
 }
 function logout(){
@@ -28,12 +31,23 @@ function logout(){
         }
     }).then(() => {
         localStorage.clear();
-        window.location.replace('login');
+        window.location.replace('login.html');
     })
 }
 function logoutSimple(){
     localStorage.clear();
-    window.location.replace('login');
+    window.location.replace('login.html');
+}
+function showLoadingSpinner(){
+    $(".login-button").prop("disabled", true);
+    $('.loader-white').css({"display":"block"});
+    $('.login-text').css({"display":"none"});
+}
+
+function hideLoadingSpinner(){
+    $(".login-button").prop("disabled", false);
+    $('.loader-white').css({"display":"none"});
+    $('.login-text').css({"display":"block"});
 }
 function swalSuccess(){
     Swal.fire({

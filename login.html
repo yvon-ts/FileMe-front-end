@@ -4,58 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login Page</title>
-<style>
-  html, body {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f7f7f7;
-  }
-
-  .box {
-    width: 300px;
-    padding: 2em;
-    background: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    border-radius: 5px;
-  }
-
-  .box input[type="text"],
-  .box input[type="password"] {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-
- #login {
-    width: 95%;
-    padding: 10px;
-    margin-top: 20px;
-    border: none;
-    border-radius: 4px;
-    background-color: #5c6bc0;
-    color: white;
-    cursor: pointer;
-  }
-
- #login:hover {
-    background-color: #3949ab;
-  }
-  a{
-    display: block;
-    cursor: pointer;
-  }
-  .swal2-actions {
-    display: flex;
-    flex-direction: row-reverse; /* Reverses the order of the buttons */
-}
-</style>
+<link rel="stylesheet" href="css/main.css">
 </head>
+<style>
+   html, body {
+     height: 100%;
+     margin: 0;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     background-color: #f7f7f7;
+ }
+</style>
 <body>
 
 <div class="box">
@@ -63,8 +23,11 @@
   <h2>FileMe 會員登入</h2>
   <input type="text" id="username" placeholder="Username" required><br>
   <input type="password" id="password" placeholder="Password" required><br>
-  <button id="login">Login</button>
-  <a id="register">還沒有帳號嗎？點此註冊</a>
+  <button id="login" class="login-button">
+    <span class="login-text">Login</span>
+    <div class="loader loader-white"></div>
+  </button>
+  <p class="register-remind">還沒有帳號嗎？點此<a id="register" class="register-text">註冊</a></p>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
