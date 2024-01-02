@@ -1,9 +1,10 @@
 function toggleSideBar(e){
-    $('#side-bar li').removeClass('active');
+    $('.side-bar-menu').removeClass('active');
     $(e.target).addClass('active');
 }
 function toggleBreadcrumb(e){
     $('.breadcrumb').remove();
+    $('.breadcrumb-delimiter').remove();
     if(e.target.id === 'my-drive'){
         $('#root').removeClass('hidden');
         $('.tool-drive').removeClass('hidden');
@@ -17,20 +18,20 @@ function toggleBreadcrumb(e){
         $('.tool-drive').addClass('hidden');
     }
 }
-function toggleFocus(e){
-    if($(e.target).hasClass('focus')){
-        $(e.target).removeClass('focus');
-        monitorToolbar();
-    }else{
-        $(e.target).addClass('focus');
-        monitorToolbar();
+function addFocus(e){
+    if (!e.ctrlKey && !e.metaKey){ // without ctrl key means single focus
+        $('.focus').removeClass('focus');
     }
+    $(e.target).addClass('focus');
+    monitorToolbar();
+    return false; // stop propagation to outside DOM
 }
 function monitorToolbar(){
     const count = countFocus();
    if(count > 0){
     $('#root').addClass('hidden');
     $('.breadcrumb').addClass('hidden');
+    $('.breadcrumb-delimiter').addClass('hidden');
     $('#toolbar').removeClass('hidden');
     $('#toolbar span').text(`已選取 ${count} 個`);
    }
@@ -42,6 +43,7 @@ function resumeHeader(){
     $('#toolbar').addClass('hidden');
     $('#root').removeClass('hidden');
     $('.breadcrumb').removeClass('hidden');
+    $('.breadcrumb-delimiter').removeClass('hidden');
 }
 function countFocus(){
     return $('.focus').length;
@@ -66,6 +68,12 @@ function clearFocused(){
     $('.focus').removeClass('focus');
     monitorToolbar();
 }
+function showLoadingMask(){
+    $('.loading-mask').css({'display':'block'});   
+}
+function hideLoadingMask(){
+    $('.loading-mask').css({'display':'none'});
+}
 // ----------------- Init drag drop area ----------------- //
 function initDragDropArea(){
     $("#content").on('dragenter', function(ev) {
@@ -75,21 +83,42 @@ function initDragDropArea(){
     $("#content").on('dragleave', function(ev) {
       $("#content").removeClass("highlightDropArea");
     });
-    
-    $("#content").on('drop', function(ev) {
+    // drop upload: loop to upload single file as workaround
+    $("#content").on('drop', async function(ev) {
       // Dropping files
       ev.preventDefault();
       ev.stopPropagation();
-      // Clear previous messages
-      $("#messages").empty();
+
       if(ev.originalEvent.dataTransfer){
         if(ev.originalEvent.dataTransfer.files.length) {
-          var droppedFiles = ev.originalEvent.dataTransfer.files;
-          for(var i = 0; i < droppedFiles.length; i++)
-          {
-            // Upload droppedFiles[i] to server
-            uploadSingleFile(droppedFiles[i]);
-          }
+            var droppedFiles = ev.originalEvent.dataTransfer.files;
+            var isFolderIncluded = false;
+
+            for(var i = 0; i < droppedFiles.length; i++) {
+                if(droppedFiles[i].type === '') {
+                    isFolderIncluded = true;
+                    break;
+                }
+            }
+
+            if(isFolderIncluded) {
+                swal('warning','','暫不支援上傳整個資料夾，請先新增目錄再上傳檔案內容')
+            } else {
+                showLoadingMask();
+                for(var i = 0; i < droppedFiles.length; i++)
+                {
+                    try{
+                        // Upload droppedFiles[i] to server
+                        await batchUpload(droppedFiles[i]);
+                    }catch(error){
+                        swalFrontEndError();
+                    }
+                }
+                const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+                currentFolderId === 0 ? fetchMyDrive() : fetchDrive(currentFolderId);
+                swalSuccess();
+                hideLoadingMask();
+            }
         }
       }
   
@@ -157,12 +186,12 @@ function swalAddSingleFile(){
   
   }
   function uploadSingleFile(file){
-    var formData = new FormData();
-    formData.append('file', file);
-    const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
-    formData.append('folderId', currentFolderId);
-    formData.append('location', 1); // TODO: 目前寫死
-  
+    // var formData = new FormData();
+    // formData.append('file', file);
+    // const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+    // formData.append('folderId', currentFolderId);
+    // formData.append('location', 1); // TODO: 目前寫死
+    const formData = prepareFormData(file);
     axios.post(API_ADD_FILE, formData, {
         headers: {
           'token': localStorage.getItem('token'),
@@ -172,10 +201,30 @@ function swalAddSingleFile(){
         const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
           currentFolderId === 0 ? fetchMyDrive() : fetchDrive(currentFolderId);
           swalSuccess();
+          hideLoadingMask();
       });
+  }
+  async function batchUpload(file){
+    const formData = prepareFormData(file);
+    const result = await axios.post(API_ADD_FILE, formData, {
+        headers: {
+          'token': localStorage.getItem('token'),
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    return result;
+  }
+  function prepareFormData(file){
+    var formData = new FormData();
+    formData.append('file', file);
+    const currentFolderId = $('.breadcrumb').last().attr('id') || 0;
+    formData.append('folderId', currentFolderId);
+    formData.append('location', 1); // TODO: 目前寫死
+    return formData;
   }
 // ----------------- Fetch data ----------------- //
 function fetchMyDrive(){
+    showLoadingMask();
     globalTargetId = '';
     axios.get(API_MY_DRIVE, {
         headers: {
@@ -191,6 +240,7 @@ function fetchMyDrive(){
 }
 
 function fetchMyTrash(){
+    showLoadingMask();
     axios.get(API_MY_TRASH, {
         headers: {
             'token': localStorage.getItem('token')}
@@ -204,6 +254,7 @@ function fetchMyTrash(){
     })
 }
 async function fetchDrive(folderId){
+    showLoadingMask();
     const api_drive = API_DRIVE_PREFIX + folderId;
     axios.get(api_drive, {
         headers: {
@@ -218,7 +269,7 @@ async function fetchDrive(folderId){
     })
 }
 function fetchPreview(fileId){
-    $('.loading-mask').css({"display":"block"});
+    showLoadingMask();
     const api_preview = API_PREVIEW_PREFIX + fileId;
     axios.get(api_preview, {
         headers: {
@@ -257,6 +308,7 @@ function fetchDownload(fileId){
     });
 }
 function fetchSearch(keywords){
+    showLoadingMask();
     let arr = filterKeywords(keywords);
     axios.post(API_SEARCH, {keywords: arr}, {
         headers: {
@@ -288,7 +340,7 @@ function clearDriveData(){
 function addBreadcrumb(target){
     $('#breadcrumb').addClass('flex');
     $('#breadcrumb li').removeClass('active');
-    $('#breadcrumb').append(`<li id="${target.id}" class="active breadcrumb"> > ${target.innerHTML}</li>`);
+    $('#breadcrumb').append(`<span class="breadcrumb-delimiter">></span><li id="${target.id}" class="active breadcrumb">${target.innerHTML}</li>`);
     $('.breadcrumb').click(e => {
         fetchDrive(e.target.id);
         $(e.target).nextAll().remove();});
@@ -298,12 +350,13 @@ function renderDriveData(rawData){
     clearDriveData();
     renderFolders(rawData);
     renderFiles(rawData);
-    $('.folder').click(e => toggleFocus(e));
-    $('.file').click(e => toggleFocus(e));
+    $('.folder').click(e => addFocus(e));
+    $('.file').click(e => addFocus(e));
     $('.folder').dblclick(e => {
         fetchDrive(e.target.id);
         addBreadcrumb(e.target);
     });
+    hideLoadingMask();
 }
 
 function renderTrash(rawData){
@@ -311,13 +364,14 @@ function renderTrash(rawData){
     renderFolderTrash(rawData);
     renderFileTrash(rawData);
     // 好像移除group recover所以focus沒意義
-    $('.folder').click(e => toggleFocus(e));
-    $('.file').click(e => toggleFocus(e));
+    $('.folder').click(e => addFocus(e));
+    $('.file').click(e => addFocus(e));
     $('.trash').dblclick(e => {
         $('.focus').removeClass('focus');
         $(e.target).addClass('focus');
         recover();
     });
+    hideLoadingMask();
 }
 
 function renderFolders(rawData){

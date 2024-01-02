@@ -46,32 +46,97 @@
 }
 
 
-
 .main-content{
     display: flex;
     .side-bar-container{
         border-right: 1px solid #aaa;
         height: calc(100vh - 64px);
-        .add-button{
-           color: #5c6bc0;
-        }
         i{
             margin-right: 12px;
         }
         #side-bar{
             li{
                 padding: 16px 20px;
-                cursor: pointer;
             }
         }
     }
     #breadcrumb{
-        padding: 8px 12px;
+        line-height: 40px;
         font-size: 1rem;
         text-align: left;
-        li{
+        border-radius: 40px;
+        background-color: rgba(92, 107, 192, 0.15);
+        margin: 12px;
+        .my-drive{
             padding: 0 4px;
+            line-height: 40px;
+            &.active{
+                font-weight: 900;
+            }
+            &:not(.active):hover{
+                color: #5c6bc0;
+                border-bottom: 1px #5c6bc0 solid;
+                cursor: pointer;
+            }
         }
-        border-bottom: 1px solid #aaa;
+        .breadcrumb{
+            &.active{
+                font-weight: 900;
+            }
+            &:not(.active):hover{
+                color: #5c6bc0;
+                border-bottom: 1px #5c6bc0 solid;
+                cursor: pointer;
+            }
+        }
+        .breadcrumb-delimiter{
+            margin: 0 12px;
+        }
     }
+}
+.tool-drive{
+    &:first-child{
+        margin-left: 12px;
+    }
+}
+#toolbar{
+    line-height: 40px;
+    &:first-child{
+        margin-left: 12px;
+    }
+    button{
+        padding: 12px;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        &:hover{
+            background-color: rgba(92, 107, 192, 0.15);
+            border-radius: 50%;
+        }
+    }
+}
+.my-trash{
+    margin-left: 12px;
+}
+.add-btn{
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #5c6bc0;
+    color: #5c6bc0;
+    background-color: #fff;
+    padding: 8px;
+    &:hover{
+        cursor: pointer;
+        background-color: rgba(92, 107, 192, 0.2);
+    }
+}
+
+.side-bar-menu{
+    &.active{
+        cursor: default;
+    }
+    &:not(.active):hover{
+        background-color: rgba(92, 107, 192, 0.5);
+        cursor: pointer;
+      }
 }

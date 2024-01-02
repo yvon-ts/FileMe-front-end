@@ -17,8 +17,7 @@
       href="./jquery-ui-1.13.2-2.custom/jquery-ui.structure.min.css"
     />
     <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="./css/global.css" />
-    <style></style>
+    <link rel="stylesheet" href="css/global.css" />
     <!-- <script src="./js/exceptionHandler.js"></script> -->
     <script
       src="https://kit.fontawesome.com/25fdabb88c.js"
@@ -33,7 +32,6 @@
           <div class="search-content">
             <input id="keywords" type="text" placeholder="在雲端硬碟中搜尋" />
             <button id="search"><i class="fas fa-search"></i></button>
-            <!-- Search input would go here -->
           </div>
         </div>
         <div class="right-content">
@@ -48,16 +46,18 @@
         <aside class="side-bar-container">
           <nav id="side-bar">
             <ul class="flex-col">
-              <li id="add" class="bread-toggler add-button">
-                <i class="fas fa-plus"></i>新增
+              <li id="add">
+                <button class="add-btn">
+                  <i class="fas fa-plus"></i>新增
+                </button>
               </li>
-              <li id="my-drive" class="my-drive bread-toggler">
+              <li id="my-drive" class="active my-drive bread-toggler side-bar-menu">
                 <i class="fab fa-google-drive"></i>我的雲端硬碟
               </li>
-              <li id="my-trash" class="bread-toggler">
+              <li id="my-trash" class="bread-toggler side-bar-menu">
                 <i class="fas fa-trash"></i>垃圾桶
               </li>
-              <li id="my-settings" class="bread-toggler">
+              <li id="my-settings" class="side-bar-menu">
                 <i class="fas fa-cog"></i>帳號設定
               </li>
             </ul>
@@ -68,10 +68,13 @@
           <nav>
             <ul id="breadcrumb">
               <li id="toolbar" class="hidden">
+                <!-- button: clear focused -->
+                <button id="clearFocus" class="tool-drive"><i class="fas fa-times"></i></button>
                 <span>選取</span>
-                <button id="trash" class="tool-drive">移至垃圾桶</button>
-                <button id="relocate" class="tool-drive">移動</button>
-                <button id="clearFocus" class="tool-drive">取消全部選取</button>
+                <!-- button: go to trash -->
+                <button id="trash" class="tool-drive"><i class="fas fa-trash"></i></button>
+                <!-- button: relocate -->
+                <button id="relocate" class="tool-drive"><i class="fas fa-exchange-alt"></i></button>
               </li>
               <li id="root">
                 <span class="my-drive tool-drive">我的雲端硬碟</span>
@@ -83,16 +86,12 @@
           <div id="drive-data">
             <div id="folder">
               <!-- Folder entries would be listed here -->
-              <!-- <div class="folder"><span style="color: #000;"><i class="fa-solid fa-folder"></i></span>資料夾1</div> -->
             </div>
             <div id="file">
               <!-- File entries would be listed here -->
             </div>
           </div>
         </section>
-        <!-- 右側保留欄位 -->
-        <!-- <section id="details" style="border: 1px solid #000">
-      </section> -->
       </main>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -115,14 +114,18 @@
       });
       $(document).ready(fetchMyDrive());
       $(document).ready(initDragDropArea());
-      $("#side-bar li").click((e) => toggleSideBar(e));
+      $(".side-bar-menu").click((e) => toggleSideBar(e));
       $(".bread-toggler").click((e) => toggleBreadcrumb(e));
-      $(".my-drive").click(() => fetchMyDrive());
+      $(".my-drive").click(() => {
+        fetchMyDrive();
+        $('.breadcrumb-delimiter').remove();
+      });
       $("#my-trash").click(() => fetchMyTrash());
       $("#root").click(() => $(".breadcrumb").remove());
       $("#trash").click(() => trash());
       $("#clean").click(() => swalClean());
       $("#relocate").click(() => relocateSetting());
+      $('#content').click(() => clearFocused());
       $("#clearFocus").click(() => clearFocused());
       $("#add").click(() => $("#add").trigger("contextmenu"));
       $("#my-settings").click(() => $("#my-settings").trigger("contextmenu"));

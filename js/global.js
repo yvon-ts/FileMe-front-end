@@ -4,8 +4,8 @@ function login(username, password){
         'username': username,
         'password': password
     }).then(response => {
-        localStorage.setItem("username", response.data.data.username);
-        localStorage.setItem("token", response.data.data.token);
+        localStorage.setItem('username', response.data.data.username);
+        localStorage.setItem('token', response.data.data.token);
         window.location.replace('dashboard.html');
     }).catch(error => {
         if(error.response.data.code === 10010){
@@ -39,15 +39,15 @@ function logoutSimple(){
     window.location.replace('login.html');
 }
 function showLoadingSpinner(){
-    $(".login-button").prop("disabled", true);
-    $('.loader-white').css({"display":"block"});
-    $('.login-text').css({"display":"none"});
+    $('.login-button').prop('disabled', true);
+    $('.loader-white').css({'display':'block'});
+    $('.login-text').css({'display':'none'});
 }
 
 function hideLoadingSpinner(){
-    $(".login-button").prop("disabled", false);
-    $('.loader-white').css({"display":"none"});
-    $('.login-text').css({"display":"block"});
+    $('.login-button').prop('disabled', false);
+    $('.loader-white').css({'display':'none'});
+    $('.login-text').css({'display':'block'});
 }
 function swalSuccess(){
     Swal.fire({

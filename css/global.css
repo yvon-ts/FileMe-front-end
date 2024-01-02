@@ -80,9 +80,7 @@
     width: 100%;
     height: 100%;
   }
-  #side-bar li:not(.active):hover{
-    background-color: #ccc;
-  }
+
   .hidden{
     display: none;
   }
@@ -90,9 +88,7 @@
 /*
 TODO: change drag drop area css
 */
-  .dropFiles {
-  border: 5px red dashed; 
-}
+
 .highlightDropArea {
   border: 5px green dashed;
 }
