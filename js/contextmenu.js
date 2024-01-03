@@ -85,6 +85,7 @@ function folderMenu(){
                 name: '重新命名',
                 icon: 'fa-edit',
                 callback: (key, opt) => {
+                    clearFocused();
                     const target = opt.$trigger[0];
                     const targetId = target.id
                     const dataType = opt.$trigger[0].classList.contains('folder') ? 0 : 1;
@@ -108,6 +109,7 @@ function folderMenu(){
                 name: '移動',
                 icon: 'fa-exchange-alt',
                 callback: (key, opt) => {
+                    clearFocused();
                     const target = opt.$trigger[0];
                     target.classList.add('focus');
                     relocateSetting();
@@ -117,6 +119,7 @@ function folderMenu(){
                 name: '移至垃圾桶',
                 icon: 'delete',
                 callback: (key, opt) => {
+                    clearFocused();
                     const target = opt.$trigger[0];
                     target.classList.add('focus');
                     trash();
@@ -132,6 +135,7 @@ function fileMenu(){
                 name: '預覽',
                 icon: 'fa-search',
                 callback: (key, opt) => {
+                    clearFocused();
                     globalTargetId = '';
                     const fileId = opt.$trigger[0].id;
                     globalTargetId = fileId;
@@ -142,6 +146,7 @@ function fileMenu(){
                 name: '下載',
                 icon: 'fa-save',
                 callback: (key, opt) => {
+                    clearFocused();
                     globalTargetId = '';
                     globalTargetId = globalTargetId.length === 0 ? opt.$trigger[0].id : globalTargetId;
                     swalDownload(globalTargetId);
@@ -150,6 +155,7 @@ function fileMenu(){
                 name: '重新命名',
                 icon: 'fa-edit',
                 callback: (key, opt) => {
+                    clearFocused();
                     const target = opt.$trigger[0];
                     const targetId = target.id
                     const dataType = opt.$trigger[0].classList.contains('folder') ? 0 : 1;
@@ -160,6 +166,7 @@ function fileMenu(){
                 name: '權限設定',
                 icon: 'fa-wrench',
                 callback: (key, opt) => {
+                    clearFocused();
                     globalTargetId = '';
                     const target = opt.$trigger[0];
                     globalTargetId = target.id;
@@ -172,6 +179,7 @@ function fileMenu(){
                 name: '移動',
                 icon: 'fa-exchange-alt',
                 callback: (key, opt) => {
+                    clearFocused();
                     const target = opt.$trigger[0];
                     target.classList.add('focus');
                     relocateSetting();
@@ -181,6 +189,7 @@ function fileMenu(){
                 name: '移至垃圾桶',
                 icon: 'delete',
                 callback: (key, opt) => {
+                    clearFocused();
                     const target = opt.$trigger[0];
                     target.classList.add('focus');
                     trash();
@@ -196,6 +205,7 @@ function trashMenu(){
                 name: '還原',
                 icon: 'fa-rotate-left',
                 callback: (key, opt) => {
+                    clearFocused();
                     const target = opt.$trigger[0];
                     target.classList.add('focus');
                     recover();
@@ -204,6 +214,7 @@ function trashMenu(){
                 name: '立即刪除',
                 icon: 'fa-solid fa-ban',
                 callback: (key, opt) => {
+                    clearFocused();
                     const target = opt.$trigger[0];
                     target.classList.add('focus');
                     softDelete();

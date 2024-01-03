@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="./jquery-ui-1.13.2-2.custom/jquery-ui.min.css">
     <link rel="stylesheet" href="./jquery-ui-1.13.2-2.custom/jquery-ui.structure.min.css">
     <link rel="stylesheet" href="./css/global.css">
+    <style>
+      .ui-dialog-titlebar-close {
+    visibility: hidden;
+}
+    </style>
 </head>
 <body>
     <div id="dialog" class="flex just-btwn hidden">
@@ -49,9 +54,6 @@
       buttons: {
         '下載': function() {
             swalPublicDownload();
-        },
-        '關閉視窗': function() {
-            $( this ).dialog( "close" );
         }
       }
     });
@@ -68,11 +70,6 @@ function renderFailPublicDialogPreview() {
         $('#preview').attr('src', '');
         $('#dialog').addClass('hidden');
         $('.preview').addClass('hidden');
-      },
-      buttons: {
-        '關閉視窗': function() {
-            $( this ).dialog( "close" );
-        }
       }
     });
 }

@@ -57,8 +57,8 @@
     text-align: center; /* Centering the text */
     background-color: #f3f3f3; /* Folder background */
   }
-  .focus, .selected{
-    border: 5px solid #9dc8f0;
+  .focus{
+    border: 5px solid rgba(92, 107, 192, 0.5);
   }
   /* .folder:not(.focus):hover,
   .folder:not(.origin):hover,

@@ -826,7 +826,7 @@ function displaySelectedMenu(folderId){
 function renderSuperFolders(rawData){
     $('.super-folder').remove();
     const folders = rawData.map(item => function(){
-        return `<li id="${item.id}" class="super-folder">${item.dataName}</li>`;
+        return `<li id="${item.id}" class="super-folder hide-overflow" title="${item.dataName}">${item.dataName}</li>`;
     });
     folders.forEach(folder => $('#dialog ul').append(folder));
     $('.super-folder').click(e => fetchSubFolders(e.target.id));
@@ -836,7 +836,7 @@ function renderSubFolders(rawData){
     $('#sub-folder').empty();
     const folders = rawData.map(item => {
         let className = includesLargeNumber(relocateTargetFolders, item.id) ? 'folder origin' : 'folder';
-    return `<div id="${item.id}" class="${className}">${item.dataName}</div>`;
+    return `<div id="${item.id}" class="${className} hide-overflow" title="${item.dataName}"><i class="fas fa-folder icon"></i>${item.dataName}</div>`;
     });
     folders.forEach(folder => $('#sub-folder').append(folder));
     addListenerRelocate('origin');
@@ -889,7 +889,8 @@ function initDialogRelocate(){
  * 故新增此方法
  */
 function addListenerRelocate(excludedClass){
-    const className = '.' + excludedClass; 
+    const className = '.' + excludedClass;
+    $('#sub-folder .folder').not(className).css({'cursor': 'pointer'}); 
     $('#sub-folder .folder').not(className).dblclick(e => {
         fetchSubFolders(e.target.id)
         .then(() => fetchSuperFolders(e.target.id))

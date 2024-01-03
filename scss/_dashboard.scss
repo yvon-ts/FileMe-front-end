@@ -33,7 +33,10 @@
             }
         }
     }
-    
+    .logo{
+        height: 36px;
+        margin-left: 12px;
+    }
     .right-content{
         display: flex;
         align-items: center;
@@ -181,4 +184,18 @@
     @include box-style;
     content: '\f15b';
     color: rgba(107, 192, 92, 0.5);
+}
+
+
+.super-folder-container{
+    li{
+        line-height: 40px;
+        &.selected{
+            background-color: rgba(92, 107, 192, 0.15);
+        }
+        &:not(.selected):hover{
+            cursor: pointer;
+            background-color: #f3f3f3;
+        }
+    }
 }
