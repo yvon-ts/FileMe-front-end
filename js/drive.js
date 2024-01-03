@@ -23,6 +23,8 @@ function addFocus(e){
         $('.focus').removeClass('focus');
     }
     $(e.target).addClass('focus');
+    $('.breadcrumb').addClass('hidden');
+    $('.breadcrumb-delimiter').addClass('hidden');
     monitorToolbar();
     return false; // stop propagation to outside DOM
 }
@@ -30,8 +32,6 @@ function monitorToolbar(){
     const count = countFocus();
    if(count > 0){
     $('#root').addClass('hidden');
-    $('.breadcrumb').addClass('hidden');
-    $('.breadcrumb-delimiter').addClass('hidden');
     $('#toolbar').removeClass('hidden');
     $('#toolbar span').text(`已選取 ${count} 個`);
    }
@@ -66,6 +66,8 @@ function collectFocusedInfo(){
 }
 function clearFocused(){
     $('.focus').removeClass('focus');
+    $('.breadcrumb').removeClass('hidden');
+    $('.breadcrumb-delimiter').removeClass('hidden');
     monitorToolbar();
 }
 function showLoadingMask(){
@@ -276,9 +278,17 @@ function fetchPreview(fileId){
             'token': localStorage.getItem('token')},
         responseType: 'blob'
     }).then(response => {
-        let url = URL.createObjectURL(new Blob([response.data]));
-        $('#preview').attr('src', url);
-        renderDialogPreview();
+        const dataType = response.data.type;
+        if(dataType === 'application/pdf'){
+            const pdfURL = URL.createObjectURL(response.data);
+            window.open(pdfURL, '_blank');
+            swal('info','','檔案已在新視窗開啟');
+            hideLoadingMask();
+        }else{
+            let url = URL.createObjectURL(new Blob([response.data]));
+            $('#preview').attr('src', url);
+            renderDialogPreview();
+        }
     }).catch(() => {
         $('#preview').attr('src', '');
         $('#preview').attr('alt', '該檔案不支援預覽，請直接下載查看');
@@ -335,12 +345,14 @@ function clearDriveData(){
     $('#file').html('');
     $('#toolbar').addClass('hidden');
     $('#root').removeClass('hidden');
+    $('.breadcrumb').removeClass('hidden');
+    $('.breadcrumb-delimiter').removeClass('hidden');
 }
 
 function addBreadcrumb(target){
     $('#breadcrumb').addClass('flex');
     $('#breadcrumb li').removeClass('active');
-    $('#breadcrumb').append(`<span class="breadcrumb-delimiter">></span><li id="${target.id}" class="active breadcrumb">${target.innerHTML}</li>`);
+    $('#breadcrumb').append(`<span class="breadcrumb-delimiter">></span><li id="${target.id}" class="active breadcrumb hide-overflow">${target.innerText}</li>`);
     $('.breadcrumb').click(e => {
         fetchDrive(e.target.id);
         $(e.target).nextAll().remove();});
@@ -378,7 +390,7 @@ function renderFolders(rawData){
     const folders = rawData
     .filter(item => item.dataType === 0)
     .map(item => function(){
-        return `<div class="folder" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
+        return `<div class="folder hide-overflow" id="${item.id}" access="${item.accessLevel}" title="${item.dataName}"><i class="fas fa-folder icon"></i>${item.dataName}</div>`;
     });
     folders.forEach(folder => $('#folder').append(folder));
 }
@@ -386,31 +398,73 @@ function renderFolders(rawData){
 function renderFiles(rawData){
  const files = rawData
     .filter(item => item.dataType === 1)
-    .map(item => function(){
-        return `<div class="file" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
+    .map(item => {
+        var fileHtml = `<div class="file hide-overflow" id="${item.id}" access="${item.accessLevel}" title="${item.dataName}">${item.dataName}</div>`;
+        var fileElement = $(fileHtml);
+        var type = determineMimeTypeByFileName(item.dataName);
+
+        switch(type){
+            case 'pdf':
+                fileElement.addClass('box-pdf');
+                fileElement.prepend('<i class="far fa-file-pdf icon"></i>');
+                break;
+            case 'jpg':
+            case 'gif':
+            case 'png':
+                fileElement.addClass('box-image');
+                fileElement.prepend('<i class="fas fa-image icon"></i>');
+                break;
+            default:
+                fileElement.addClass('box-file');
+                fileElement.prepend('<i class="fas fa-file icon"></i>');
+                break;
+        }
+        $('#file').append(fileElement);
     });
-    files.forEach(file => $('#file').append(file));
     $('.file').dblclick(e => {
         globalTargetId = e.target.id;
         fetchPreview(globalTargetId);
     });
 }
-
+function determineMimeTypeByFileName(fileName){
+    var index = fileName.lastIndexOf('.');
+    var type = index == -1 ? '' : fileName.substring(index + 1).trim().toLowerCase();
+    return type;
+}
 function renderFolderTrash(rawData){
     const folders = rawData
     .filter(item => item.dataType === 0)
     .map(item => function(){
-        return `<div class="folder-trash trash" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
+        return `<div class="folder-trash trash hide-overflow" id="${item.id}" access="${item.accessLevel}" title="${item.dataName}"><i class="fas fa-folder icon">${item.dataName}</div>`;
     });
     folders.forEach(folder => $('#folder').append(folder));
 }
 function renderFileTrash(rawData){
     const files = rawData
        .filter(item => item.dataType === 1)
-       .map(item => function(){
-           return `<div class="file-trash trash" id="${item.id}" access="${item.accessLevel}">${item.dataName}</div>`;
+       .map(item => {
+           var fileHtml = `<div class="file-trash trash hide-overflow" id="${item.id}" access="${item.accessLevel}" title="${item.dataName}">${item.dataName}</div>`;
+           var fileElement = $(fileHtml);
+            var type = determineMimeTypeByFileName(item.dataName);
+    
+            switch(type){
+                case 'pdf':
+                    fileElement.addClass('box-pdf');
+                    fileElement.prepend('<i class="far fa-file-pdf icon"></i>');
+                    break;
+                case 'jpg':
+                case 'gif':
+                case 'png':
+                    fileElement.addClass('box-image');
+                    fileElement.prepend('<i class="fas fa-image icon"></i>');
+                    break;
+                default:
+                    fileElement.addClass('box-file');
+                    fileElement.prepend('<i class="fas fa-file icon"></i>');
+                    break;
+            }
+            $('#file').append(fileElement);
        });
-       files.forEach(file => $('#file').append(file));
    }
 // ----------------- Read: preview ----------------- //
    function renderDialogPreview() {

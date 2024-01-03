@@ -80,6 +80,7 @@
             }
         }
         .breadcrumb{
+            max-width: 200px;
             &.active{
                 font-weight: 900;
             }
@@ -94,12 +95,12 @@
         }
     }
 }
-.tool-drive{
+.tool-drive, .tool-trash{
     &:first-child{
         margin-left: 12px;
     }
 }
-#toolbar{
+#toolbar, #root{
     line-height: 40px;
     &:first-child{
         margin-left: 12px;
@@ -139,4 +140,45 @@
         background-color: rgba(92, 107, 192, 0.5);
         cursor: pointer;
       }
+}
+.hide-overflow{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.folder, .file, .folder-trash, .file-trash{
+    font-size: 14px;
+    border-radius: 4px;
+    line-height: 32px;
+}
+.icon{
+    margin-right: 12px;
+}
+@mixin box-style{
+    font-family: 'FontAwesome';
+    display: block;
+    width: 98%;
+    height: 150px;
+    position: relative;
+    left: 1%;
+    background-color: #fff;
+    line-height: 150px;
+    font-size: 60px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+.box-pdf::before{
+    @include box-style;
+    content: '\f1c1';
+    color: rgba(92, 107, 192, 0.5);
+}
+.box-image::before{
+    @include box-style;
+    content: '\f03e';
+    color: rgba(192, 92, 107, 0.5);
+}
+.box-file::before{
+    @include box-style;
+    content: '\f15b';
+    color: rgba(107, 192, 92, 0.5);
 }

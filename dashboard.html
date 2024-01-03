@@ -68,18 +68,15 @@
           <nav>
             <ul id="breadcrumb">
               <li id="toolbar" class="hidden">
-                <!-- button: clear focused -->
-                <button id="clearFocus" class="tool-drive"><i class="fas fa-times"></i></button>
-                <span>選取</span>
-                <!-- button: go to trash -->
-                <button id="trash" class="tool-drive"><i class="fas fa-trash"></i></button>
-                <!-- button: relocate -->
-                <button id="relocate" class="tool-drive"><i class="fas fa-exchange-alt"></i></button>
+                <button id="clearFocus" class="tool-drive" title="清除選取"><i class="fas fa-times"></i></button>
+                <span>選取個數</span>
+                <button id="trash" class="tool-drive" title="移至垃圾桶"><i class="fas fa-trash"></i></button>
+                <button id="relocate" class="tool-drive" title="移動"><i class="fas fa-exchange-alt"></i></button>
               </li>
               <li id="root">
                 <span class="my-drive tool-drive">我的雲端硬碟</span>
                 <span class="hidden my-trash tool-trash">垃圾桶</span>
-                <button id="clean" class="tool-trash hidden">全部清空</button>
+                <button id="clean" class="tool-trash hidden" title="全部清空"><i class="fas fa-broom"></i></button>
               </li>
             </ul>
           </nav>

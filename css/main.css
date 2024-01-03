@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -229,6 +230,9 @@ a {
   border-bottom: 1px #5c6bc0 solid;
   cursor: pointer;
 }
+.main-content #breadcrumb .breadcrumb {
+  max-width: 200px;
+}
 .main-content #breadcrumb .breadcrumb.active {
   font-weight: 900;
 }
@@ -241,23 +245,23 @@ a {
   margin: 0 12px;
 }
 
-.tool-drive:first-child {
+.tool-drive:first-child, .tool-trash:first-child {
   margin-left: 12px;
 }
 
-#toolbar {
+#toolbar, #root {
   line-height: 40px;
 }
-#toolbar:first-child {
+#toolbar:first-child, #root:first-child {
   margin-left: 12px;
 }
-#toolbar button {
+#toolbar button, #root button {
   padding: 12px;
   border: none;
   background-color: transparent;
   cursor: pointer;
 }
-#toolbar button:hover {
+#toolbar button:hover, #root button:hover {
   background-color: rgba(92, 107, 192, 0.15);
   border-radius: 50%;
 }
@@ -287,6 +291,70 @@ a {
   cursor: pointer;
 }
 
+.hide-overflow {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.folder, .file, .folder-trash, .file-trash {
+  font-size: 14px;
+  border-radius: 4px;
+  line-height: 32px;
+}
+
+.icon {
+  margin-right: 12px;
+}
+
+.box-pdf::before {
+  font-family: "FontAwesome";
+  display: block;
+  width: 98%;
+  height: 150px;
+  position: relative;
+  left: 1%;
+  background-color: #fff;
+  line-height: 150px;
+  font-size: 60px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  content: "";
+  color: rgba(92, 107, 192, 0.5);
+}
+
+.box-image::before {
+  font-family: "FontAwesome";
+  display: block;
+  width: 98%;
+  height: 150px;
+  position: relative;
+  left: 1%;
+  background-color: #fff;
+  line-height: 150px;
+  font-size: 60px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  content: "";
+  color: rgba(192, 92, 107, 0.5);
+}
+
+.box-file::before {
+  font-family: "FontAwesome";
+  display: block;
+  width: 98%;
+  height: 150px;
+  position: relative;
+  left: 1%;
+  background-color: #fff;
+  line-height: 150px;
+  font-size: 60px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  content: "";
+  color: rgba(107, 192, 92, 0.5);
+}
+
 .dropFiles {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
@@ -299,6 +367,11 @@ a {
   -webkit-box-flex: 1;
       -ms-flex-positive: 1;
           flex-grow: 1;
+}
+
+.reminder {
+  font-size: 14px;
+  color: #999;
 }
 
 .loading-mask {
