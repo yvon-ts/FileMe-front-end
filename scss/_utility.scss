@@ -1,0 +1,30 @@
+.flex{
+    display: flex;
+  }
+  .flex-col{
+    display: flex;
+    flex-direction: column;
+  }
+  .just-btwn{
+    justify-content: space-between;
+  }
+  .just-around{
+    justify-content: space-around;
+  }
+  .just-center{
+    justify-content: center;
+  }
+  .align-items-center{
+    align-items: center;
+  }
+  .hide-overflow{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.focus{
+    border: 5px solid rgba(92, 107, 192, 0.5);
+  }
+  .hidden{
+    display: none;
+  }

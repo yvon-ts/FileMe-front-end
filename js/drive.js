@@ -78,15 +78,17 @@ function hideLoadingMask(){
 }
 // ----------------- Init drag drop area ----------------- //
 function initDragDropArea(){
-    $("#content").on('dragenter', function(ev) {
-        $("#content").addClass("highlightDropArea");
+    $('#content').on('dragenter', function(ev) {
+        $('#content').addClass('highlightDropArea');
+        $('#drag-drop-reminder').removeClass('hidden');
     });
     
-    $("#content").on('dragleave', function(ev) {
-      $("#content").removeClass("highlightDropArea");
+    $('#content').on('dragleave', function(ev) {
+      $('#content').removeClass('highlightDropArea');
+      $('#drag-drop-reminder').addClass('hidden');
     });
     // drop upload: loop to upload single file as workaround
-    $("#content").on('drop', async function(ev) {
+    $('#content').on('drop', async function(ev) {
       // Dropping files
       ev.preventDefault();
       ev.stopPropagation();

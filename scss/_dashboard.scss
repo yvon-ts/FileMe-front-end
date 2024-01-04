@@ -1,38 +1,36 @@
+/* ---------------------------- header ---------------------------- */
 .header{
-    width: 100vw;    
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    width: 100vw;
     box-sizing: border-box;
     background-color: #5c6bc0;
     .left-content{
-        display: flex;
-        align-items: center;
+        width: 20%;
+    }
+    .logo-content{
+        // width: 20%;
+        min-width: 240px;
         .sys-name{
             box-sizing: border-box;
-            width: 240px;
             padding-left: 24px;
             font-size: 32px;
             color: white;
         }
-        .search-content{
-            display: flex;
-            align-items: center;
-            margin-right: 12px;
-            #keywords{
-                width: 300px;
-                padding: 12px 16px;
-                border-radius: 4px 0 0 4px;
-                border: none;
-            }
-            #search{
-                border: none;
-                cursor: pointer;
-                border-radius: 0 4px 4px 0;
-                padding: 12px 16px;
-            }
-        }
     }
+    .search-content{
+        margin-right: 12px;
+        #keywords{
+            width: 300px;
+            padding: 12px 16px;
+            border-radius: 4px 0 0 4px;
+            border: none;
+        }
+        #search{
+            border: none;
+            cursor: pointer;
+            border-radius: 0 4px 4px 0;
+            padding: 12px 16px;
+    }
+}
     .logo{
         height: 36px;
         margin-left: 12px;
@@ -48,6 +46,61 @@
     }
 }
 
+/* settings: username, hello */
+.data-title:before {
+    content: attr(data-menutitle);
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    background: #DDD;
+    padding: 2px;
+  
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .data-title :first-child {
+    margin-top: 20px;
+  }
+/* ---------------------------- sidebar ---------------------------- */
+.my-trash{
+    margin-left: 12px;
+}
+.add-btn{
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #5c6bc0;
+    color: #5c6bc0;
+    background-color: #fff;
+    padding: 8px;
+    &:hover{
+        cursor: pointer;
+        background-color: rgba(92, 107, 192, 0.2);
+    }
+}
+
+.side-bar-menu{
+    &.active{
+        cursor: default;
+    }
+    &:not(.active):hover{
+        background-color: rgba(92, 107, 192, 0.5);
+        cursor: pointer;
+      }
+}
+  /* ---------------------------- content ---------------------------- */
+
+  .highlightDropArea {
+    border: 5px #aaa dashed;
+  }
+  #drag-drop-reminder{
+    position: absolute;
+    left: 50%;
+    top: 70%;
+    color: #aaa;
+  }
 
 .main-content{
     display: flex;
@@ -119,40 +172,22 @@
         }
     }
 }
-.my-trash{
-    margin-left: 12px;
-}
-.add-btn{
-    width: 100%;
-    border-radius: 4px;
-    border: 1px solid #5c6bc0;
-    color: #5c6bc0;
-    background-color: #fff;
-    padding: 8px;
-    &:hover{
-        cursor: pointer;
-        background-color: rgba(92, 107, 192, 0.2);
-    }
-}
 
-.side-bar-menu{
-    &.active{
-        cursor: default;
-    }
-    &:not(.active):hover{
-        background-color: rgba(92, 107, 192, 0.5);
-        cursor: pointer;
-      }
-}
-.hide-overflow{
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+#folder, #file, #sub-folder {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 16px;
+  }
+
 .folder, .file, .folder-trash, .file-trash{
     font-size: 14px;
     border-radius: 4px;
     line-height: 32px;
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+    background-color: #f3f3f3;
 }
 .icon{
     margin-right: 12px;
@@ -186,7 +221,7 @@
     color: rgba(107, 192, 92, 0.5);
 }
 
-
+/* ---------------------------- dialog ---------------------------- */
 .super-folder-container{
     li{
         line-height: 40px;
@@ -199,3 +234,10 @@
         }
     }
 }
+#sub-folder .focus, #sub-folder .origin{
+    color: #ccc;
+    border: none;
+  }
+  [access="1"]{
+    background-color: #dfedfa;
+  }

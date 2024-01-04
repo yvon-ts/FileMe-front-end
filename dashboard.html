@@ -26,8 +26,6 @@
       href="./jquery-ui-1.13.2-2.custom/jquery-ui.structure.min.css"
     />
     <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/global.css" />
-    <!-- <script src="./js/exceptionHandler.js"></script> -->
     <script
       src="https://kit.fontawesome.com/25fdabb88c.js"
       crossorigin="anonymous"
@@ -35,10 +33,12 @@
   </head>
   <body>
     <div id="container">
-      <header class="header">
-        <div class="left-content">
-          <h1 class="sys-name">FILEME<img class="logo" src="./img/logo-bg.png"></h1>
-          <div class="search-content">
+      <header class="header flex just-btwn align-items-center">
+        <div class="left-content flex just-btwn">
+          <div class="logo-content flex align-items-center">
+            <h1 class="sys-name">FILEME<img class="logo" src="./img/logo-bg.png"></h1>
+          </div>
+          <div class="search-content flex align-items-center">
             <input id="keywords" type="text" placeholder="在雲端硬碟中搜尋" />
             <button id="search"><i class="fas fa-search"></i></button>
           </div>
@@ -74,6 +74,7 @@
         </aside>
         <!-- <section id="content" class="dropFiles" style="border: 1px solid #000"> -->
         <section id="content" class="dropFiles">
+          <div id="drag-drop-reminder" class="hidden">請將檔案拖曳到此區域上傳</div>
           <nav>
             <ul id="breadcrumb">
               <li id="toolbar" class="hidden">
