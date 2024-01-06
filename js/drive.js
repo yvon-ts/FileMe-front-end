@@ -81,12 +81,16 @@ function initDragDropArea(){
     $('#content').on('dragenter', function(ev) {
         $('#content').addClass('highlightDropArea');
         $('#drag-drop-reminder').removeClass('hidden');
+        setTimeout(function() {
+            $('#content').removeClass('highlightDropArea');
+            $('#drag-drop-reminder').addClass('hidden');
+        }, 1000); 
     });
     
-    $('#content').on('dragleave', function(ev) {
-      $('#content').removeClass('highlightDropArea');
-      $('#drag-drop-reminder').addClass('hidden');
-    });
+    // $('#content').on('dragleave', function(ev) {
+    //   $('#content').removeClass('highlightDropArea');
+    //   $('#drag-drop-reminder').addClass('hidden');
+    // });
     // drop upload: loop to upload single file as workaround
     $('#content').on('drop', async function(ev) {
       // Dropping files
@@ -391,8 +395,11 @@ function renderTrash(rawData){
 function renderFolders(rawData){
     const folders = rawData
     .filter(item => item.dataType === 0)
-    .map(item => function(){
-        return `<div class="folder hide-overflow" id="${item.id}" access="${item.accessLevel}" title="${item.dataName}"><i class="fas fa-folder icon"></i>${item.dataName}</div>`;
+    .map(item => {
+        var publicHtml = `<div class="folder hide-overflow" id="${item.id}" access="${item.accessLevel}" title="${item.dataName}"><i class="fas fa-folder icon"></i>(公開) ${item.dataName}</div>`;
+        var privateHtml = `<div class="folder hide-overflow" id="${item.id}" access="${item.accessLevel}" title="${item.dataName}"><i class="fas fa-folder icon"></i>${item.dataName}</div>`;
+        var folderHtml = item.accessLevel === 0 ? privateHtml : publicHtml;
+        return folderHtml;
     });
     folders.forEach(folder => $('#folder').append(folder));
 }
@@ -401,7 +408,9 @@ function renderFiles(rawData){
  const files = rawData
     .filter(item => item.dataType === 1)
     .map(item => {
-        var fileHtml = `<div class="file hide-overflow" id="${item.id}" access="${item.accessLevel}" title="${item.dataName}">${item.dataName}</div>`;
+        var publicHtml = `<div class="file hide-overflow" id="${item.id}" access="${item.accessLevel}" title="${item.dataName}">(公開) ${item.dataName}</div>`;
+        var privateHtml = `<div class="file hide-overflow" id="${item.id}" access="${item.accessLevel}" title="${item.dataName}">${item.dataName}</div>`;
+        var fileHtml = item.accessLevel === 0 ? privateHtml : publicHtml;
         var fileElement = $(fileHtml);
         var type = determineMimeTypeByFileName(item.dataName);
 

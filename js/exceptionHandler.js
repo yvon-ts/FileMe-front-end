@@ -31,6 +31,15 @@ axios.interceptors.response.use(
             });
             throw error;
         }
+        // RECOVERY_LOGIC_CONFLICT
+        case 20020:{
+            Swal.fire({
+                icon: 'error',
+                title: '已有同名檔案或目錄',
+                text: '請先移動或刪除該資料，才能還原'
+            })
+            throw error;
+        };
         // 409
         case 23010: {
             throw error;

@@ -189,6 +189,11 @@
     text-align: center;
     background-color: #f3f3f3;
 }
+.folder, .file{
+    &[access="1"]{
+        background-color: #dfedfa;
+      }
+}
 .icon{
     margin-right: 12px;
 }
@@ -237,7 +242,4 @@
 #sub-folder .focus, #sub-folder .origin{
     color: #ccc;
     border: none;
-  }
-  [access="1"]{
-    background-color: #dfedfa;
   }

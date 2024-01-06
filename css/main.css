@@ -381,6 +381,10 @@ a {
   background-color: #f3f3f3;
 }
 
+.folder[access="1"], .file[access="1"] {
+  background-color: #dfedfa;
+}
+
 .icon {
   margin-right: 12px;
 }
@@ -448,10 +452,6 @@ a {
 #sub-folder .focus, #sub-folder .origin {
   color: #ccc;
   border: none;
-}
-
-[access="1"] {
-  background-color: #dfedfa;
 }
 
 #container {
