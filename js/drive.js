@@ -382,8 +382,8 @@ function renderTrash(rawData){
     renderFolderTrash(rawData);
     renderFileTrash(rawData);
     // 好像移除group recover所以focus沒意義
-    $('.folder').click(e => addFocus(e));
-    $('.file').click(e => addFocus(e));
+    // $('.folder-trash').click(e => addFocus(e));
+    // $('.file-trash').click(e => addFocus(e));
     $('.trash').dblclick(e => {
         $('.focus').removeClass('focus');
         $(e.target).addClass('focus');
@@ -645,7 +645,7 @@ function doRename(newName, targetId, dataType){
 }
 // ----------------- Update: trash ----------------- //
 function trash(){
-    const list = collectFocused();
+    const list = collectFocusedInfo(); //workaround
     if(list.length === 0) swal('warning', null, SWAL_NULL_DEST);
     else swalTrash(list);
 }
@@ -660,7 +660,7 @@ function swalTrash(list){
         else clearFocused();
       });
 }
-function swalTrashConflict(){
+function swalTrashConflict(list){
     Swal.fire({
         icon: 'warning',
         title: '垃圾桶已有同名檔案',
@@ -670,7 +670,7 @@ function swalTrashConflict(){
         cancelButtonText: '否'
       }).then((result) => {
         if (result.isConfirmed) {
-            const list = collectFocusedInfo();
+            // const list = collectFocusedInfo();
             handleTrashConflict(list);
         }
       });
@@ -692,7 +692,7 @@ function doTrash(list){
     .catch(error => {
         let errorCode = error.response.data.code;
         if(errorCode === 23010) {
-            swalTrashConflict()
+            swalTrashConflict(list);
         }
     });
 }

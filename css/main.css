@@ -98,10 +98,6 @@ table {
   text-overflow: ellipsis;
 }
 
-.focus {
-  border: 5px solid rgba(92, 107, 192, 0.5);
-}
-
 .hidden {
   display: none;
 }
@@ -379,6 +375,10 @@ a {
   padding: 8px;
   text-align: center;
   background-color: #f3f3f3;
+  cursor: pointer;
+}
+.folder.focus, .file.focus, .folder-trash.focus, .file-trash.focus {
+  border: 5px solid rgba(92, 107, 192, 0.5);
 }
 
 .folder[access="1"], .file[access="1"] {
